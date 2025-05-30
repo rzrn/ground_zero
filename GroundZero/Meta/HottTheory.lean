@@ -311,7 +311,7 @@ def abbrevAttrs : Array Attribute :=
     }
 
     let implOfDecl ← getConstInfo implOfName;
-    let implFnDecl ← getConstInfo implFnName;
+    let implFnDecl ← getConstVal implFnName;
 
     unless implOfDecl.levelParams.length = implFnDecl.levelParams.length do {
       throwError "invalid `hott implementation` argument “{implFnStx}”, “{implFnStx}” has {implFnDecl.levelParams.length} universe level parameter(s), but “{implOfStx}” has {implOfDecl.levelParams.length}"
