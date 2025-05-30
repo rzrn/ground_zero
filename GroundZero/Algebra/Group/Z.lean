@@ -69,7 +69,7 @@ hott definition ZΩ.rec {G : Group} (z : G.carrier) : Group.Hom ZΩ G :=
 Group.mkhomo (power z) (power.mul z)
 
 hott definition ZΩ.mul (p q : ZΩ.carrier) : ZΩ.carrier :=
-(@power _ (Group.S ZΩ.1.zero) (Group.left ZΩ p) q).1 Id.refl
+(@power _ (Group.S ZΩ.1.zero) (ZΩ.left p) q).1 Id.refl
 
 hott theorem power.one {G : Group} : Π p, power G.e p = G.e :=
 begin
@@ -88,8 +88,13 @@ by reflexivity
 hott remark ZΩ.mulZero (p : ZΩ.carrier) : ZΩ.mul p (idp base) = idp base :=
 by reflexivity
 
--- something is really wrong with this thing
---hott def ZΩ.zeroMul (p : ZΩ.carrier) : ZΩ.mul (idp base) p = idp base :=
---@ap (Group.S ZΩ.1.zero).carrier ZΩ.carrier (power (ideqv _) p) (ideqv _) (λ e, e.1 (idp base)) (power.one p)
+hott lemma ZΩ.zeroMul (p : ZΩ.carrier) : ZΩ.mul (idp base) p = idp base :=
+begin
+  dsimp [ZΩ.mul]; show _ = (ideqv ZΩ.carrier).1 (idp base);
+  apply ap (λ (e : ZΩ.carrier ≃ ZΩ.carrier), e.1 (idp base));
+  transitivity; apply ap (power · _); show _ = ideqv _;
+  apply Theorems.Equiv.equivHmtpyLem; intro; reflexivity;
+  apply power.one
+end
 
 end GroundZero.Algebra
