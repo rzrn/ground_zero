@@ -93,7 +93,7 @@ namespace Reals
   hott definition lift (f : ℤ → ℤ) : R → R :=
   rec (elem ∘ f) (λ _, dist _ _)
 
-  instance (n : ℕ) : OfNat R n := ⟨elem (Integer.pos n)⟩
+  noncomputable instance (n : ℕ) : OfNat R n := ⟨elem (Integer.pos n)⟩
 
   section
     variable {A : Type⁎} (H : prop A.space)
@@ -106,7 +106,7 @@ namespace Reals
       apply ap helix; apply φ.id
     end
 
-    noncomputable hott lemma fibOfHomo (x : S¹) := calc
+    hott lemma fibOfHomo (x : S¹) := calc
       fib φ.ap x ≃ Σ (z : A.1), φ.ap z = x       : Equiv.ideqv (fib φ.ap x)
              ... = Σ (z : A.1), φ.ap A.point = x : ap Sigma (funext (λ z, ap (φ.ap · = x) (H z A.point)))
              ... = Σ (z : A.1), base = x         : ap Sigma (funext (λ _, ap (· = x) φ.id))
@@ -115,7 +115,7 @@ namespace Reals
              ... ≃ 𝟏 × (helix x)                 : productEquiv₃ (contrEquivUnit.{_, 0} ⟨A.point, H A.point⟩) (Equiv.ideqv (helix x))
              ... ≃ helix x                       : prodUnitEquiv (helix x)
 
-    noncomputable hott corollary kerOfHomo : fib φ.ap base ≃ ℤ :=
+    hott corollary kerOfHomo : fib φ.ap base ≃ ℤ :=
     fibOfHomo H φ base
   end
 
@@ -129,11 +129,11 @@ namespace Reals
   -/
   hott definition cis : R → S¹ := rec (λ _, base) (λ _, loop)
 
-  noncomputable hott theorem Euler : fib cis base ≃ ℤ :=
+  hott theorem Euler : fib cis base ≃ ℤ :=
   @kerOfHomo _ ⟨R, 0⟩ dist ⟨cis, idp base⟩
 
   -- Another (more tricky) proof, but it does not use R contractibility
-  noncomputable hott lemma helixOverCis (x : R) : helix (cis x) = ℤ :=
+  hott lemma helixOverCis (x : R) : helix (cis x) = ℤ :=
   begin
     induction x;
     { case cz x => apply (Integer.shift x)⁻¹ };
@@ -169,10 +169,10 @@ namespace Reals
   | Sum.inl x => x
   | Sum.inr y => explode (G y)
 
-  noncomputable hott remark circleNotHset : ¬(hset S¹) :=
+  hott remark circleNotHset : ¬(hset S¹) :=
   begin intro H; apply Circle.loopNeqRefl; apply H end
 
-  noncomputable hott proposition lemInfDisproved : ¬LEM∞ :=
+  hott proposition lemInfDisproved : ¬LEM∞ :=
   begin
     intro H; apply circleNotHset; apply propIsSet; apply contrImplProp;
     apply phiEqvBaseImplContr; intro φ; apply lemInfImplDnegInf H;

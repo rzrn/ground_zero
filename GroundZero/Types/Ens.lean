@@ -62,15 +62,15 @@ begin intro; apply id end
 hott lemma Ens.ssubset.trans {A : Type u} {a b c : Ens A} : a ⊆ b → b ⊆ c → a ⊆ c :=
 λ G H x p, H x (G x p)
 
-instance {A : Type u} : @Reflexive  (Ens A) Ens.ssubset := ⟨Ens.ssubset.refl⟩
-instance {A : Type u} : @Transitive (Ens A) Ens.ssubset := ⟨@Ens.ssubset.trans A⟩
+noncomputable instance {A : Type u} : @Reflexive  (Ens A) Ens.ssubset := ⟨Ens.ssubset.refl⟩
+noncomputable instance {A : Type u} : @Transitive (Ens A) Ens.ssubset := ⟨@Ens.ssubset.trans A⟩
 
 hott definition Ens.parallel {A : Type u} (a b : Ens A) := a ∩ b ⊆ ∅
 
 hott definition Ens.image {A : Type u} {β : Type v} (φ : Ens A) (f : A → β) : Ens β :=
 ⟨λ y, ∥(Σ x, f x = y × x ∈ φ)∥, λ _, HITs.Merely.uniq⟩
 
-noncomputable hott definition Ens.ext {A : Type u} {φ ψ : Ens A} (H : Π x, x ∈ φ ↔ x ∈ ψ) : φ = ψ :=
+hott definition Ens.ext {A : Type u} {φ ψ : Ens A} (H : Π x, x ∈ φ ↔ x ∈ ψ) : φ = ψ :=
 begin
   fapply Sigma.prod; apply Theorems.funext; intro x;
   { apply ua; apply Structures.propEquivLemma;
@@ -78,7 +78,7 @@ begin
   { apply piProp; intro; apply propIsProp }
 end
 
-noncomputable hott definition Ens.ssubset.asymm {A : Type u} {φ ψ : Ens A}
+hott definition Ens.ssubset.asymm {A : Type u} {φ ψ : Ens A}
   (f : φ ⊆ ψ) (g : ψ ⊆ φ) : φ = ψ :=
 Ens.ext (λ x, ⟨f x, g x⟩)
 
@@ -98,7 +98,7 @@ begin
   { fapply Sigma.prod <;> apply Theorems.funext <;> intro x; reflexivity; apply propIsProp }
 end
 
-noncomputable hott lemma Ens.isset {A : Type u} : Structures.hset (Ens A) :=
+hott lemma Ens.isset {A : Type u} : Structures.hset (Ens A) :=
 begin
   apply hsetRespectsEquiv; symmetry; apply Ens.eqvPredicate;
   apply piHset; intro; apply Theorems.Equiv.propsetIsSet

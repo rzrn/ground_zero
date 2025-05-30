@@ -58,7 +58,7 @@ namespace Group
     axiom mulLeftInv   (a : F.carrier ε) : mul (inv a) a = unit
     axiom ens                            : Structures.hset (F.carrier ε)
 
-    def rec (G : Group) (f : ε → G.carrier) (x : F.carrier ε) : G.carrier :=
+    noncomputable def rec (G : Group) (f : ε → G.carrier) (x : F.carrier ε) : G.carrier :=
     Exp.eval G f x.value
 
     @[induction_eliminator] def ind {π : F.carrier ε → Type v}
@@ -102,23 +102,23 @@ namespace Group
     hott remark recOne (f : ε → G.carrier) : rec G f unit = e :=
     by reflexivity
 
-    noncomputable hott definition homomorphism (f : ε → G.carrier) : Hom (F ε) G :=
+    hott definition homomorphism (f : ε → G.carrier) : Hom (F ε) G :=
     mkhomo (rec G f) (recMul f)
 
-    noncomputable hott remark recβrule₁ {a b c : F.carrier ε} (f : ε → G.carrier) :
+    hott remark recβrule₁ {a b c : F.carrier ε} (f : ε → G.carrier) :
       ap (rec G f) (mulAssoc a b c) =
         G.mulAssoc (rec G f a) (rec G f b) (rec G f c) :=
     by apply G.hset
 
-    noncomputable hott remark recβrule₂ {a : F.carrier ε} (f : ε → G.carrier) :
+    hott remark recβrule₂ {a : F.carrier ε} (f : ε → G.carrier) :
       ap (rec G f) (oneMul a) = G.oneMul (rec G f a) :=
     by apply G.hset
 
-    noncomputable hott remark recβrule₄ {a : F.carrier ε} (f : ε → G.carrier) :
+    hott remark recβrule₄ {a : F.carrier ε} (f : ε → G.carrier) :
       ap (rec G f) (mulLeftInv a) = G.mulLeftInv (rec G f a) :=
     by apply G.hset
 
-    noncomputable hott definition indΩ {π : F.carrier ε → Type v}
+    hott definition indΩ {π : F.carrier ε → Type v}
       (propπ : Π x, prop (π x))
       (u : π unit) (η : Π {x}, π (elem x))
       (m : Π {x y}, π x → π y → π (mul x y))

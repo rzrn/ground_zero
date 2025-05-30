@@ -24,14 +24,14 @@ namespace Group
     apply @idhom _ _ _ _ _ (φ ⋅ φ) 0; apply H
   end
 
-  noncomputable hott lemma boundaryOfBoundary {φ : Hom G G}
+  hott lemma boundaryOfBoundary {φ : Hom G G}
     (p : (im φ).set ⊆ (ker φ).set) : φ ⋅ φ = 0 :=
   begin
     fapply Hom.funext; intro x; apply p;
     apply HITs.Merely.elem; existsi x; reflexivity
   end
 
-  noncomputable hott lemma boundaryEqv (φ : Hom G G) :
+  hott lemma boundaryEqv (φ : Hom G G) :
     (φ ⋅ φ = 0) ≃ ((im φ).set ⊆ (ker φ).set) :=
   begin
     apply Structures.propEquivLemma;

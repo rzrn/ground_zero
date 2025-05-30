@@ -44,7 +44,7 @@ namespace «4.1»
   begin induction p; apply adjointIdfun end
 
   -- not a mere proposition if, for example, A = S²
-  noncomputable hott theorem adjointIfInh {A B : Type u} (f : A → B) :
+  hott theorem adjointIfInh {A B : Type u} (f : A → B) :
     biinv f → Adjoint f ≃ (Π (x : A), idp x = idp x) :=
   begin
     intro e; apply transport (Adjoint · ≃ _);
@@ -63,7 +63,7 @@ namespace «4.2»
 
   variable {A : Type u} {B : Type v}
 
-  noncomputable hott example : Corr A B ≃ (A ≃ B) :=
+  hott example : Corr A B ≃ (A ≃ B) :=
   Theorems.Equiv.biinvEquivCorr
 
   hott definition isequiv (f : A → B) := Σ (ρ : Corr A B), Π x, ρ.1 x (f x)
@@ -344,22 +344,22 @@ namespace «4.6»
     let g : idtoqinv p = ψ := ap idtoqinv (ε _ _ p (idp 𝟐));
     ffNeqTt (Interval.happly (ap Sigma.fst (f⁻¹ ⬝ g)) true)
 
-    noncomputable hott definition loopNeqRefl : loop ≠ idp base :=
+    hott definition loopNeqRefl : loop ≠ idp base :=
     begin
       intro H; apply universeNotASet uaq;
       intros A B p q; apply (KIffSet Type).left;
       apply Circle.loopEqReflImplsUip; assumption
     end
 
-    noncomputable hott lemma rotNeqIdp : rot ≠ idp :=
+    hott lemma rotNeqIdp : rot ≠ idp :=
     λ H, loopNeqRefl uaq (Interval.happly H base)
 
-    noncomputable hott lemma notTrivLoop : ¬(prop (Π (x : S¹), x = x)) :=
+    hott lemma notTrivLoop : ¬(prop (Π (x : S¹), x = x)) :=
     begin intro H; apply loopNeqRefl uaq; exact Interval.happly (H rot idp) base end
 
     open «4.3»
 
-    noncomputable hott theorem «4.6.ii» : Σ (A B : Type) (f : A → B), ¬prop (qinv f) :=
+    hott theorem «4.6.ii» : Σ (A B : Type) (f : A → B), ¬prop (qinv f) :=
     begin
       existsi S¹; existsi S¹; existsi idfun; intro H; apply notTrivLoop uaq;
       apply propRespectsEquiv; apply «4.1.1»; exact Qinv.ideqv; assumption
@@ -384,7 +384,7 @@ namespace «4.6»
     variable (uaq : Π (A B : Type), qinv (@idtoqinv A B))
     open Circle (rot)
 
-    noncomputable hott theorem «4.6.iii» : 𝟎 :=
+    hott theorem «4.6.iii» : 𝟎 :=
     begin apply rotNeqIdp uaq; symmetry; apply @cohQinv uaq S¹ S¹ idfun ⟨idfun, (idp, rot)⟩ end
   end
 end «4.6»
@@ -434,7 +434,7 @@ namespace «4.8»
   open GroundZero.Structures
   open GroundZero.Theorems
 
-  noncomputable hott lemma injOutOfBoolChar {B : Type u} : (Σ (f : 𝟐 → B), injective f) ≃ (Σ (w : B × B), w.1 ≠ w.2) :=
+  hott lemma injOutOfBoolChar {B : Type u} : (Σ (f : 𝟐 → B), injective f) ≃ (Σ (w : B × B), w.1 ≠ w.2) :=
   begin
     fapply Sigma.mk;
     { intro w; existsi (w.1 false, w.1 true);
@@ -453,7 +453,7 @@ namespace «4.8»
       { apply Theorems.funext; intro b; induction b using Bool.casesOn <;> reflexivity } }
   end
 
-  noncomputable hott lemma embdOutOfBoolChar {B : Type u} :
+  hott lemma embdOutOfBoolChar {B : Type u} :
     (𝟐 ↪ B) ≃ (Σ (w : B × B), w.1 ≠ w.2 × contr (w.1 = w.1) × contr (w.2 = w.2)) :=
   begin
     fapply Sigma.mk;

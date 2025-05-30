@@ -98,7 +98,7 @@ namespace GroundZero.Theorems.Ontological
   hott def I (φ : wff ι) : ⊢ φ ⇒ φ :=
   begin apply mp; apply mp; apply as φ (φ ⇒ φ) φ; apply ak; apply ak end
 
-  def lem (φ : wff ι) : ⊢ φ ∨ ¬φ := I ¬φ
+  hott def lem (φ : wff ι) : ⊢ φ ∨ ¬φ := I ¬φ
 
   def true : wff ι := ¬⊥
   notation "⊤" => true

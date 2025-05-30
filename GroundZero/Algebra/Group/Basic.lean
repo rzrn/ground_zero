@@ -399,18 +399,18 @@ namespace Group
     hott definition Homo.zero : Hom G H :=
     mkhomo (λ _, H.e) (λ _ _, Id.inv (H.oneMul H.e))
 
-    instance : OfNat (Hom G H) Nat.zero := ⟨Homo.zero⟩
-    instance : OfNat (Algebra.Hom G.1 H.1) Nat.zero := ⟨Homo.zero⟩
+    noncomputable instance : OfNat (Hom G H) Nat.zero := ⟨Homo.zero⟩
+    noncomputable instance : OfNat (Algebra.Hom G.1 H.1) Nat.zero := ⟨Homo.zero⟩
   end
 
   section
     variable (G H : Abelian)
 
-    instance : OfNat (Abelian.Hom G H) Nat.zero := ⟨@Homo.zero G.group H.group⟩
-    instance : OfNat (Algebra.Hom G.1 H.1) Nat.zero := ⟨@Homo.zero G.group H.group⟩
+    noncomputable instance : OfNat (Abelian.Hom G H) Nat.zero := ⟨@Homo.zero G.group H.group⟩
+    noncomputable instance : OfNat (Algebra.Hom G.1 H.1) Nat.zero := ⟨@Homo.zero G.group H.group⟩
   end
 
-  noncomputable hott lemma Homo.set {G H : Group} : Structures.hset (Hom G H) :=
+  hott lemma Homo.set {G H : Group} : Structures.hset (Hom G H) :=
   Algebra.Hom.hset
 
   -- Of course, this can be done by induction
@@ -431,12 +431,12 @@ namespace Group
     apply @Equiv.transportBackAndForward _ (λ G, G) _ _ φ
   end
 
-  noncomputable hott corollary Iso.ua {G H : Group} : (G ≅ H) → G = H :=
+  hott corollary Iso.ua {G H : Group} : (G ≅ H) → G = H :=
   begin intro φ; fapply Sigma.prod; apply Alg.ua φ; apply isGroupProp end
 
   -- This statement in fact says that two groups are equal
   -- if their multiplication tables are equal
-  noncomputable hott theorem table {G H : Group} (φ : G.carrier = H.carrier)
+  hott theorem table {G H : Group} (φ : G.carrier = H.carrier)
     (p : G.φ =[λ G, G → G → G, φ] H.φ) : G = H :=
   Iso.ua (Iso.ofPath φ p)
 
@@ -472,7 +472,7 @@ namespace Group
   hott definition Z₁.mul : 𝟏 → 𝟏 → 𝟏 := λ _ _, ★
   hott definition Z₁.inv : 𝟏 → 𝟏     := λ _, ★
 
-  instance Z₁.Mul : Mul 𝟏 := ⟨Z₁.mul⟩
+  noncomputable instance Z₁.Mul : Mul 𝟏 := ⟨Z₁.mul⟩
 
   hott definition Z₁ : Group :=
   @Group.intro 𝟏 unitIsSet Z₁.mul Z₁.inv ★ (λ _ _ _, idp _) (λ _, idp _) (λ _, idp _)

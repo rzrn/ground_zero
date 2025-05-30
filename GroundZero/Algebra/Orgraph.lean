@@ -11,13 +11,13 @@ namespace GroundZero.Algebra
   universe u v
 
   -- this is exactly directed graph
-  def Orgraph : Type (max u v + 1) :=
+  hott def Orgraph : Type (max u v + 1) :=
   @Alg.{0, 0, u, v} ⊥ 𝟏 (λ _, 2)
 
-  def Orgraph.rel (Γ : Orgraph) (x y : Γ.carrier) : Prop := Alg.rel Γ ★ (x, y, ★)
-  def Orgraph.ρ (Γ : Orgraph.{u}) (x y : Γ.carrier) : Type v := (Γ.rel x y).1
+  hott def Orgraph.rel (Γ : Orgraph) (x y : Γ.carrier) : Prop := Alg.rel Γ ★ (x, y, ★)
+  hott def Orgraph.ρ (Γ : Orgraph.{u}) (x y : Γ.carrier) : Type v := (Γ.rel x y).1
 
-  def Orgraph.prop (Γ : Orgraph.{u}) (x y : Γ.carrier) : prop (Γ.ρ x y) := (Γ.rel x y).2
+  hott def Orgraph.prop (Γ : Orgraph.{u}) (x y : Γ.carrier) : prop (Γ.ρ x y) := (Γ.rel x y).2
 
   class reflexive (Γ : Orgraph) :=
   (refl : Π x, Γ.ρ x x)
@@ -38,7 +38,7 @@ namespace GroundZero.Algebra
 
   class order (Γ : Orgraph) extends reflexive Γ, antisymmetric Γ, transitive Γ
 
-  def Overring.κ (T : Overring) : Orgraph :=
+  hott def Overring.κ (T : Overring) : Orgraph :=
   ⟨T.1, (λ z, explode z, T.2.2)⟩
 
   class connected (Γ : Orgraph) :=
@@ -50,7 +50,7 @@ namespace GroundZero.Algebra
   (leOverAdd : Π (x y z : T.carrier), x ≤ y → x + z ≤ y + z)
   (leOverMul : Π (x y : T.carrier), 0 ≤ x → 0 ≤ y → 0 ≤ (x * y))
 
-  instance (T : Overring) [H : orfield T] : OfNat T.carrier (Nat.succ Nat.zero) := ⟨H.tohasOne.one⟩
+  noncomputable instance (T : Overring) [H : orfield T] : OfNat T.carrier (Nat.succ Nat.zero) := ⟨H.tohasOne.one⟩
 
   hott def majorant {Γ : Orgraph} (φ : Γ.subset) (M : Γ.carrier) :=
   Π x, x ∈ φ → Γ.ρ x M
@@ -191,7 +191,7 @@ namespace GroundZero.Algebra
   hott def strictIneqAddRight (T : Overring) [orfield T] {a b c d : T.carrier} (p : a < b) (q : c ≤ d) : a + c < b + d :=
   begin apply strictIneqTransRight; apply ltOverAdd; exact p; apply leOverAddLeft; exact q end
 
-  noncomputable hott def minusInvSign (T : Overring) [orfield T] (a b : T.carrier) (p : a ≤ b) : -a ≥ -b :=
+  hott def minusInvSign (T : Overring) [orfield T] (a b : T.carrier) (p : a ≤ b) : -a ≥ -b :=
   begin
     fapply GroundZero.HITs.Merely.rec _ _ (@connected.total T.κ _ _ _);
     change T.carrier; exact -b; change T.carrier; exact -a; apply T.κ.prop;
@@ -206,16 +206,16 @@ namespace GroundZero.Algebra
       assumption }
   end
 
-  noncomputable hott def invMinusSign (T : Overring) [orfield T] (a b : T.carrier) (p : -a ≤ -b) : a ≥ b :=
+  hott def invMinusSign (T : Overring) [orfield T] (a b : T.carrier) (p : -a ≤ -b) : a ≥ b :=
   begin apply Equiv.transportconst; apply Equiv.bimap <;> apply @Group.invInv T.τ⁺; apply minusInvSign; assumption end
 
-  noncomputable hott def geIfMinusLe (T : Overring) [orfield T] (a b : T.carrier) (p : -a ≤ b) : a ≥ -b :=
+  hott def geIfMinusLe (T : Overring) [orfield T] (a b : T.carrier) (p : -a ≤ b) : a ≥ -b :=
   begin
     apply invMinusSign; apply Equiv.transport (λ c, -a ≤ c);
     symmetry; apply @Group.invInv T.τ⁺; assumption
   end
 
-  noncomputable hott def geMinusIfLe (T : Overring) [orfield T] (a b : T.carrier) (p : a ≤ -b) : -a ≥ b :=
+  hott def geMinusIfLe (T : Overring) [orfield T] (a b : T.carrier) (p : a ≤ -b) : -a ≥ b :=
   begin
     apply invMinusSign; apply Equiv.transport (λ c, c ≤ -b);
     symmetry; apply @Group.invInv T.τ⁺; assumption
@@ -243,7 +243,7 @@ namespace GroundZero.Algebra
     { apply q.2.2; apply p.2.1 }; { apply p.2.2; apply q.2.1 }
   end
 
-  def Neg {T : Prering} (φ : T.subset) : T.subset :=
+  hott def Neg {T : Prering} (φ : T.subset) : T.subset :=
   ⟨λ a, T.neg a ∈ φ, λ a, Ens.prop (T.neg a) φ⟩
 
   hott def Neg.inh {T : Prering} [ring T] {φ : T.subset} : φ.inh → (Neg φ).inh :=
@@ -256,7 +256,7 @@ namespace GroundZero.Algebra
   hott def Neg.negInh {T : Prering} {φ : T.subset} : (Neg φ).inh → φ.inh :=
   begin apply HITs.Merely.lift; intro ⟨x, H⟩; existsi T.neg x; apply H end
 
-  noncomputable hott def Neg.majorant {T : Overring} [orfield T] {φ : T.subset} (x : T.carrier) :
+  hott def Neg.majorant {T : Overring} [orfield T] {φ : T.subset} (x : T.carrier) :
     @minorant T.κ φ x → @majorant T.κ (@Neg T.τ φ) (T.τ.neg x) :=
   begin
     intros H x p; apply invMinusSign;
@@ -264,7 +264,7 @@ namespace GroundZero.Algebra
     apply @Group.invInv T.τ⁺; apply H; exact p
   end
 
-  noncomputable hott def Neg.negMajorant {T : Overring} [orfield T] {φ : T.subset} (x : T.carrier) :
+  hott def Neg.negMajorant {T : Overring} [orfield T] {φ : T.subset} (x : T.carrier) :
     @minorant T.κ (@Neg T.τ φ) x → @Algebra.majorant T.κ φ (T.τ.neg x) :=
   begin
     intro H; intros x p; apply invMinusSign;
@@ -273,7 +273,7 @@ namespace GroundZero.Algebra
     symmetry; apply @Group.invInv T.τ⁺; exact p
   end
 
-  noncomputable hott def Neg.minorant {T : Overring} [orfield T] {φ : T.subset} (x : T.carrier) :
+  hott def Neg.minorant {T : Overring} [orfield T] {φ : T.subset} (x : T.carrier) :
     @Algebra.majorant T.κ φ x → @Algebra.minorant T.κ (@Neg T.τ φ) (T.τ.neg x) :=
   begin
     intro H x p; apply invMinusSign;
@@ -281,7 +281,7 @@ namespace GroundZero.Algebra
     apply @Group.invInv T.τ⁺; apply H; exact p
   end
 
-  noncomputable hott def Neg.negMinorant {T : Overring} [orfield T] {φ : T.subset} (x : T.carrier) :
+  hott def Neg.negMinorant {T : Overring} [orfield T] {φ : T.subset} (x : T.carrier) :
     @Algebra.majorant T.κ (@Neg T.τ φ) x → @Algebra.minorant T.κ φ (T.τ.neg x) :=
   begin
     intro H x p; apply invMinusSign;
@@ -290,43 +290,43 @@ namespace GroundZero.Algebra
     symmetry; apply @Group.invInv T.τ⁺; exact p
   end
 
-  noncomputable hott def Neg.majorized {T : Overring} [orfield T] {φ : T.subset} : @Algebra.minorized T.κ φ → @Algebra.majorized T.κ (@Neg T.τ φ) :=
+  hott def Neg.majorized {T : Overring} [orfield T] {φ : T.subset} : @Algebra.minorized T.κ φ → @Algebra.majorized T.κ (@Neg T.τ φ) :=
   begin apply HITs.Merely.lift; intro H; existsi T.τ.neg H.1; apply Neg.majorant; exact H.2 end
 
-  noncomputable hott def Neg.minorized {T : Overring} [orfield T] {φ : T.subset} : @Algebra.majorized T.κ φ → @Algebra.minorized T.κ (@Neg T.τ φ) :=
+  hott def Neg.minorized {T : Overring} [orfield T] {φ : T.subset} : @Algebra.majorized T.κ φ → @Algebra.minorized T.κ (@Neg T.τ φ) :=
   begin apply HITs.Merely.lift; intro H; existsi T.τ.neg H.1; apply Neg.minorant; exact H.2 end
 
   section
     variable {T : Overring} [orfield T] (φ : T.subset)
 
-    noncomputable hott def negMinorantEqMajorantNeg.forward : @Neg T.τ (@Minorant T.κ φ) ⊆ @Majorant T.κ (@Neg T.τ φ) :=
+    hott def negMinorantEqMajorantNeg.forward : @Neg T.τ (@Minorant T.κ φ) ⊆ @Majorant T.κ (@Neg T.τ φ) :=
     begin intros x H y G; apply invMinusSign; apply H; assumption end
 
-    noncomputable hott def negMinorantEqMajorantNeg.backward : @Majorant T.κ (@Neg T.τ φ) ⊆ @Neg T.τ (@Minorant T.κ φ) :=
+    hott def negMinorantEqMajorantNeg.backward : @Majorant T.κ (@Neg T.τ φ) ⊆ @Neg T.τ (@Minorant T.κ φ) :=
     begin
       intros x H y G; apply invMinusSign; apply Equiv.transport;
       symmetry; apply @Group.invInv T.τ⁺; apply H; apply Equiv.transport (· ∈ φ);
       symmetry; apply @Group.invInv T.τ⁺; assumption
     end
 
-    noncomputable hott def negMinorantEqMajorantNeg : @Neg T.τ (@Minorant T.κ φ) = @Majorant T.κ (@Neg T.τ φ) :=
+    hott def negMinorantEqMajorantNeg : @Neg T.τ (@Minorant T.κ φ) = @Majorant T.κ (@Neg T.τ φ) :=
     begin
       apply Ens.ssubset.asymm <;> intros x H;
       apply negMinorantEqMajorantNeg.forward; assumption;
       apply negMinorantEqMajorantNeg.backward; assumption
     end
 
-    noncomputable hott def negMajorantEqMinorantNeg.forward : @Neg T.τ (@Majorant T.κ φ) ⊆ @Minorant T.κ (@Neg T.τ φ) :=
+    hott def negMajorantEqMinorantNeg.forward : @Neg T.τ (@Majorant T.κ φ) ⊆ @Minorant T.κ (@Neg T.τ φ) :=
     begin intros x H y G; apply invMinusSign; apply H; assumption end
 
-    noncomputable hott def negMajorantEqMinorantNeg.backward : @Minorant T.κ (@Neg T.τ φ) ⊆ @Neg T.τ (@Majorant T.κ φ) :=
+    hott def negMajorantEqMinorantNeg.backward : @Minorant T.κ (@Neg T.τ φ) ⊆ @Neg T.τ (@Majorant T.κ φ) :=
     begin
       intros x H y G; apply invMinusSign; apply Equiv.transport (λ z, z ≤ T.τ.neg y);
       symmetry; apply @Group.invInv T.τ⁺; apply H; apply Equiv.transport (· ∈ φ);
       symmetry; apply @Group.invInv T.τ⁺; assumption
     end
 
-    noncomputable hott def negMajorantEqMinorantNeg : @Neg T.τ (@Majorant T.κ φ) = @Minorant T.κ (@Neg T.τ φ) :=
+    hott def negMajorantEqMinorantNeg : @Neg T.τ (@Majorant T.κ φ) = @Minorant T.κ (@Neg T.τ φ) :=
     begin
       apply Ens.ssubset.asymm <;> intros x H;
       apply negMajorantEqMinorantNeg.forward; assumption;
@@ -334,7 +334,7 @@ namespace GroundZero.Algebra
     end
   end
 
-  noncomputable hott def orfieldCocompleteIfComplete {T : Overring} [orfield T] (H : complete T.κ) : cocomplete T.κ :=
+  hott def orfieldCocompleteIfComplete {T : Overring} [orfield T] (H : complete T.κ) : cocomplete T.κ :=
   begin
     constructor; intros φ p q; fapply HITs.Merely.rec _ _ (@complete.sup T.κ _ _ _ _);
     change T.τ.subset; exact Neg φ; apply HITs.Merely.uniq;
@@ -345,7 +345,7 @@ namespace GroundZero.Algebra
     apply Neg.inh; assumption; apply Neg.majorized; assumption
   end
 
-  noncomputable hott def orfieldCompleteIfCocomplete {T : Overring} [orfield T] (H : cocomplete T.κ) : complete T.κ :=
+  hott def orfieldCompleteIfCocomplete {T : Overring} [orfield T] (H : cocomplete T.κ) : complete T.κ :=
   begin
     constructor; intros φ p q; fapply HITs.Merely.rec _ _ (@cocomplete.inf T.κ _ _ _ _);
     change T.τ.subset; exact Neg φ; apply HITs.Merely.uniq;

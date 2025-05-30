@@ -28,44 +28,44 @@ section
   hott axiom uaweakβ (H : f ∘ g ~ idfun) (G : g ∘ f ~ idfun) : transportconst (uaweak f g H G) ~ f
 end
 
-noncomputable hott definition ua {A B : Type u} (e : A ≃ B) : A = B :=
+hott definition ua {A B : Type u} (e : A ≃ B) : A = B :=
 uaweak e.forward e.left e.forwardLeft e.leftForward
 
-noncomputable hott definition uaε {A B : Type u} (e : A ≃ B) : A = B :=
+hott definition uaε {A B : Type u} (e : A ≃ B) : A = B :=
 ua e ⬝ (ua (ideqv B))⁻¹
 
-noncomputable hott lemma idtoeqvua {A B : Type u} (e : A ≃ B) : idtoeqv (ua e) = e :=
+hott lemma idtoeqvua {A B : Type u} (e : A ≃ B) : idtoeqv (ua e) = e :=
 begin apply equivHmtpyLem; apply uaweakβ end
 
-noncomputable hott lemma uaidtoeqvε {A B : Type u} (p : A = B) : uaε (idtoeqv p) = p :=
+hott lemma uaidtoeqvε {A B : Type u} (p : A = B) : uaε (idtoeqv p) = p :=
 begin induction p; apply Id.compInv end
 
-noncomputable hott theorem univalence (A B : Type u) : (A = B) ≃ (A ≃ B) :=
+hott theorem univalence (A B : Type u) : (A = B) ≃ (A ≃ B) :=
 ⟨idtoeqv, (⟨uaε, uaidtoeqvε⟩, ⟨ua, idtoeqvua⟩)⟩
 
-noncomputable hott corollary uaidtoeqv {A B : Type u} (p : A = B) : ua (idtoeqv p) = p :=
+hott corollary uaidtoeqv {A B : Type u} (p : A = B) : ua (idtoeqv p) = p :=
 (univalence A B).rightForward p
 
 hott example {A : Type u} : idtoeqv (idp A) = ideqv A :=
 by reflexivity
 
-noncomputable hott corollary uaidp (A : Type u) : ua (ideqv A) = idp A :=
+hott corollary uaidp (A : Type u) : ua (ideqv A) = idp A :=
 uaidtoeqv (idp A)
 
-noncomputable hott theorem uaβ {A B : Type u} (e : A ≃ B) (x : A) : transportconst (ua e) x = e x :=
+hott theorem uaβ {A B : Type u} (e : A ≃ B) (x : A) : transportconst (ua e) x = e x :=
 happly (ap Equiv.forward (idtoeqvua e)) x
 
-noncomputable hott theorem uaβrev {A B : Type u} (e : A ≃ B) (x : B) : transportconst (ua e)⁻¹ x = e.left x :=
+hott theorem uaβrev {A B : Type u} (e : A ≃ B) (x : B) : transportconst (ua e)⁻¹ x = e.left x :=
 happly (ap Equiv.left (idtoeqvua e)) x
 
-noncomputable hott remark uaCompRule {A B : Type u} (e : A ≃ B) (x : A) : x =[id, ua e] e x :=
+hott remark uaCompRule {A B : Type u} (e : A ≃ B) (x : A) : x =[id, ua e] e x :=
 uaβ e x
 
-noncomputable hott theorem propext {A B : Type u}
+hott theorem propext {A B : Type u}
   (F : prop A) (G : prop B) : (A ↔ B) → A = B :=
 λ h, ua (propEquivLemma F G h.left h.right)
 
-noncomputable hott theorem uacom {A B C : Type u} (p : A ≃ B) (q : B ≃ C) : ua (p.trans q) = ua p ⬝ ua q :=
+hott theorem uacom {A B C : Type u} (p : A ≃ B) (q : B ≃ C) : ua (p.trans q) = ua p ⬝ ua q :=
 begin
   fapply (univalence A C).eqvInj; apply equivHmtpyLem;
   intro x; symmetry; transitivity; apply transportcom;
@@ -73,7 +73,7 @@ begin
   apply uaβ; symmetry; apply uaβ
 end
 
-noncomputable hott theorem univAlt (A : Type u) : contr (Σ B, A ≃ B) :=
+hott theorem univAlt (A : Type u) : contr (Σ B, A ≃ B) :=
 begin
   existsi ⟨A, ideqv A⟩; intro w; fapply Sigma.prod; apply ua w.2;
   transitivity; apply transportMeetSigma; apply equivHmtpyLem; intro x;
@@ -81,18 +81,18 @@ begin
   transitivity; apply uaβ; apply ap w.2; apply transportOverConstFamily
 end
 
-noncomputable hott corollary uaSinglProp (A : Type u) : prop (Σ B, A ≃ B) :=
+hott corollary uaSinglProp (A : Type u) : prop (Σ B, A ≃ B) :=
 contrImplProp (univAlt A)
 
 namespace Equiv
   variable {C : Π (A B : Type u), A ≃ B → Type v} (Cidp : Π (A : Type u), C A A (ideqv A))
 
-  noncomputable hott definition J {A B : Type u} (e : A ≃ B) : C A B e :=
+  hott definition J {A B : Type u} (e : A ≃ B) : C A B e :=
   transport (λ (w : Σ B, A ≃ B), C A w.1 w.2) ((univAlt A).2 ⟨B, e⟩) (Cidp A)
 
   attribute [induction_eliminator] J
 
-  noncomputable hott lemma Jβrule (A : Type u) : J Cidp (ideqv A) = Cidp A :=
+  hott lemma Jβrule (A : Type u) : J Cidp (ideqv A) = Cidp A :=
   begin
     dsimp [J]; transitivity; apply ap (transport _ · _);
     show _ = idp _; apply propIsSet; apply uaSinglProp; reflexivity
@@ -116,7 +116,7 @@ hott definition negNeg : Π x, not (not x) = x
 hott definition negBoolEquiv : 𝟐 ≃ 𝟐 :=
 ⟨not, (⟨not, negNeg⟩, ⟨not, negNeg⟩)⟩
 
-noncomputable hott theorem universeNotASet : ¬(hset Type) :=
+hott theorem universeNotASet : ¬(hset Type) :=
 begin
   let p : 𝟐 = 𝟐 := ua negBoolEquiv; let h := transportconst p true;
   let g : h = false := uaβ negBoolEquiv true;
@@ -135,14 +135,14 @@ hott theorem coproductSet {A B : Type u} (f : hset A) (g : hset B) : hset (A + B
   propRespectsEquiv (@Coproduct.inr.inj' A B x y).symm (g _ _)
 
 -- exercise 2.17 (i) in HoTT book
-noncomputable hott theorem productEquiv₁ {A A' B B' : Type u}
+hott theorem productEquiv₁ {A A' B B' : Type u}
   (e₁ : A ≃ A') (e₂ : B ≃ B') : (A × B) ≃ (A' × B') :=
 begin
   have p := ua e₁; have q := ua e₂;
   induction p; induction q; apply ideqv
 end
 
-noncomputable hott theorem productEquiv₂ {A A' B B' : Type u}
+hott theorem productEquiv₂ {A A' B B' : Type u}
   (e₁ : A ≃ A') (e₂ : B ≃ B') : (A × B) ≃ (A' × B') :=
 begin induction e₁; induction e₂; reflexivity end
 
@@ -176,13 +176,13 @@ end
 
 namespace Theorems.Equiv
 
-noncomputable hott definition propEqProp {A B : Type u} (G : prop B) : prop (A = B) :=
+hott definition propEqProp {A B : Type u} (G : prop B) : prop (A = B) :=
 begin
   apply propRespectsEquiv.{u, u + 1}; apply Equiv.symm;
   apply univalence; apply propEquivProp G
 end
 
-noncomputable hott theorem propsetIsSet : hset (Prop u) :=
+hott theorem propsetIsSet : hset (Prop u) :=
 begin
   intro ⟨x, H⟩ ⟨y, G⟩; apply transport (λ X, Π (p q : X), p = q);
   symmetry; apply ua; apply Sigma.sigmaPath;
@@ -235,7 +235,7 @@ section
     { intro p; induction p; apply Id.invComp }
   end
 
-  noncomputable hott lemma corrBiinvIdfun : corrOfBiinv ∘ @biinvOfCorr A B ~ idfun :=
+  hott lemma corrBiinvIdfun : corrOfBiinv ∘ @biinvOfCorr A B ~ idfun :=
   begin
     intro w; fapply Sigma.prod;
     apply Theorems.funext; intro x; apply Theorems.funext; intro y;
@@ -251,14 +251,14 @@ section
   hott proposition biinvCorrIdfun : biinvOfCorr ∘ @corrOfBiinv A B ~ idfun :=
   begin intro e; fapply equivHmtpyLem; intro; reflexivity end
 
-  noncomputable hott theorem biinvEquivCorr : Corr A B ≃ (A ≃ B) :=
+  hott theorem biinvEquivCorr : Corr A B ≃ (A ≃ B) :=
   begin
     existsi biinvOfCorr; fapply Qinv.toBiinv; existsi corrOfBiinv;
     apply Prod.mk; apply biinvCorrIdfun; apply corrBiinvIdfun
   end
 end
 
-noncomputable hott theorem ntypeIsSuccNType (n : ℕ₋₂) : is-(hlevel.succ n)-type (n-Type u) :=
+hott theorem ntypeIsSuccNType (n : ℕ₋₂) : is-(hlevel.succ n)-type (n-Type u) :=
 begin
   intro ⟨X, p⟩ ⟨Y, p'⟩; apply ntypeRespectsEquiv;
   symmetry; apply Sigma.sigmaPath; fapply ntypeRespectsSigma;
@@ -275,17 +275,17 @@ begin
   { intro q; apply Structures.propIsNType; apply ntypeIsProp }
 end
 
-noncomputable hott corollary ensIsGroupoid : groupoid (0-Type) :=
+hott corollary ensIsGroupoid : groupoid (0-Type) :=
 begin apply oneEqvGroupoid.forward; apply ntypeIsSuccNType 0 end
 
-noncomputable hott corollary pathNType₁ {A B : Type u} {n : ℕ₋₂} :
+hott corollary pathNType₁ {A B : Type u} {n : ℕ₋₂} :
   is-(n + 1)-type B → is-(n + 1)-type (A = B) :=
 begin
   intro H; apply ntypeRespectsEquiv.{u, u + 1};
   apply (univalence A B).symm; apply equivNType₁; exact H
 end
 
-noncomputable hott corollary pathNType₂ {A B : Type u} {n : ℕ₋₂} :
+hott corollary pathNType₂ {A B : Type u} {n : ℕ₋₂} :
   is-(n + 1)-type A → is-(n + 1)-type (A = B) :=
 begin
   intro H; apply ntypeRespectsEquiv.{u, u + 1}; apply symm;

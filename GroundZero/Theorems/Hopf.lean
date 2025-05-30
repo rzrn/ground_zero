@@ -24,11 +24,11 @@ namespace Real
 
   hott abbreviation μ := μ₁
 
-  noncomputable hott definition μLoop : μ = μ :=
+  hott definition μLoop : μ = μ :=
   Sigma.prod (loop ⬝ loop) (Circle.Ωrecβ₂ false not not negNeg negNeg loop ⬝
                     ap not (Circle.Ωrecβ₂ false not not negNeg negNeg (idp base)))
 
-  noncomputable hott statement mapRecμ : map ∘ rec μ μLoop ~ rec base (loop ⬝ loop) :=
+  hott statement mapRecμ : map ∘ rec μ μLoop ~ rec base (loop ⬝ loop) :=
   begin
     fapply ind; exact idp base; apply Id.trans; apply Equiv.transportOverHmtpy;
     transitivity; apply ap (· ⬝ _ ⬝ _); transitivity; apply Id.mapInv; apply ap;
@@ -37,14 +37,14 @@ namespace Real
     apply Id.compReflIfEq; symmetry; apply recβrule₂
   end
 
-  noncomputable hott lemma family.transport₁ : transport family loop ~ not :=
+  hott lemma family.transport₁ : transport family loop ~ not :=
   begin
     intro b; transitivity; apply transportToTransportconst;
     transitivity; apply ap (transportconst · b);
     apply recβrule₂; apply uaβ
   end
 
-  noncomputable hott lemma family.transport₂ : transport family loop⁻¹ ~ not :=
+  hott lemma family.transport₂ : transport family loop⁻¹ ~ not :=
   begin
     intro b; transitivity; apply transportToTransportconst;
     transitivity; apply ap (transportconst · b);

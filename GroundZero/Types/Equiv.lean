@@ -51,9 +51,9 @@ namespace Equiv
 
   section
     variable {A : Type u} {B : A → Type v}
-    instance : @Reflexive  (Π x, B x) (· ~ ·) := ⟨@Homotopy.id A B⟩
-    instance : @Symmetric  (Π x, B x) (· ~ ·) := ⟨@Homotopy.symm A B⟩
-    instance : @Transitive (Π x, B x) (· ~ ·) := ⟨@Homotopy.trans A B⟩
+    noncomputable instance : @Reflexive  (Π x, B x) (· ~ ·) := ⟨@Homotopy.id A B⟩
+    noncomputable instance : @Symmetric  (Π x, B x) (· ~ ·) := ⟨@Homotopy.symm A B⟩
+    noncomputable instance : @Transitive (Π x, B x) (· ~ ·) := ⟨@Homotopy.trans A B⟩
   end
 
   hott definition Homotopy.Id {A : Type u} {B : A → Type v}
@@ -147,7 +147,7 @@ namespace Equiv
   ⟨f, (⟨g, H⟩, ⟨g, G⟩)⟩
 
   hott definition forward (e : A ≃ B) : A → B := e.fst
-  instance forwardCoe : CoeFun (A ≃ B) (λ _, A → B) := ⟨forward⟩
+  noncomputable instance forwardCoe : CoeFun (A ≃ B) (λ _, A → B) := ⟨forward⟩
 
   hott definition left  (e : A ≃ B) : B → A := e.2.1.1
   hott definition right (e : A ≃ B) : B → A := e.2.2.1
@@ -167,7 +167,7 @@ namespace Equiv
   hott definition symm (f : A ≃ B) : B ≃ A :=
   Qinv.toEquiv (Qinv.sym (Qinv.ofBiinv f.1 f.2))
 
-  instance : @Symmetric (Type u) (· ≃ ·) := ⟨@Equiv.symm⟩
+  noncomputable instance : @Symmetric (Type u) (· ≃ ·) := ⟨@Equiv.symm⟩
 
   hott lemma eqvInj (e : A ≃ B) (x y : A) (p : e.forward x = e.forward y) : x = y :=
   begin
@@ -195,7 +195,7 @@ namespace Equiv
   hott definition ideqv (A : Type u) : A ≃ A :=
   ⟨idfun, (⟨idfun, idp⟩, ⟨idfun, idp⟩)⟩
 
-  instance : @Reflexive (Type u) (· ≃ ·) := ⟨ideqv⟩
+  noncomputable instance : @Reflexive (Type u) (· ≃ ·) := ⟨ideqv⟩
 
   hott lemma inveqv {A : Type u} {a b : A} : (a = b) ≃ (b = a) :=
   ⟨Id.inv, (⟨Id.inv, Id.invInv⟩, ⟨Id.inv, Id.invInv⟩)⟩
@@ -209,7 +209,7 @@ namespace Equiv
     (f : A ≃ B) (g : B ≃ C) : A ≃ C :=
   ⟨g.1 ∘ f.1, biinvTrans f.2 g.2⟩
 
-  instance : @Transitive (Type u) (· ≃ ·) := ⟨@trans⟩
+  noncomputable instance : @Transitive (Type u) (· ≃ ·) := ⟨@trans⟩
 
   hott definition idtoiff {A B : Type u} (p : A = B) : A ↔ B :=
   begin induction p; reflexivity end
@@ -219,7 +219,7 @@ namespace Equiv
 
   section
     variable {A : Type u} {B : A → Type v} {a b : A} (p : a = b)
-    abbrev subst : B a → B b := transport B p
+    hott abbrev subst : B a → B b := transport B p
   end
 
   hott definition transportconst {A B : Type u} : A = B → A → B :=
@@ -229,15 +229,15 @@ namespace Equiv
     (p : f = g) : f.forward ~ g.forward :=
   begin induction p; reflexivity end
 
-  instance {A : Type u} : @Rewrite A A A Id Id Id := ⟨@Id.trans A⟩
+  noncomputable instance {A : Type u} : @Rewrite A A A Id Id Id := ⟨@Id.trans A⟩
 
-  instance {A : Type u} {B : Type v} (ρ : A → B → Type w) : Rewrite ρ Id ρ :=
+  noncomputable instance {A : Type u} {B : Type v} (ρ : A → B → Type w) : Rewrite ρ Id ρ :=
   ⟨λ a _ _ R p => transport (ρ a) p R⟩
 
-  instance {A : Type u} {B : Type v} (ρ : A → B → Type w) : Rewrite Id ρ ρ :=
+  noncomputable instance {A : Type u} {B : Type v} (ρ : A → B → Type w) : Rewrite Id ρ ρ :=
   ⟨λ _ _ c p R => transport (ρ · c) p⁻¹ R⟩
 
-  instance : Rewrite Equiv.{u, v} Equiv.{v, w} Equiv.{u, w} := ⟨@trans⟩
+  noncomputable instance : Rewrite Equiv.{u, v} Equiv.{v, w} Equiv.{u, w} := ⟨@trans⟩
 
   hott definition depPath {A : Type u} (B : A → Type v) {a b : A} (p : a = b) (u : B a) (v : B b) :=
   transport B p u = v
@@ -248,7 +248,7 @@ namespace Equiv
   hott definition depPath.refl {A : Type u} (B : A → Type v) {a : A} (u : B a) : u =[idp a] u :=
   idp u
 
-  instance {A : Type u} (B : A → Type v) (a : A) :
+  noncomputable instance {A : Type u} (B : A → Type v) (a : A) :
     @Reflexive (B a) (depPath B (idp a)) :=
   ⟨depPath.refl B⟩
 
@@ -335,7 +335,7 @@ namespace Equiv
 
   notation "transport²" => transportSquare
 
-  abbrev substSquare {A : Type u} {B : A → Type v} {a b : A} {p q : a = b}
+  hott abbrev substSquare {A : Type u} {B : A → Type v} {a b : A} {p q : a = b}
     (r : p = q) (u : B a) : transport B p u = transport B q u :=
   transport² B r u
 
@@ -698,7 +698,7 @@ namespace Equiv
   hott lemma baseEquivΩ {A : Type u} {a b : A} (p : a = b) {n : ℕ} : Ωⁿ(A, a) ≃ Ωⁿ(A, b) :=
   transport (λ x, Ωⁿ(A, a) ≃ Ωⁿ(A, x)) p (ideqv (Ωⁿ(A, a)))
 
-  instance {A : Type u} {a b : A} {n : ℕ} : HPow (Ωⁿ(A, a)) (a = b) (Ωⁿ(A, b)) :=
+  noncomputable instance {A : Type u} {a b : A} {n : ℕ} : HPow (Ωⁿ(A, a)) (a = b) (Ωⁿ(A, b)) :=
   ⟨λ p α, conjugateΩ α p⟩
 
   hott lemma conjugateRewriteΩ {A : Type u} {a b : A} (p : a = b) {n : ℕ}
@@ -848,8 +848,8 @@ namespace Equiv
   section
     variable {A : Type u} {a : A} (n : ℕ)
 
-    abbrev outΩ : Ωⁿ⁺¹(A, a) → Ω¹(Ωⁿ(A, a), idΩ a n) := (altDefΩ n).forward
-    abbrev inΩ  : Ω¹(Ωⁿ(A, a), idΩ a n) → Ωⁿ⁺¹(A, a) := (altDefΩ n).left
+    hott abbrev outΩ : Ωⁿ⁺¹(A, a) → Ω¹(Ωⁿ(A, a), idΩ a n) := (altDefΩ n).forward
+    hott abbrev inΩ  : Ω¹(Ωⁿ(A, a), idΩ a n) → Ωⁿ⁺¹(A, a) := (altDefΩ n).left
   end
 
   hott lemma altDefIdΩ {A : Type u} {a : A} : Π (n : ℕ), altDefΩ n (idΩ (idp a) n) = idp (idΩ a n)
@@ -946,8 +946,8 @@ namespace Equiv
   section
     variable {A : Type u} {B : A → Type v} {a : A} {b : B a} (n : ℕ) (α : Ωⁿ⁺¹(A, a))
 
-    abbrev outOverΩ : Ωⁿ⁺¹(B, b, α) → Ω¹(λ β, Ωⁿ(B, b, β), idOverΩ b n, outΩ n α) := (altDefOverΩ n α).forward
-    abbrev inOverΩ  : Ω¹(λ β, Ωⁿ(B, b, β), idOverΩ b n, outΩ n α) → Ωⁿ⁺¹(B, b, α) := (altDefOverΩ n α).left
+    hott abbrev outOverΩ : Ωⁿ⁺¹(B, b, α) → Ω¹(λ β, Ωⁿ(B, b, β), idOverΩ b n, outΩ n α) := (altDefOverΩ n α).forward
+    hott abbrev inOverΩ  : Ω¹(λ β, Ωⁿ(B, b, β), idOverΩ b n, outΩ n α) → Ωⁿ⁺¹(B, b, α) := (altDefOverΩ n α).left
   end
 
   hott theorem apIdΩ {A : Type u} {B : Type v} (f : A → B) {a : A} : Π {n : ℕ}, apΩ f (idΩ a n) = idΩ (f a) n

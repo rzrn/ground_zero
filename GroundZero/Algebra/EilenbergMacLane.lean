@@ -52,7 +52,7 @@ namespace K1
 
   attribute [irreducible] K1
 
-  instance : isPointed (K1 G) := ⟨base⟩
+  noncomputable instance : isPointed (K1 G) := ⟨base⟩
 
   hott definition KΩ.mul : Ω¹(K1 G) → Ω¹(K1 G) → Ω¹(K1 G) := λ p q, p ⬝ q
   hott definition KΩ.one : Ω¹(K1 G)                       := idp base
@@ -86,7 +86,7 @@ namespace K1
     { apply ensIsGroupoid }
   end
 
-  noncomputable hott definition code' : K1 G → 0-Type :=
+  hott definition code' : K1 G → 0-Type :=
   begin
     fapply family; exact G.carrier;
     { intro x; apply ua; existsi (G.φ · x); apply Prod.mk <;>

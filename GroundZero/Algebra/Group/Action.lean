@@ -42,16 +42,16 @@ namespace Group
       symmetry; apply invExplode
     end)⟩
 
-    def orbit (φ : G ⮎ A) (x : A) :=
+    hott def orbit (φ : G ⮎ A) (x : A) :=
     GroundZero.Algebra.im (φ.1 · x)
 
-    def Orb (φ : G ⮎ A) (x : A) :=
+    hott def Orb (φ : G ⮎ A) (x : A) :=
     (orbit φ x).subtype
 
-    def orbitᵣ (φ : G ⮌ A) (x : A) :=
+    hott def orbitᵣ (φ : G ⮌ A) (x : A) :=
     GroundZero.Algebra.im (φ.1 x)
 
-    def Orbᵣ (φ : G ⮌ A) (x : A) :=
+    hott def Orbᵣ (φ : G ⮌ A) (x : A) :=
     (orbitᵣ φ x).subtype
   end
 
@@ -149,7 +149,7 @@ namespace Group
 
     attribute [irreducible] Fga
 
-    noncomputable hott def act : G ⮎ Fga A G :=
+    hott def act : G ⮎ Fga A G :=
     ⟨φ, (unit, assoc)⟩
   end Fga
 

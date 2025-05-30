@@ -174,7 +174,7 @@ namespace Group
     (h : G.carrier) (φ : G.subgroup) : h ∈ coset h φ.set :=
   begin existsi G.e; apply Prod.mk; apply φ.unit; symmetry; apply G.mulOne end
 
-  noncomputable hott def coset.assoc {G : Group} {a b : G.carrier}
+  hott def coset.assoc {G : Group} {a b : G.carrier}
     (φ : G.subgroup) : coset a (coset b φ.set) = coset (G.φ a b) φ.set :=
   begin
     apply Ens.ext; intro x; apply Prod.mk;
@@ -189,7 +189,7 @@ namespace Group
   section
     variable {G : Group.{u}} (φ : Group.subgroup.{u, max u v} G)
 
-    noncomputable hott def coset.idem {x : G.carrier} : x ∈ φ.set → coset x φ.set = φ.set :=
+    hott def coset.idem {x : G.carrier} : x ∈ φ.set → coset x φ.set = φ.set :=
     begin
       intro p; apply Ens.ext; intro y; apply Prod.mk;
       { intro ⟨z, q⟩; apply transport (· ∈ φ.set); exact q.2⁻¹;
@@ -201,7 +201,7 @@ namespace Group
           apply ap (G.φ · y); apply mulRightInv } }
     end
 
-    noncomputable hott def coset.uniq {x g₁ g₂ : G.carrier} :
+    hott def coset.uniq {x g₁ g₂ : G.carrier} :
       x ∈ coset g₁ φ.set → x ∈ coset g₂ φ.set → coset g₁ φ.set = coset g₂ φ.set :=
     begin
       intro ⟨x₁, p⟩ ⟨x₂, q⟩; transitivity;
@@ -228,7 +228,7 @@ namespace Group
     apply coset.triv; existsi x; reflexivity
   end
 
-  def coset.repr (G : Group) (φ : G.subgroup) :
+  hott def coset.repr (G : Group) (φ : G.subgroup) :
     G.carrier ≃ (coset.all φ).subtype :=
   begin
     existsi coset.total φ; apply Prod.mk <;> existsi Sigma.fst;

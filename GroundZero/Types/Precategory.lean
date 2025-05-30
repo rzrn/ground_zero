@@ -42,7 +42,7 @@ namespace Precategory
   hott definition idiso (A : Precategory) {a : A.obj} : iso A a a :=
   ⟨id A, ⟨id A, (lu A (id A), lu A (id A))⟩⟩
 
-  instance (A : Precategory) : Reflexive (iso A) := ⟨@idiso A⟩
+  noncomputable instance (A : Precategory) : Reflexive (iso A) := ⟨@idiso A⟩
 
   hott definition idtoiso (A : Precategory) {a b : A.obj} (p : a = b) : iso A a b :=
   begin induction p; reflexivity end

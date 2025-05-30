@@ -16,7 +16,7 @@ axiom choice {A : Type u} (B : A → Type v) (η : Π x, B x → Type w) :
   (Π (x : A), ∥(Σ (y : B x), η x y)∥) →
   ∥(Σ (φ : Π x, B x), Π x, η x (φ x))∥
 
-noncomputable hott lemma choiceOfRel {A : Type u} {B : Type v}
+hott lemma choiceOfRel {A : Type u} {B : Type v}
   (R : A → B → Prop w) (H : hset A) (G : hset B) :
   (Π x, ∥(Σ y, (R x y).fst)∥) → ∥(Σ (φ : A → B), Π x, (R x (φ x)).fst)∥ :=
 begin
@@ -26,7 +26,7 @@ begin
   { intros x y; apply (R x y).2 }
 end
 
-noncomputable hott theorem cartesian {A : Type u} (B : A → Type v) :
+hott theorem cartesian {A : Type u} (B : A → Type v) :
   hset A → (Π x, hset (B x)) → (Π x, ∥B x∥) → ∥(Π x, B x)∥ :=
 begin
   intros p q φ; apply transport; apply ua;
@@ -43,7 +43,7 @@ section
   variable {A : Type u} (H : prop A)
   hott definition inh := Σ (φ : 𝟐 → Prop), ∥(Σ (x : 𝟐), (φ x).fst)∥
 
-  noncomputable hott lemma inh.hset : hset inh :=
+  hott lemma inh.hset : hset inh :=
   begin
     apply hsetRespectsSigma; apply piHset;
     intro x; apply Theorems.Equiv.propsetIsSet;
@@ -51,7 +51,7 @@ section
   end
 
   -- due to http://www.cs.ioc.ee/ewscs/2017/altenkirch/altenkirch-notes.pdf
-  noncomputable hott theorem lem {A : Type u} (H : prop A) : A + ¬A :=
+  hott theorem lem {A : Type u} (H : prop A) : A + ¬A :=
   begin
     have f := @choiceOfRel inh 𝟐 (λ φ x, φ.fst x) inh.hset boolIsSet (λ x, HITs.Merely.lift id x.2);
     induction f;
@@ -83,7 +83,7 @@ section
   end
 end
 
-noncomputable hott definition dneg.decode {A : Type u} (H : prop A) : ¬¬A → A :=
+hott definition dneg.decode {A : Type u} (H : prop A) : ¬¬A → A :=
 λ G, match lem H with
 | Sum.inl z => z
 | Sum.inr φ => explode (G φ)
@@ -91,7 +91,7 @@ noncomputable hott definition dneg.decode {A : Type u} (H : prop A) : ¬¬A → 
 hott definition dneg.encode {A : Type u} : A → ¬¬A :=
 λ x p, p x
 
-noncomputable hott definition dneg {A : Type u} (H : prop A) : A ≃ ¬¬A :=
+hott definition dneg {A : Type u} (H : prop A) : A ≃ ¬¬A :=
 propEquivLemma H notIsProp dneg.encode (dneg.decode H)
 
 section
@@ -100,15 +100,15 @@ section
   hott definition Contrapos.intro : (A → B) → (¬B → ¬A) :=
   λ f p a, p (f a)
 
-  noncomputable hott definition Contrapos.elim : (¬B → ¬A) → (A → B) :=
+  hott definition Contrapos.elim : (¬B → ¬A) → (A → B) :=
   λ f p, match lem H with
   | Sum.inl z => z
   | Sum.inr φ => explode (f φ p)
 
-  noncomputable hott definition Contrapos : (A → B) ↔ (¬B → ¬A) :=
+  hott definition Contrapos : (A → B) ↔ (¬B → ¬A) :=
   ⟨Contrapos.intro, Contrapos.elim H⟩
 
-  noncomputable hott definition Contrapos.eq (H : prop B) : (A → B) = (¬B → ¬A) :=
+  hott definition Contrapos.eq (H : prop B) : (A → B) = (¬B → ¬A) :=
   begin
     apply ua; apply propEquivLemma;
     apply piProp; intro; assumption;

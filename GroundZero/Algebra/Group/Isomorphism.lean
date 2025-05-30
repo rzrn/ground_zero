@@ -39,7 +39,7 @@ namespace Group
       { apply Ens.hset; apply H.hset }
     end
 
-    noncomputable hott def ker.encodeInj {φ : Hom G H} :
+    hott def ker.encodeInj {φ : Hom G H} :
       Π (x y : factorLeft G (ker φ)), ker.encode x = ker.encode y → x = y :=
     begin
       fapply @Relquot.indProp _ _ (λ x, Π y, ker.encode x = ker.encode y → x = y) <;> intro x;
@@ -57,7 +57,7 @@ namespace Group
     hott def ker.incl {φ : Hom G H} : G.carrier → factorLeft G (ker φ) :=
     Factor.incl
 
-    noncomputable hott def ker.decodeSigma {φ : Hom G H} :
+    hott def ker.decodeSigma {φ : Hom G H} :
       Π (x : im.carrier φ), fib ker.encode x :=
     begin
       apply Sigma.Ind; intro x; fapply Merely.ind;
@@ -69,15 +69,15 @@ namespace Group
         { apply Ens.hset; apply H.hset } }
     end
 
-    noncomputable hott def ker.decode {φ : Hom G H}
+    hott def ker.decode {φ : Hom G H}
       (x : im.carrier φ) : factorLeft G (ker φ) :=
     (ker.decodeSigma x).1
 
-    abbrev Im (φ : Hom G H) : Group :=
+    hott abbrev Im (φ : Hom G H) : Group :=
     Subgroup H (im φ)
 
     -- First isomorphism theorem.
-    noncomputable hott def firstIsoTheorem {φ : Hom G H} : Im φ ≅ G\ker φ :=
+    hott def firstIsoTheorem {φ : Hom G H} : Im φ ≅ G\ker φ :=
     begin
       fapply mkiso; exact ker.decode;
       { intro ⟨a, (A : ∥_∥)⟩ ⟨b, (B : ∥_∥)⟩; induction A; induction B;
@@ -89,7 +89,7 @@ namespace Group
     end
   end
 
-  noncomputable hott def S.iso : Im (S.univ G) ≅ G :=
+  hott def S.iso : Im (S.univ G) ≅ G :=
   begin
     fapply Iso.trans firstIsoTheorem;
     apply Iso.symm; fapply Iso.trans triv.factor;
@@ -114,7 +114,7 @@ namespace Group
   end
 
   -- Cayley’s theorem
-  noncomputable hott def Cayley : Σ (φ : subgroup (S G.1.zero)), Subgroup (S G.1.zero) φ ≅ G :=
+  hott def Cayley : Σ (φ : subgroup (S G.1.zero)), Subgroup (S G.1.zero) φ ≅ G :=
   ⟨im (S.univ G), S.iso⟩
 end Group
 

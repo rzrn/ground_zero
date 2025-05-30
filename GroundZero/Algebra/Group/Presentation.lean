@@ -56,17 +56,17 @@ namespace Group
 
   section
     variable {ε : Type u} (R : (F ε).subset)
-    noncomputable hott definition Presentation :=
+    hott definition Presentation :=
     (F ε)\(Closure R)
 
     hott definition Presentation.carrier :=
     factorLeft (F ε) (Closure R)
 
-    noncomputable hott definition Presentation.one : Presentation.carrier R :=
+    hott definition Presentation.one : Presentation.carrier R :=
     (Presentation R).e
   end
 
-  noncomputable hott lemma Presentation.sound {A : Type u}
+  hott lemma Presentation.sound {A : Type u}
     {R : (F A).subset} {x : F.carrier A} (H : x ∈ R) :
       @Factor.incl (F A) _ x = Presentation.one R :=
   begin apply Factor.sound; apply Closure.sub; assumption end
@@ -74,14 +74,14 @@ namespace Group
   hott definition commutators (G : Group) : G.subset :=
   GroundZero.Algebra.im (λ (a, b), commutator a b)
 
-  noncomputable hott definition Abelianization (G : Group) :=
+  hott definition Abelianization (G : Group) :=
   G\Closure (commutators G)
   postfix:max "ᵃᵇ" => Abelianization
 
   hott definition Abelianization.elem : G.carrier → (Abelianization G).carrier :=
   Factor.incl
 
-  noncomputable hott theorem abelComm : (Abelianization G).isCommutative :=
+  hott theorem abelComm : (Abelianization G).isCommutative :=
   begin
     intro (a : Relquot _) (b : Relquot _);
     apply @commutes (Abelianization G); induction a;
@@ -127,7 +127,7 @@ namespace Group
     apply commutators.toClosureKer ρ; assumption
   end
 
-  noncomputable hott definition Abelianization.homomorphism {G A : Group} (ρ : A.isCommutative) (f : Hom G A) : Hom Gᵃᵇ A :=
+  hott definition Abelianization.homomorphism {G A : Group} (ρ : A.isCommutative) (f : Hom G A) : Hom Gᵃᵇ A :=
   mkhomo (Abelianization.rec ρ f) (begin
     intro (a : Relquot _) (b : Relquot _);
     induction a; induction b; apply homoMul;
@@ -135,27 +135,27 @@ namespace Group
     apply A.hset; apply propIsSet; apply A.hset
   end)
 
-  noncomputable hott definition FAb (A : Type u) := Abelianization (F A)
+  hott definition FAb (A : Type u) := Abelianization (F A)
 
-  noncomputable hott definition FAb.elem {A : Type u} : A → (FAb A).carrier :=
+  hott definition FAb.elem {A : Type u} : A → (FAb A).carrier :=
   Abelianization.elem ∘ F.elem
 
-  noncomputable hott definition FAb.rec {A : Group} (ρ : A.isCommutative)
+  hott definition FAb.rec {A : Group} (ρ : A.isCommutative)
     {ε : Type v} (f : ε → A.carrier) : (FAb ε).carrier → A.carrier :=
   Abelianization.rec ρ (F.homomorphism f)
 
-  noncomputable hott definition FAb.homomorphism {A : Group} (ρ : A.isCommutative)
+  hott definition FAb.homomorphism {A : Group} (ρ : A.isCommutative)
     {ε : Type v} (f : ε → A.carrier) : Hom (FAb ε) A :=
   Abelianization.homomorphism ρ (F.homomorphism f)
 
-  noncomputable hott definition normalFactor (φ : G.normal) : G\φ ≅ G\Closure φ.set :=
+  hott definition normalFactor (φ : G.normal) : G\φ ≅ G\Closure φ.set :=
   Factor.iso (Closure.sub φ.set) (Closure.elim φ)
 
-  noncomputable hott definition F.homomorphism.encode :
+  hott definition F.homomorphism.encode :
     G.carrier → im.carrier (@F.homomorphism G G.carrier id) :=
   λ x, ⟨x, HITs.Merely.elem ⟨F.elem x, idp _⟩⟩
 
-  noncomputable hott theorem F.homomorphism.iso :
+  hott theorem F.homomorphism.iso :
     G ≅ Im (@F.homomorphism G G.carrier id) :=
   begin
     fapply mkiso; exact F.homomorphism.encode;
@@ -167,7 +167,7 @@ namespace Group
         reflexivity; apply HITs.Merely.uniq } }
   end
 
-  noncomputable hott theorem Presentation.univ :
+  hott theorem Presentation.univ :
     Σ (R : (F G.carrier).subset), G ≅ Presentation R :=
   begin
     existsi (ker (F.homomorphism id)).set;

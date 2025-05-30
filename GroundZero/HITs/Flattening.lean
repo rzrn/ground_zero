@@ -33,7 +33,7 @@ namespace Flattening
   hott definition iotaφ : Π x, C x → Σ x, P f g C D x :=
   λ x y, ⟨Coeq.iota x, y⟩
 
-  noncomputable hott definition respφ (x : A) (y : C (f x)) :
+  hott definition respφ (x : A) (y : C (f x)) :
     @Id (Σ x, P f g C D x) (iotaφ (f x) y) (iotaφ (g x) ((D x).1 y)) :=
   begin
     fapply Sigma.prod; apply Coeq.resp;

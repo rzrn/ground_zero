@@ -6,7 +6,7 @@ namespace GroundZero.Algebra
 namespace Group
   hott definition Aut.carrier (G : Group) := G ≅ G
 
-  noncomputable hott definition Aut (G : Group) : Group :=
+  hott definition Aut (G : Group) : Group :=
   @Group.intro (G ≅ G) Iso.hset (λ φ ψ, Iso.trans ψ φ) Iso.symm (Iso.refl G.1)
     (λ ⟨f, ⟨f', e₁⟩⟩ ⟨g, ⟨g', e₂⟩⟩ ⟨h, ⟨h', e₂⟩⟩, Iso.ext (λ _, idp _))
     (λ ⟨f, ⟨f', e₁⟩⟩, Iso.ext (λ _, idp _))

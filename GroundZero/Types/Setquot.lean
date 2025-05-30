@@ -19,7 +19,7 @@ end
 hott definition setquot {A : Type u} (R : eqrel A) :=
 Σ (φ : Ens A), iseqclass R φ
 
-noncomputable hott definition setquot.set {A : Type u} (R : eqrel A) : hset (setquot R) :=
+hott definition setquot.set {A : Type u} (R : eqrel A) : hset (setquot R) :=
 begin
   fapply hsetRespectsSigma; apply Ens.isset;
   intro; apply propIsSet; apply iseqclass.prop
@@ -31,7 +31,7 @@ hott definition setquot.elem {A : Type u} {R : eqrel A} (x : A) : setquot R :=
    λ _ _ p q, R.trans q p,
    λ _ _ p q, R.trans (R.symm p) q)⟩
 
-noncomputable hott definition setquot.sound {A : Type u} {R : eqrel A} {x y : A} :
+hott definition setquot.sound {A : Type u} {R : eqrel A} {x y : A} :
   R.apply x y → @setquot.elem A R x = setquot.elem y :=
 begin
   intro p; fapply Types.Sigma.prod;

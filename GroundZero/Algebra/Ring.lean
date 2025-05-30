@@ -92,42 +92,42 @@ class ring (T : Prering) :=
 
 section
   variable (T : Prering)
-  def Prering.sub (x y : T.carrier) := T.φ x (T.neg y)
+  hott def Prering.sub (x y : T.carrier) := T.φ x (T.neg y)
 
   hott definition Prering.additive (T : Prering) [ring T] : Group :=
   Group.intro T.hset T.φ T.neg T.zero ring.addAssoc ring.zeroAdd ring.addLeftNeg
 
   postfix:max "⁺" => Prering.additive
 
-  def Prering.isproper [ring T] (x : T.carrier) := T⁺.isproper x
-  def Prering.proper [ring T] := T⁺.proper
+  hott def Prering.isproper [ring T] (x : T.carrier) := T⁺.isproper x
+  hott def Prering.proper [ring T] := T⁺.proper
 
-  def Prering.properHset [ring T] : hset T.proper :=
+  hott def Prering.properHset [ring T] : hset T.proper :=
   begin
     apply hsetRespectsSigma;
     apply T⁺.hset; intro;
     apply propIsSet; apply notIsProp
   end
 
-  instance : Add T.carrier := ⟨T.φ⟩
-  instance : Sub T.carrier := ⟨T.sub⟩
-  instance : Neg T.carrier := ⟨T.neg⟩
+  noncomputable instance : Add T.carrier := ⟨T.φ⟩
+  noncomputable instance : Sub T.carrier := ⟨T.sub⟩
+  noncomputable instance : Neg T.carrier := ⟨T.neg⟩
 
-  instance : Mul T.carrier := ⟨T.ψ⟩
+  noncomputable instance : Mul T.carrier := ⟨T.ψ⟩
 
-  instance : OfNat T.carrier Nat.zero := ⟨T.zero⟩
+  noncomputable instance : OfNat T.carrier Nat.zero := ⟨T.zero⟩
 end
 
 section
   variable (T : Overring)
 
-  instance : Add T.carrier := ⟨T.τ.φ⟩
-  instance : Sub T.carrier := ⟨T.τ.sub⟩
-  instance : Neg T.carrier := ⟨T.τ.neg⟩
+  noncomputable instance : Add T.carrier := ⟨T.τ.φ⟩
+  noncomputable instance : Sub T.carrier := ⟨T.τ.sub⟩
+  noncomputable instance : Neg T.carrier := ⟨T.τ.neg⟩
 
-  instance : Mul T.carrier := ⟨T.τ.ψ⟩
+  noncomputable instance : Mul T.carrier := ⟨T.τ.ψ⟩
 
-  instance : OfNat T.carrier Nat.zero := ⟨T.τ.zero⟩
+  noncomputable instance : OfNat T.carrier Nat.zero := ⟨T.τ.zero⟩
 
   infix:60 " <= " => Overring.ρ _
   infix:60 " ≤ "  => Overring.ρ _
@@ -311,7 +311,7 @@ namespace Ring
   hott definition normal : T⁺ ⊵ φ :=
   Group.abelianSubgroupIsNormal T⁺ T.addComm φ
 
-  noncomputable hott definition Factor.mul : factorLeft T⁺ φ → factorLeft T⁺ φ → factorLeft T⁺ φ :=
+  hott definition Factor.mul : factorLeft T⁺ φ → factorLeft T⁺ φ → factorLeft T⁺ φ :=
   begin
     fapply Relquot.lift₂;
     { intros a b; apply Relquot.elem; exact T.ψ a b };

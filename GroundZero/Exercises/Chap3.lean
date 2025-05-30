@@ -116,7 +116,7 @@ namespace «3.9»
   | false => ap (Coproduct.elim _ _) (lemFalse explode)
   | true  => ap (Coproduct.elim _ _) (lemTrue ★)
 
-  noncomputable hott lemma Ωrinv (lem : LEM₋₁) : Ωintro ∘ Ωelim lem ~ idfun :=
+  hott lemma Ωrinv (lem : LEM₋₁) : Ωintro ∘ Ωelim lem ~ idfun :=
   begin
     intro w; apply Equiv.propset.Id; match lem w.1 w.2 with | Sum.inl x => _ | Sum.inr φ => _;
 
@@ -128,7 +128,7 @@ namespace «3.9»
     apply lemFalse φ; symmetry; apply ua; apply uninhabitedType; exact explode ∘ φ
   end
 
-  noncomputable hott theorem lemImplPropEqvBool (lem : LEM₋₁) : Prop u ≃ 𝟐 :=
+  hott theorem lemImplPropEqvBool (lem : LEM₋₁) : Prop u ≃ 𝟐 :=
   ⟨Ωelim lem, Qinv.toBiinv _ ⟨Ωintro, (Ωlinv lem, Ωrinv lem)⟩⟩
 end «3.9»
 
@@ -151,11 +151,11 @@ namespace «3.10»
   hott corollary lemSucCumulativity : LEM₋₁ (u + 1) → LEM₋₁ u :=
   lemCumulativity.{u, u + 1}
 
-  noncomputable hott lemma lemImplPropUniverseEqv (lem : LEM₋₁ (max u v)) : Prop u ≃ Prop (max u v) :=
+  hott lemma lemImplPropUniverseEqv (lem : LEM₋₁ (max u v)) : Prop u ≃ Prop (max u v) :=
   Equiv.trans (lemImplPropEqvBool (lemCumulativity.{u, v} lem))
               (Equiv.symm (lemImplPropEqvBool lem))
 
-  noncomputable hott lemma resizeUniqLem1 (lem : LEM₋₁ (max u v)) : (lemImplPropUniverseEqv.{u, v} lem).1 ∘ Ωintro ~ ResizeΩ.{u, v} ∘ Ωintro :=
+  hott lemma resizeUniqLem1 (lem : LEM₋₁ (max u v)) : (lemImplPropUniverseEqv.{u, v} lem).1 ∘ Ωintro ~ ResizeΩ.{u, v} ∘ Ωintro :=
   begin
     intro b; transitivity; apply ap Ωintro; apply Ωlinv; apply Equiv.propset.Id;
     symmetry; apply ua; induction b using Bool.casesOn;
@@ -164,16 +164,16 @@ namespace «3.10»
       intro (Resize.intro b); apply ap; apply Structures.unitIsProp }
   end
 
-  noncomputable hott lemma resizeUniqLem2 (lem : LEM₋₁ (max u v)) : (lemImplPropUniverseEqv.{u, v} lem).1 ~ ResizeΩ.{u, v} :=
+  hott lemma resizeUniqLem2 (lem : LEM₋₁ (max u v)) : (lemImplPropUniverseEqv.{u, v} lem).1 ~ ResizeΩ.{u, v} :=
   begin
     intro w; transitivity; apply ap; symmetry; apply Ωrinv (lemCumulativity.{u, v} lem);
     transitivity; apply resizeUniqLem1; apply ap ResizeΩ; apply Ωrinv
   end
 
-  noncomputable hott theorem lemImplResizing (lem : LEM₋₁ (max u v)) : biinv ResizeΩ :=
+  hott theorem lemImplResizing (lem : LEM₋₁ (max u v)) : biinv ResizeΩ :=
   transport biinv (Theorems.funext (resizeUniqLem2.{u, v} lem)) (lemImplPropUniverseEqv lem).2
 
-  noncomputable hott corollary lemImplResizingSuc : LEM₋₁ (u + 1) → biinv ResizeΩ.{u, u + 1} :=
+  hott corollary lemImplResizingSuc : LEM₋₁ (u + 1) → biinv ResizeΩ.{u, u + 1} :=
   lemImplResizing.{u, u + 1}
 end «3.10»
 

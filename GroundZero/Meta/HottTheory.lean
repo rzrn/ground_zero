@@ -186,8 +186,15 @@ def declImpl     := leading_parser implTok >> Parser.ident >> Term.leftArrow >> 
 -/
 def hottPrefix := leading_parser "hott "
 
+def hottDeclMods := leading_parser
+  optional docComment >>
+  optional Term.«attributes» >>
+  optional visibility >>
+  optional «unsafe» >>
+  optional («partial» <|> «nonrec»)
+
 @[command_parser] def hott :=
-leading_parser declModifiers false >> hottPrefix >> (decl <|> declExample <|> declCheck <|> declAxiom <|> declOpaque <|> declProhibit <|> declImpl)
+leading_parser hottDeclMods >> hottPrefix >> (decl <|> declExample <|> declCheck <|> declAxiom <|> declOpaque <|> declProhibit <|> declImpl)
 
 def checkAndMark (tag : Syntax) (name : Name) : CommandElabM Unit := do {
   liftTermElabM (checkDecl tag name);
@@ -227,7 +234,10 @@ def abbrevAttrs : Array Attribute :=
 
 @[command_elab «hott»] def elabHoTT : CommandElab :=
 λ stx => do {
-  let #[mods, _, cmd] := stx.getArgs | throwError "incomplete declaration";
+  let #[hottMods, _, cmd] := stx.getArgs | throwError "incomplete declaration";
+
+  let #[commentMod, attrs, visibilityMod, unsafeMod, recMod] := hottMods.getArgs | throwError "invalid syntax";
+  let mods := mkNode ``Command.declModifiers #[commentMod, attrs, visibilityMod, mkNode ``Command.«noncomputable» #[], unsafeMod, recMod];
 
   if cmd.isOfKind ``decl then do {
     let #[tok, declId, declDef] := cmd.getArgs | throwError "invalid declaration";

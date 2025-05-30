@@ -88,7 +88,7 @@ namespace Group
       apply mulInvInv; apply φ.inv; assumption }
   end
 
-  noncomputable hott proposition cosetsEq {φ : G.subgroup} (H : G ⊵ φ) : ldiv φ = rdiv φ :=
+  hott proposition cosetsEq {φ : G.subgroup} (H : G ⊵ φ) : ldiv φ = rdiv φ :=
   begin
     apply Theorems.funext; intro; apply Theorems.funext; intro;
     apply propext; apply Ens.prop; apply Ens.prop;

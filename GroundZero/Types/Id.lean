@@ -44,9 +44,9 @@ namespace Id
     (p : a = b) (q : b = c) : a = c :=
   begin induction p; apply q end
 
-  instance (A : Type u) : Reflexive  (@Id A) := ⟨@idp A⟩
-  instance (A : Type u) : Symmetric  (@Id A) := ⟨@symm A⟩
-  instance (A : Type u) : Transitive (@Id A) := ⟨@trans A⟩
+  noncomputable instance (A : Type u) : Reflexive  (@Id A) := ⟨@idp A⟩
+  noncomputable instance (A : Type u) : Symmetric  (@Id A) := ⟨@symm A⟩
+  noncomputable instance (A : Type u) : Transitive (@Id A) := ⟨@trans A⟩
 
   hott definition inv {A : Type u} {a b : A} (p : a = b) : b = a := symm p
 

@@ -185,7 +185,7 @@ namespace Nat
     transitivity; apply ap (max · k); exact p; exact q
   end
 
-  instance : Transitive le := ⟨@le.trans⟩
+  noncomputable instance : Transitive le := ⟨@le.trans⟩
 
   hott corollary le.inj (n m : ℕ) : n + 1 ≤ m + 1 → n ≤ m := ap Nat.pred
   hott corollary le.map (n m : ℕ) : n ≤ m → n + 1 ≤ m + 1 := ap Nat.succ
@@ -446,7 +446,7 @@ namespace UnitList
   hott theorem iso : ℕ ≃ List 𝟏 :=
   ⟨encode, (⟨decode, decodeEncode⟩, ⟨decode, encodeDecode⟩)⟩
 
-  noncomputable hott corollary equality : ℕ = List 𝟏 := ua iso
+  hott corollary equality : ℕ = List 𝟏 := ua iso
 end UnitList
 
 end Theorems

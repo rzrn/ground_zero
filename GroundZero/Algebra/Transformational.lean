@@ -490,7 +490,7 @@ namespace GroundZero.Algebra
       { intro; apply gis.id; reflexivity }
     end
 
-    noncomputable hott definition rga.eqv' (G : Group)
+    hott definition rga.eqv' (G : Group)
       (H : hset M) : rga M G ≃ gis M G :=
     @transport Group (λ H, @rga M H ≃ gis M G) Gᵒᵖ G
       (Id.inv (Iso.ua Op.iso)) (rga.eqv H)

@@ -47,8 +47,8 @@ namespace Interval
 
   attribute [irreducible] I
 
-  instance : OfNat I Nat.zero := ⟨i₀⟩
-  instance : OfNat I (Nat.succ Nat.zero) := ⟨i₁⟩
+  noncomputable instance : OfNat I Nat.zero := ⟨i₀⟩
+  noncomputable instance : OfNat I (Nat.succ Nat.zero) := ⟨i₁⟩
 
   hott abbreviation left  := i₀
   hott abbreviation right := i₁

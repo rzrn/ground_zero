@@ -12,16 +12,16 @@ namespace GroundZero.Algebra
   @Alg.{0, 0, u, v} 𝟎 𝟐 (Coproduct.elim explode (Bool.rec 3 4))
 
   namespace Pregeometry
-    def between (G : Pregeometry) (a b c : G.carrier) :=
+    hott def between (G : Pregeometry) (a b c : G.carrier) :=
     (G.rel false (a, b, c, ★)).1
 
-    def congruent (G : Pregeometry) (a b c d : G.carrier) :=
+    hott def congruent (G : Pregeometry) (a b c d : G.carrier) :=
     (G.rel true (a, b, c, d, ★)).1
 
-    def prop₁ (G : Pregeometry) {a b c : G.carrier} : prop (G.between a b c) :=
+    hott def prop₁ (G : Pregeometry) {a b c : G.carrier} : prop (G.between a b c) :=
     (G.rel false (a, b, c, ★)).2
 
-    def prop₂ (G : Pregeometry) {a b c d : G.carrier} : prop (G.congruent a b c d) :=
+    hott def prop₂ (G : Pregeometry) {a b c d : G.carrier} : prop (G.congruent a b c d) :=
     (G.rel true (a, b, c, d, ★)).2
 
     hott def collinear (G : Pregeometry) (a b c : G.carrier) :=

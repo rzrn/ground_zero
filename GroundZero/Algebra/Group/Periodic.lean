@@ -31,7 +31,7 @@ namespace Group
     (λ _, Theorems.funext (λ _, G.oneMul _))
     (λ _, Theorems.funext (λ _, G.mulLeftInv _))
 
-  instance P.abelian (G : Group) (ρ : G.isCommutative) : (P G).isCommutative :=
+  noncomputable instance P.abelian (G : Group) (ρ : G.isCommutative) : (P G).isCommutative :=
   begin intros f g; fapply Theorems.funext; intro; apply ρ end
 
   hott definition P.unitSqr (H : Π x, G.φ x x = G.e) (x : P.carrier G) : P.mul x x = P.one :=

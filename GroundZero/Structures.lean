@@ -77,7 +77,7 @@ namespace hlevel
   | −2     => le.refl −2
   | succ n => le.step _ _ (le.minusTwo n)
 
-  noncomputable hott definition le.succ (a b : ℕ₋₂) (ρ : a ≤ b) : succ a ≤ succ b :=
+  hott definition le.succ (a b : ℕ₋₂) (ρ : a ≤ b) : succ a ≤ succ b :=
   begin induction ρ; apply le.refl; apply le.step; assumption end
 
   hott def addNat : ℕ₋₂ → ℕ → ℕ₋₂
@@ -136,13 +136,13 @@ namespace hlevel
   | n, −1            => idp (succ n)
   | n, succ (succ m) => addNatSuccSucc n (succSucc m)
 
-  instance : HAdd ℕ₋₂ ℕ₋₂ ℕ₋₂ := ⟨add⟩
+  noncomputable instance : HAdd ℕ₋₂ ℕ₋₂ ℕ₋₂ := ⟨add⟩
 
   hott definition ofNat (n : ℕ) : ℕ₋₂ :=
   succ (succ (predPred n))
 
-  instance (n : ℕ) : OfNat ℕ₋₂ n := ⟨ofNat n⟩
-  instance : Coe ℕ ℕ₋₂ := ⟨ofNat⟩
+  noncomputable instance (n : ℕ) : OfNat ℕ₋₂ n := ⟨ofNat n⟩
+  noncomputable instance : Coe ℕ ℕ₋₂ := ⟨ofNat⟩
 end hlevel
 
 hott definition isNType : hlevel → Type u → Type u
@@ -161,7 +161,7 @@ hott lemma hlevel.cumulative {A : Type u} : Π (n : hlevel), is-n-type A → is-
 | −2,            H => λ x y, ⟨(H.2 x)⁻¹ ⬝ H.2 y, λ p, begin induction p; apply Id.invComp end⟩
 | hlevel.succ n, H => λ x y, hlevel.cumulative n (H x y)
 
-noncomputable hott corollary hlevel.strongCumulative (n m : hlevel) (ρ : n ≤ m) :
+hott corollary hlevel.strongCumulative (n m : hlevel) (ρ : n ≤ m) :
   Π {A : Type u}, (is-n-type A) → (is-m-type A) :=
 begin
   induction ρ; intros; assumption;

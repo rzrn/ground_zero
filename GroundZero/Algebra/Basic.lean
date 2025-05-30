@@ -32,7 +32,7 @@ namespace GroundZero.Algebra
 
     hott definition Alg := Σ (A : 0-Type), Algebra deg A.1
 
-    noncomputable hott definition Algebra.hset {A : Type w} (H : hset A) : hset (Algebra deg A) :=
+    hott definition Algebra.hset {A : Type w} (H : hset A) : hset (Algebra deg A) :=
     begin
       apply prodHset;
       { apply piHset; intro; apply piHset; intro; apply H };
@@ -66,7 +66,7 @@ namespace GroundZero.Algebra
     (Π i v, f (Γ.op i v) = Λ.op i (v.map f)) ×
     (Π i v, Γ.rel i v = Λ.rel i (v.map f))
 
-    noncomputable hott definition respects.prop {Γ Λ : Alg deg}
+    hott definition respects.prop {Γ Λ : Alg deg}
       (f : Γ →ᴬ Λ) : prop (respects f) :=
     begin
       apply productProp <;> apply piProp <;> intro <;> apply piProp <;> intro;
@@ -102,7 +102,7 @@ namespace GroundZero.Algebra
       apply Id.ap (Γ.rel i); apply vect.id
     end
 
-    noncomputable hott definition Hom.funext {Γ Λ : Alg deg} :
+    hott definition Hom.funext {Γ Λ : Alg deg} :
       Π {f g : Hom Γ Λ}, f.ap ~ g.ap → f = g :=
     begin
       intro ⟨f, F⟩ ⟨g, G⟩ p; fapply Sigma.prod;
@@ -112,7 +112,7 @@ namespace GroundZero.Algebra
     hott definition idhom {Γ Λ : Alg deg} {f g : Hom Γ Λ} : f = g → f.ap ~ g.ap :=
     begin intro p; induction p; apply Homotopy.id end
 
-    noncomputable hott definition Hom.hset {Γ Λ : Alg deg} : hset (Hom Γ Λ) :=
+    hott definition Hom.hset {Γ Λ : Alg deg} : hset (Hom Γ Λ) :=
     begin
       fapply hsetRespectsSigma;
       { apply piHset; intro; apply Λ.hset };
@@ -138,20 +138,20 @@ namespace GroundZero.Algebra
       hott definition Iso.ofHom : Π (φ : Hom Γ Λ), biinv φ.ap → Iso Γ Λ :=
       λ ⟨φ, p⟩ q, ⟨φ, (p, q)⟩
 
-      noncomputable hott lemma Iso.ext {φ ψ : Iso Γ Λ} : φ.ap ~ ψ.ap → φ = ψ :=
+      hott lemma Iso.ext {φ ψ : Iso Γ Λ} : φ.ap ~ ψ.ap → φ = ψ :=
       begin
         intro p; fapply Sigma.prod; apply Theorems.funext p;
         apply productProp; apply respects.prop;
         apply Theorems.Equiv.biinvProp
       end
 
-      noncomputable hott lemma Iso.eqIffEqEqv (φ ψ : Iso Γ Λ) : φ.eqv = ψ.eqv → φ = ψ :=
+      hott lemma Iso.eqIffEqEqv (φ ψ : Iso Γ Λ) : φ.eqv = ψ.eqv → φ = ψ :=
       begin intro p; apply Iso.ext; apply happly; apply Id.ap Sigma.fst p end
 
       hott definition Iso.hom (φ : Iso Γ Λ) : Hom Γ Λ :=
       ⟨φ.ap, φ.2.1⟩
 
-      noncomputable hott lemma Iso.hset : hset (Iso Γ Λ) :=
+      hott lemma Iso.hset : hset (Iso Γ Λ) :=
       begin
         apply hsetRespectsSigma;
         { apply piHset; intro; apply Λ.hset };
@@ -190,9 +190,9 @@ namespace GroundZero.Algebra
       { apply Equiv.biinvTrans; exact f.2.2; exact g.2.2 }
     end
 
-    instance : @Reflexive  (Alg deg) Iso := ⟨Iso.refl⟩
-    instance : @Symmetric  (Alg deg) Iso := ⟨@Iso.symm _ _ _⟩
-    instance : @Transitive (Alg deg) Iso := ⟨@Iso.trans _ _ _⟩
+    noncomputable instance : @Reflexive  (Alg deg) Iso := ⟨Iso.refl⟩
+    noncomputable instance : @Symmetric  (Alg deg) Iso := ⟨@Iso.symm _ _ _⟩
+    noncomputable instance : @Transitive (Alg deg) Iso := ⟨@Iso.trans _ _ _⟩
 
     hott lemma Algebra.ext {A B : Type w} (p : A = B) :
       Π (Γ : Algebra deg A) (Λ : Algebra deg B),
@@ -222,7 +222,7 @@ namespace GroundZero.Algebra
       apply Algebra.ext <;> assumption
     end
 
-    noncomputable hott lemma equivCompSubst {A B : Type u} (φ : A ≃ B) :
+    hott lemma equivCompSubst {A B : Type u} (φ : A ≃ B) :
       φ.1 ∘ transportconst (ua φ)⁻¹ = id :=
     begin
       apply Theorems.funext; intro x;
@@ -230,7 +230,7 @@ namespace GroundZero.Algebra
       apply uaβrev; apply Equiv.forwardLeft
     end
 
-    noncomputable hott lemma uaPreservesOp {Γ Λ : Alg deg} :
+    hott lemma uaPreservesOp {Γ Λ : Alg deg} :
       Π (φ : Iso Γ Λ) (i : ι), Γ.op i =[ua φ.eqv] Λ.op i :=
     begin
       intro ⟨φ, (p, q)⟩ i; apply Id.trans;
@@ -243,7 +243,7 @@ namespace GroundZero.Algebra
       apply equivCompSubst ⟨φ, q⟩; apply vect.id
     end
 
-    noncomputable hott lemma uaPreservesRel {Γ Λ : Alg deg} :
+    hott lemma uaPreservesRel {Γ Λ : Alg deg} :
       Π (φ : Iso Γ Λ) (i : υ), Γ.rel i =[algrel (deg (Sum.inr i)), ua φ.eqv] Λ.rel i :=
     begin
       intro ⟨φ, (p, q)⟩ i; apply Id.trans;
@@ -259,20 +259,20 @@ namespace GroundZero.Algebra
       apply constmap; reflexivity
     end
 
-    noncomputable hott theorem Alg.ua {Γ Λ : Alg deg} (φ : Iso Γ Λ) : Γ = Λ :=
+    hott theorem Alg.ua {Γ Λ : Alg deg} (φ : Iso Γ Λ) : Γ = Λ :=
     Alg.ext (GroundZero.ua φ.eqv) (uaPreservesOp φ) (uaPreservesRel φ)
 
     hott lemma Alg.eqcar {Γ Λ : Alg deg} : Γ = Λ → Γ.carrier = Λ.carrier :=
     λ p, @Id.ap (0-Type) (Type _) _ _ Sigma.fst (Id.ap Sigma.fst p)
 
-    noncomputable hott lemma Alg.uaext : Π {Γ Λ : Alg deg} (φ : Iso Γ Λ), GroundZero.ua φ.eqv = Alg.eqcar (Alg.ua φ) :=
+    hott lemma Alg.uaext : Π {Γ Λ : Alg deg} (φ : Iso Γ Λ), GroundZero.ua φ.eqv = Alg.eqcar (Alg.ua φ) :=
     begin
       intro ⟨⟨A, f⟩, (Γ₁, Γ₂)⟩ ⟨⟨B, g⟩, (Λ₁, Λ₂)⟩ φ;
       symmetry; change Id.ap _ _ = _; transitivity; apply Id.ap;
       apply Sigma.mapFstOverProd; apply Sigma.mapFstOverProd
     end
 
-    noncomputable hott lemma Alg.inj {Γ Λ : Alg deg} {φ ψ : Iso Γ Λ} (p : Alg.ua φ = Alg.ua ψ) : φ = ψ :=
+    hott lemma Alg.inj {Γ Λ : Alg deg} {φ ψ : Iso Γ Λ} (p : Alg.ua φ = Alg.ua ψ) : φ = ψ :=
     begin
       apply Iso.eqIffEqEqv; transitivity; symmetry; apply idtoeqvua;
       transitivity; apply Id.ap; apply Alg.uaext;
@@ -290,7 +290,7 @@ namespace GroundZero.Algebra
         (λ p, transport B p u.2 = v.2) p₁ p₂ ε q) :=
     begin induction ε; reflexivity end
 
-    noncomputable hott lemma Alg.uaβrefl {Γ : Alg deg} : Alg.ua (Iso.refl Γ) = Id.refl :=
+    hott lemma Alg.uaβrefl {Γ : Alg deg} : Alg.ua (Iso.refl Γ) = Id.refl :=
     begin
       change Alg.ext _ _ _ = _;
       change Sigma.prod _ _ = _;
@@ -305,10 +305,10 @@ namespace GroundZero.Algebra
       apply Sigma.prodRefl
     end
 
-    noncomputable hott corollary Alg.rinv {Γ Λ : Alg deg} (p : Γ = Λ) : Alg.ua (Alg.id p) = p :=
+    hott corollary Alg.rinv {Γ Λ : Alg deg} (p : Γ = Λ) : Alg.ua (Alg.id p) = p :=
     begin induction p; apply Alg.uaβrefl end
 
-    noncomputable hott corollary Alg.linv {Γ Λ : Alg deg} {φ : Iso Γ Λ} : Alg.id (Alg.ua φ) = φ :=
+    hott corollary Alg.linv {Γ Λ : Alg deg} {φ : Iso Γ Λ} : Alg.id (Alg.ua φ) = φ :=
     begin apply Alg.inj; apply Alg.rinv end
 
     /--
@@ -335,7 +335,7 @@ namespace GroundZero.Algebra
       Venanzio Capretta
       * https://link.springer.com/chapter/10.1007/3-540-48256-3_10
     -/
-    noncomputable hott theorem Alg.univalence {Γ Λ : Alg deg} : Iso Γ Λ ≃ (Γ = Λ) :=
+    hott theorem Alg.univalence {Γ Λ : Alg deg} : Iso Γ Λ ≃ (Γ = Λ) :=
     begin existsi Alg.ua; apply Prod.mk <;> existsi Alg.id; apply Alg.linv; apply Alg.rinv end
   end
 

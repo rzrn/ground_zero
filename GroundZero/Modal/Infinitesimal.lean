@@ -8,7 +8,7 @@ open GroundZero.Proto
 /-
   Infinitesimal shape modality or coreduction.
 
-  https://github.com/forked-from-1kasper/anders/blob/master/library/modal/infinitesimal.anders
+  https://github.com/rzrn/anders/blob/master/library/modal/infinitesimal.anders
   https://www.math.kit.edu/iag3/~wellen/media/diss.pdf
   https://arxiv.org/pdf/1806.05966.pdf
 

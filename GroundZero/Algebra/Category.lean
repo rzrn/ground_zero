@@ -39,88 +39,88 @@ namespace Precategory
 
   variable (𝒞 : Precategory.{u})
 
-  def bottom : 𝒞.carrier :=
+  hott def bottom : 𝒞.carrier :=
   𝒞.op Arity.bottom ★
   notation "∄" => bottom _
 
-  def μ : 𝒞.carrier → 𝒞.carrier → 𝒞.carrier :=
+  hott def μ : 𝒞.carrier → 𝒞.carrier → 𝒞.carrier :=
   λ x y, 𝒞.op Arity.mul (x, y, ★)
 
-  def dom : 𝒞 →ᴬ 𝒞 :=
+  hott def dom : 𝒞 →ᴬ 𝒞 :=
   λ x, 𝒞.op Arity.left (x, ★)
 
-  def cod : 𝒞 →ᴬ 𝒞 :=
+  hott def cod : 𝒞 →ᴬ 𝒞 :=
   λ x, 𝒞.op Arity.right (x, ★)
 
-  def defined (x : 𝒞.carrier) : Type u := x ≠ ∄
+  hott def defined (x : 𝒞.carrier) : Type u := x ≠ ∄
   prefix:70 "∃" => defined _
 
-  def id (x : 𝒞.carrier) := x = 𝒞.dom x
+  hott def id (x : 𝒞.carrier) := x = 𝒞.dom x
 
-  def Obj := Σ x, 𝒞.id x × 𝒞.defined x
-  def Obj.val {𝒞 : Precategory} : Obj 𝒞 → 𝒞.carrier := Sigma.fst
+  hott def Obj := Σ x, 𝒞.id x × 𝒞.defined x
+  hott def Obj.val {𝒞 : Precategory} : Obj 𝒞 → 𝒞.carrier := Sigma.fst
 
   hott def Hom (a b : 𝒞.carrier) :=
   Σ φ, (𝒞.dom φ = a) × (𝒞.cod φ = b)
 
-  def Hom.ap {𝒞 : Precategory} {a b : 𝒞.carrier} : Hom 𝒞 a b → 𝒞.carrier :=
+  hott def Hom.ap {𝒞 : Precategory} {a b : 𝒞.carrier} : Hom 𝒞 a b → 𝒞.carrier :=
   Sigma.fst
 
   hott def homext {a b : 𝒞.carrier} (f g : Hom 𝒞 a b) : f.ap = g.ap → f = g :=
   begin intro p; apply Sigma.prod p; apply Structures.productProp <;> apply 𝒞.hset end
 
-  def monic (a : 𝒞.carrier) :=
+  hott def monic (a : 𝒞.carrier) :=
   Π b c, ∃(𝒞.μ a b) → 𝒞.μ a b = 𝒞.μ a c → b = c
 
-  def epic (a : 𝒞.carrier) :=
+  hott def epic (a : 𝒞.carrier) :=
   Π b c, ∃(𝒞.μ b a) → 𝒞.μ b a = 𝒞.μ c a → b = c
 
-  def bimorphism (a : 𝒞.carrier) :=
+  hott def bimorphism (a : 𝒞.carrier) :=
   monic 𝒞 a × epic 𝒞 a
 
-  def following (a b : 𝒞.carrier) :=
+  hott def following (a b : 𝒞.carrier) :=
   𝒞.dom a = 𝒞.cod b
 
-  def endo (a : 𝒞.carrier) :=
+  hott def endo (a : 𝒞.carrier) :=
   𝒞.following a a
 
-  def rinv (a b : 𝒞.carrier) :=
+  hott def rinv (a b : 𝒞.carrier) :=
   𝒞.μ a b = 𝒞.cod a
 
-  def linv (a b : 𝒞.carrier) :=
+  hott def linv (a b : 𝒞.carrier) :=
   𝒞.μ b a = 𝒞.dom a
 
-  def biinv (a b : 𝒞.carrier) :=
+  hott def biinv (a b : 𝒞.carrier) :=
   linv 𝒞 a b × rinv 𝒞 a b
 
   hott def biinv.prop {a b : 𝒞.carrier} : prop (biinv 𝒞 a b) :=
   begin fapply Structures.productProp <;> apply 𝒞.hset end
 
-  def coretraction (a : 𝒞.carrier) :=
+  hott def coretraction (a : 𝒞.carrier) :=
   Σ b, linv 𝒞 a b
 
-  def retraction (a : 𝒞.carrier) :=
+  hott def retraction (a : 𝒞.carrier) :=
   Σ b, rinv 𝒞 a b
 
-  def iso (a : 𝒞.carrier) :=
+  hott def iso (a : 𝒞.carrier) :=
   Σ b, biinv 𝒞 a b
 
-  def invertible (a : 𝒞.carrier) :=
+  hott def invertible (a : 𝒞.carrier) :=
   ∥𝒞.iso a∥
 
-  def Iso (a b : Obj 𝒞) :=
+  hott def Iso (a b : Obj 𝒞) :=
   Σ (f : Hom 𝒞 a.val b.val), 𝒞.invertible f.ap
 
-  def univalent (𝒞 : Precategory) :=
+  hott def univalent (𝒞 : Precategory) :=
   Π a, 𝒞.endo a ≃ 𝒞.invertible a
 
-  def groupoid (𝒞 : Precategory) :=
+  hott def groupoid (𝒞 : Precategory) :=
   Π a, 𝒞.invertible a
 
-  def commutative (𝒞 : Precategory) :=
+  hott def commutative (𝒞 : Precategory) :=
   Π a b, 𝒞.dom a = 𝒞.dom b → 𝒞.cod a = 𝒞.cod b → a = b
 
-  def auto (a : 𝒞.carrier) :=
+  hott def auto (a : 𝒞.carrier) :=
   endo 𝒞 a × iso 𝒞 a
 
   hott def op : Precategory :=
@@ -378,7 +378,7 @@ namespace Category
     exact Id.inv r; apply mulAssoc
   end
 
-  def dual (𝒞 : Precategory) (η : category 𝒞) : category 𝒞ᵒᵖ :=
+  hott def dual (𝒞 : Precategory) (η : category 𝒞) : category 𝒞ᵒᵖ :=
   { defDec      := @defDec 𝒞 η,
     bottomLeft  := @bottomRight 𝒞 η,
     bottomRight := @bottomLeft 𝒞 η,
@@ -393,7 +393,7 @@ namespace Category
     mulAssoc    := λ _ _ _, (@mulAssoc 𝒞 η _ _ _)⁻¹,
     mulDef      := λ a b α β, Iff.comp (@mulDef 𝒞 η b a β α) (Id.inv, Id.inv) }
 
-  instance (𝒞 : Precategory) [η : category 𝒞] : category 𝒞ᵒᵖ := dual 𝒞 η
+  noncomputable instance (𝒞 : Precategory) [η : category 𝒞] : category 𝒞ᵒᵖ := dual 𝒞 η
 
   /-
     https://ncatlab.org/nlab/show/natural+transformation
