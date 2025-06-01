@@ -69,7 +69,7 @@ hott definition ZΩ.rec {G : Group} (z : G.carrier) : Group.Hom ZΩ G :=
 Group.mkhomo (power z) (power.mul z)
 
 hott definition ZΩ.mul (p q : ZΩ.carrier) : ZΩ.carrier :=
-(@power _ (Group.S ZΩ.1.zero) (ZΩ.left p) q).1 Id.refl
+(@power hott% (Group.S ZΩ.1.zero) (ZΩ.left p) q).1 Id.refl
 
 hott theorem power.one {G : Group} : Π p, power G.e p = G.e :=
 begin
@@ -92,8 +92,7 @@ hott lemma ZΩ.zeroMul (p : ZΩ.carrier) : ZΩ.mul (idp base) p = idp base :=
 begin
   dsimp [ZΩ.mul]; show _ = (ideqv ZΩ.carrier).1 (idp base);
   apply ap (λ (e : ZΩ.carrier ≃ ZΩ.carrier), e.1 (idp base));
-  transitivity; apply ap (power · _); show _ = ideqv _;
-  apply Theorems.Equiv.equivHmtpyLem; intro; reflexivity;
+  transitivity; apply ap (power · _); apply ZΩ.leftIdeqv;
   apply power.one
 end
 

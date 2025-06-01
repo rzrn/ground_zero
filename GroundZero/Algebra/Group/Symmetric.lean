@@ -1,5 +1,6 @@
 import GroundZero.Algebra.Group.Subgroup
 
+open GroundZero.Types.Equiv (ideqv)
 open GroundZero.Types.Id (ap)
 open GroundZero.Structures
 open GroundZero.Theorems
@@ -47,6 +48,12 @@ namespace Group
         transitivity; { apply ap (G.φ · y); apply mulRightInv };
         apply G.oneMul }
     end
+
+    hott lemma leftIdeqv (G : Group) : left G G.e = ideqv G.carrier :=
+    begin apply Equiv.equivHmtpyLem; intro; apply G.oneMul end
+
+    hott lemma leftRev (G : Group) (x : G.carrier) : left G (G.ι x) = (left G x).symm :=
+    begin apply Equiv.equivHmtpyLem; intro; reflexivity end
 
     hott definition S.univ (G : Group.{u}) : Hom G (S G.1.zero) :=
     mkhomo (left G)

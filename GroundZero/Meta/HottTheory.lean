@@ -42,6 +42,8 @@ def Lean.ConstantInfo.isAxiomInfo : ConstantInfo → Bool
 -/
 @[class] axiom GroundZero : Type
 
+elab "hott%" : term => Lean.Meta.synthInstance (Lean.mkConst ``GroundZero)
+
 namespace GroundZero.Meta.HottTheory
 
 def typeOf (c : Name) : MetaM Expr := do {

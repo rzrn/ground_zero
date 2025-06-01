@@ -2,6 +2,7 @@
 *.cpp
 *.o
 *.a
+/nongithub
 /build
 /lean_packages
 /.lake
