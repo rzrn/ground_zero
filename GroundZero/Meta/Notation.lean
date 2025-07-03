@@ -342,7 +342,7 @@ namespace Record
 
     let ci ← getConstInfo tname;
 
-    let ids ← fields.concatMapM λ stx =>
+    let ids ← fields.flatMapM λ stx =>
       Array.mapM expandBinderIdent
         (expandBEBinder stx).2;
 

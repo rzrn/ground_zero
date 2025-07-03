@@ -210,8 +210,8 @@ def axiomInstBinder := mkNode ``Term.instBinder #[mkAtom "[", mkNullNode, mkIden
 def axiomBracketedBinderF : TSyntax ``Term.bracketedBinderF := ⟨axiomInstBinder.raw⟩
 
 def withHoTTScope {A : Type} : CommandElabM A → CommandElabM A :=
-withScope (λ scope => {scope with varDecls := scope.varDecls.insertAt! 0 axiomBracketedBinderF,
-                                  varUIds  := scope.varUIds.insertAt!  0 Name.anonymous})
+withScope (λ scope => {scope with varDecls := scope.varDecls.insertIdx! 0 axiomBracketedBinderF,
+                                  varUIds  := scope.varUIds.insertIdx!  0 Name.anonymous})
 
 def defHoTT (tag declMods declId declDef : Syntax) : CommandElabM Name := do {
   let ns ← getCurrNamespace;
@@ -262,14 +262,14 @@ def abbrevAttrs : Array Attribute :=
     let #[_, declId, declSig, declDef] := cmd.getArgs | throwError "invalid “axiom” statement";
 
     if declDef.isNone then do {
-      let modifiedSig := declSig.modifyArg 0 (·.modifyArgs (·.insertAt! 0 axiomInstBinder));
+      let modifiedSig := declSig.modifyArg 0 (·.modifyArgs (·.insertIdx! 0 axiomInstBinder));
       cmd.setKind ``Command.«axiom»
       |>.setArgs #[mkAtom "axiom ", declId, modifiedSig]
       |> (mkNode ``Command.declaration #[mods, ·])
       |> elabDeclaration
     } else do {
       let optDecl := (declSig.setKind ``optDeclSig).modifyArg 1 (mkNullNode #[·]) ;
-      let declName ← declDef.modifyArgs (·.insertAt! 0 optDecl)
+      let declName ← declDef.modifyArgs (·.insertIdx! 0 optDecl)
                      |> defHoTT declId mods declId;
       markHoTTAxiom declName
     }
