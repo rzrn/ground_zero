@@ -68,6 +68,26 @@ namespace Trunc
     by apply indβrule
   end
 
+  section
+    variable {B : Type v} {C : Type w} (elemπ : A → B → C) (uniqπ : is-n-type C)
+
+    hott definition rec₂ : ∥A∥ₙ → ∥B∥ₙ → C :=
+    rec (λ a, rec (elemπ a) uniqπ) (piRespectsImpl _ uniqπ)
+
+    hott corollary recβrule₂ (x : A) (y : B) : rec₂ elemπ uniqπ |x|ₙ |y|ₙ = elemπ x y :=
+    @ap (∥B∥ₙ → C) C _ _ (· |y|ₙ) (recβrule _ _ _) ⬝ recβrule _ _ _
+  end
+
+  section
+    variable {B : Type v} {C : ∥A∥ₙ → ∥B∥ₙ → Type w} (elemπ : Π x y, C |x|ₙ |y|ₙ) (uniqπ : Π x y, is-n-type (C x y))
+
+    hott definition ind₂ : Π x y, C x y :=
+    ind (λ x, ind (elemπ x) (uniqπ |x|ₙ)) (λ _, piRespectsNType _ (λ _, uniqπ _ _))
+
+    hott corollary indβrule₂ (x : A) (y : B) : ind₂ elemπ uniqπ |x|ₙ |y|ₙ = elemπ x y :=
+    @ap (Π (y : ∥B∥ₙ), C |x|ₙ y) (C |x|ₙ |y|ₙ) _ _ (· |y|ₙ) (indβrule _ _ _) ⬝ indβrule _ _ _
+  end
+
   hott definition elemClose {B : Type v} (G : is-n-type B)
     (f g : ∥A∥ₙ → B) (H : f ∘ elem = g ∘ elem) : f = g :=
   begin
@@ -123,6 +143,10 @@ namespace Trunc
   hott lemma transportOverTrunc {A : Type u} {n : ℕ₋₂} {B : A → Type v} {a b : A}
     (p : a = b) (u : ∥B a∥ₙ) : transport (∥B ·∥ₙ) p u = Trunc.ap (transport B p) u :=
   begin induction p; symmetry; apply Trunc.idmap end
+
+  hott lemma recApElem {A : Type u} : Π {n : ℕ₋₂} {a b : A}, ∥a = b∥ₙ → |a|ₙ = |b|ₙ
+  | −2            => λ _, contrImplProp (Trunc.uniq −2) _ _
+  | hlevel.succ n => Trunc.rec (Id.ap Trunc.elem) (hlevel.cumulative _ (Trunc.uniq (hlevel.succ n) _ _))
 end Trunc
 
 end GroundZero.HITs
