@@ -60,24 +60,34 @@ hott definition Homotopy {A : Type u} (a : A) (n : ℕ) : Group :=
   Homotopy.hasLeftUnit Homotopy.hasLeftInverse
 
 namespace GroundZero.Types
-  hott definition idTrunc {n : ℕ} {A : Type u} (a b : ∥A∥ₙ₊₁) :=
-  (@Trunc.rec₂ A (hlevel.succ n) A (n-Type u) (λ x y, ⟨∥x = y∥ₙ, Trunc.uniq n⟩)
-                 (Theorems.Equiv.ntypeIsSuccNType _) a b).1
+  section
+    variables {n : ℕ} {A : Type u}
 
-  hott lemma idTruncTrunc {n : ℕ} {A : Type u} : Π (a b : ∥A∥ₙ₊₁), is-n-type (idTrunc a b) :=
-  begin
-    apply Trunc.ind₂; intros; apply Trunc.uniq n;
-    { intros; apply propIsNType; apply ntypeIsProp }
+    open GroundZero.Theorems.Equiv
+
+    hott definition idTrunc (a b : ∥A∥ₙ₊₁) :=
+    (@Trunc.rec₂ A (hlevel.succ n) A (n-Type u)
+                   (λ x y, ⟨∥x = y∥ₙ, Trunc.uniq n⟩)
+                   (ntypeIsSuccNType _) a b).1
+
+    hott lemma idTruncTrunc : Π (a b : ∥A∥ₙ₊₁), is-n-type (idTrunc a b) :=
+    begin
+      apply Trunc.ind₂; intros; apply Trunc.uniq n;
+      { intros; apply propIsNType; apply ntypeIsProp }
+    end
+
+    hott definition idpTrunc : Π (a : ∥A∥ₙ₊₁), idTrunc a a :=
+    Trunc.ind (λ x, |idp x|ₙ) (λ x, hlevel.cumulative n (idTruncTrunc x x))
+
+    hott theorem idTruncElem {a b : ∥A∥ₙ₊₁} : a = b → idTrunc a b :=
+    λ p, transport (idTrunc a) p (idpTrunc a)
+
+    hott corollary idTruncElim {a b : A} : |a|ₙ₊₁ = |b|ₙ₊₁ → ∥a = b∥ₙ :=
+    idTruncElem
+
+    hott corollary idElemDelim {a b : A} : |a|ₙ₊₁ = |b|ₙ₊₁ → |a|ₙ = |b|ₙ :=
+    Trunc.recApElem ∘ idTruncElim
   end
-
-  hott definition idpTrunc {n : ℕ} {A : Type u} : Π (a : ∥A∥ₙ₊₁), idTrunc a a :=
-  Trunc.ind (λ x, |idp x|ₙ) (λ x, hlevel.cumulative n (idTruncTrunc x x))
-
-  hott theorem idTruncElem {n : ℕ} {A : Type u} {a b : ∥A∥ₙ₊₁} : a = b → idTrunc a b :=
-  λ p, transport (idTrunc a) p (idpTrunc a)
-
-  hott corollary idTruncElim {n : ℕ} {A : Type u} {a b : A} : |a|ₙ₊₁ = |b|ₙ₊₁ → ∥a = b∥ₙ :=
-  idTruncElem
 
   hott definition Cover (A : Type u) := A → Set u
 
