@@ -1,5 +1,5 @@
+import GroundZero.Algebra.Group.Homotopy
 import GroundZero.HITs.Circle
-import GroundZero.HITs.Trunc
 
 open GroundZero.HITs.Interval
 open GroundZero.Types.Equiv

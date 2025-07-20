@@ -143,10 +143,6 @@ namespace Trunc
   hott lemma transportOverTrunc {A : Type u} {n : ℕ₋₂} {B : A → Type v} {a b : A}
     (p : a = b) (u : ∥B a∥ₙ) : transport (∥B ·∥ₙ) p u = Trunc.ap (transport B p) u :=
   begin induction p; symmetry; apply Trunc.idmap end
-
-  hott lemma recApElem {A : Type u} : Π {n : ℕ₋₂} {a b : A}, ∥a = b∥ₙ → |a|ₙ = |b|ₙ
-  | −2            => λ _, contrImplProp (Trunc.uniq −2) _ _
-  | hlevel.succ n => Trunc.rec (Id.ap Trunc.elem) (hlevel.cumulative _ (Trunc.uniq (hlevel.succ n) _ _))
 end Trunc
 
 end GroundZero.HITs

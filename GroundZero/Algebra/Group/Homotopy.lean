@@ -9,7 +9,9 @@ open GroundZero.HITs
 
 universe u
 
-namespace GroundZero.Algebra
+namespace GroundZero
+
+namespace Algebra
 
 namespace Homotopy
   variable {A : Type u} {x : A} {n : ℕ}
@@ -59,36 +61,83 @@ hott definition Homotopy {A : Type u} (a : A) (n : ℕ) : Group :=
   Homotopy.mul Homotopy.inv Homotopy.unit Homotopy.isAssoc
   Homotopy.hasLeftUnit Homotopy.hasLeftInverse
 
-namespace GroundZero.Types
-  section
-    variables {n : ℕ} {A : Type u}
+end Algebra
 
-    open GroundZero.Theorems.Equiv
+namespace HITs.Trunc
+  variables {n : ℕ} {A : Type u}
 
-    hott definition idTrunc (a b : ∥A∥ₙ₊₁) :=
-    (@Trunc.rec₂ A (hlevel.succ n) A (n-Type u)
-                   (λ x y, ⟨∥x = y∥ₙ, Trunc.uniq n⟩)
-                   (ntypeIsSuccNType _) a b).1
+  open GroundZero.Theorems.Equiv
 
-    hott lemma idTruncTrunc : Π (a b : ∥A∥ₙ₊₁), is-n-type (idTrunc a b) :=
-    begin
-      apply Trunc.ind₂; intros; apply Trunc.uniq n;
-      { intros; apply propIsNType; apply ntypeIsProp }
-    end
+  hott definition idTrunc (a b : ∥A∥ₙ₊₁) :=
+  (@Trunc.rec₂ A (hlevel.succ n) A (n-Type u)
+                 (λ x y, ⟨∥x = y∥ₙ, Trunc.uniq n⟩)
+                 (ntypeIsSuccNType _) a b).1
 
-    hott definition idpTrunc : Π (a : ∥A∥ₙ₊₁), idTrunc a a :=
-    Trunc.ind (λ x, |idp x|ₙ) (λ x, hlevel.cumulative n (idTruncTrunc x x))
-
-    hott theorem idTruncElem {a b : ∥A∥ₙ₊₁} : a = b → idTrunc a b :=
-    λ p, transport (idTrunc a) p (idpTrunc a)
-
-    hott corollary idTruncElim {a b : A} : |a|ₙ₊₁ = |b|ₙ₊₁ → ∥a = b∥ₙ :=
-    idTruncElem
-
-    hott corollary idElemDelim {a b : A} : |a|ₙ₊₁ = |b|ₙ₊₁ → |a|ₙ = |b|ₙ :=
-    Trunc.recApElem ∘ idTruncElim
+  hott lemma idTruncTrunc : Π (a b : ∥A∥ₙ₊₁), is-n-type (idTrunc a b) :=
+  begin
+    apply Trunc.ind₂; intros; apply Trunc.uniq n;
+  { intros; apply propIsNType; apply ntypeIsProp }
   end
 
+  hott definition idpTrunc : Π (a : ∥A∥ₙ₊₁), idTrunc a a :=
+  Trunc.ind (λ x, |idp x|ₙ) (λ x, hlevel.cumulative n (idTruncTrunc x x))
+
+  hott definition encode {a b : ∥A∥ₙ₊₁} : a = b → idTrunc a b :=
+  λ p, transport (idTrunc a) p (idpTrunc a)
+
+  hott lemma decodeElem {A : Type u} {n : ℕ} {a b : A} : ∥a = b∥ₙ → |a|ₙ₊₁ = |b|ₙ₊₁ :=
+  Trunc.rec (Id.ap Trunc.elem) (Trunc.uniq (n + 1) _ _)
+
+  hott definition decode : Π (a b : ∥A∥ₙ₊₁), idTrunc a b → a = b :=
+  Trunc.ind₂ (@decodeElem A n) (λ _ _, piRespectsImpl _ (hlevel.cumulative _ (Trunc.uniq _) _ _))
+
+  hott lemma decodeIdpTrunc : Π (a : ∥A∥ₙ₊₁), decode a a (idpTrunc a) = idp a :=
+  begin
+    apply Trunc.ind; intro; reflexivity; intro a;
+    apply hlevel.cumulative; apply hlevel.cumulative;
+    apply @Trunc.uniq A (n + 1)
+  end
+
+  open GroundZero.Proto (idfun)
+
+  hott lemma encodeDecodeElem {a b : A} : encode ∘ decode |a|ₙ₊₁ |b|ₙ₊₁ ~ idfun :=
+  begin
+    apply Trunc.ind; intro p; induction p; reflexivity;
+    intro; apply hlevel.cumulative; apply @Trunc.uniq (a = b) n
+  end
+
+  hott lemma encodeDecode : Π {a b : ∥A∥ₙ₊₁}, encode ∘ decode a b ~ idfun :=
+  begin
+    apply Trunc.ind₂; apply encodeDecodeElem;
+    { intros; apply piRespectsNType; intro;
+      apply hlevel.cumulative; apply hlevel.cumulative;
+      apply idTruncTrunc }
+  end
+
+  hott lemma decodeEncode {a b : ∥A∥ₙ₊₁} : decode a b ∘ encode ~ idfun :=
+  begin intro p; induction p; apply decodeIdpTrunc end
+
+  hott theorem idTruncEquiv (a b : ∥A∥ₙ₊₁) : (a = b) ≃ idTrunc a b :=
+  Equiv.intro encode (decode a b) decodeEncode encodeDecode
+
+  hott corollary truncElemEqEquiv (a b : A) : (|a|ₙ₊₁ = |b|ₙ₊₁) ≃ ∥a = b∥ₙ :=
+  idTruncEquiv |a|ₙ₊₁ |b|ₙ₊₁
+
+  hott corollary encodeElem {a b : A} : |a|ₙ₊₁ = |b|ₙ₊₁ → ∥a = b∥ₙ :=
+  encode
+
+  hott lemma encodeElemDecodeElem {A : Type u} {n : ℕ} {a b : A}
+    (p : ∥a = b∥ₙ) : encodeElem (decodeElem p) = p :=
+  @encodeDecodeElem hott% n A a b p
+
+  hott lemma decodeElemPred {A : Type u} {n : ℕ} {a b : A} : ∥a = b∥ₙ → |a|ₙ = |b|ₙ :=
+  Trunc.rec (Id.ap Trunc.elem) (hlevel.cumulative _ (Trunc.uniq n _ _))
+
+  hott corollary idElemPred {a b : A} : |a|ₙ₊₁ = |b|ₙ₊₁ → |a|ₙ = |b|ₙ :=
+  decodeElemPred ∘ encodeElem
+end HITs.Trunc
+
+namespace Types
   hott definition Cover (A : Type u) := A → Set u
 
   hott definition Cover.total {A : Type u} : Cover A → Type u :=
@@ -114,15 +163,15 @@ namespace GroundZero.Types
 
     hott definition decode (C : Cover A) (c : C.total) (H : prop ∥C.total∥₁) :
       Π x, (C x).1 → (uCov c.1 x).1 :=
-    λ b c', Trunc.ap (ap Sigma.fst) (idTruncElim (H |c|₁ |⟨b, c'⟩|₁))
+    λ b c', Trunc.ap (ap Sigma.fst) (Trunc.encodeElem (H |c|₁ |⟨b, c'⟩|₁))
 
     hott lemma encodeDecode (C : Cover A) (c₁ c₂ : C.total) (H : prop ∥C.total∥₁) :
       encode C c₁ c₂.1 (decode C c₁ H c₂.1 c₂.2) = c₂.2 :=
     begin
-      induction idTruncElim (H |c₁|₁ |c₂|₁);
+      induction Trunc.encodeElem (H |c₁|₁ |c₂|₁);
       { case elemπ p =>
         induction p; transitivity; apply ap (encode _ _ _); apply ap (Trunc.ap _);
-        apply ap idTruncElim; show _ = idp _; apply propIsSet; exact H; reflexivity };
+        apply ap Trunc.encodeElem; show _ = idp _; apply propIsSet; exact H; reflexivity };
       { apply zeroEqvSet.left; apply propIsSet; apply (C c₂.1).2 }
     end
 
@@ -133,7 +182,7 @@ namespace GroundZero.Types
     begin
       intro b; apply Trunc.ind;
       { intro p; induction p; dsimp; transitivity; apply ap (Trunc.ap _);
-        apply ap idTruncElim; show _ = idp _; apply propIsSet;
+        apply ap Trunc.encodeElem; show _ = idp _; apply propIsSet;
         exact H; reflexivity };
       { intro; apply hlevel.cumulative; apply Trunc.uniq 0 }
     end
@@ -149,6 +198,14 @@ namespace GroundZero.Types
       is-1-connected C.total → uCov c.1 ~ C :=
     λ H, isPropUniv C c (contrImplProp H)
   end uCov
-end GroundZero.Types
 
-end GroundZero.Algebra
+  open GroundZero.Algebra (Homotopy)
+
+  hott definition covGroupSet {A : Type u} (a : A) (H : is-0-connected A) :
+    Cover A → Σ (G : Set u), Homotopy a 0 ⮌ G.1 :=
+  λ C, ⟨C a, ⟨λ x, Trunc.rec (λ g, transport (λ y, (C y).1) g x) (zeroEqvSet.left (C a).2),
+              (idp, Trunc.ind₂ (λ g h x, (@transportcom A (λ y, (C y).1) _ _ _ _ _ _)⁻¹)
+                               (λ _ _, piRespectsNType 0 (λ _, zeroEqvSet.left (propIsSet ((C a).2 _ _)))))⟩⟩
+end Types
+
+end GroundZero
