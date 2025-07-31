@@ -1,5 +1,6 @@
 import GroundZero.Exercises.Chap4
 import GroundZero.Types.Lost
+import GroundZero.Types.W
 
 open GroundZero.Types
 open GroundZero.Proto
@@ -155,3 +156,43 @@ end «5.10»
 
 hott example (A : Type u) : Lost A ≃ 𝟎 :=
 Lost.isZero
+
+-- Exercise 5.12
+
+namespace «5.12»
+  open Structures (prop)
+
+  variables {A : Type u} {B : A → Type v} (H : prop A)
+
+  hott example : prop (W x, B x) :=
+  W.isProp H
+
+  hott example : (W x, B x) ≃ (Σ x, ¬(B x)) :=
+  W.propEquivSig H
+end «5.12»
+
+namespace «5.13»
+  variables {A : Type u} {B : A → Type v}
+
+  hott example : (Σ x, ¬(B x)) → (W x, B x) :=
+  W.propEncode
+
+  hott example : (W x, B x) → ¬(Π x, B x) :=
+  W.propDecodeNeg
+end «5.13»
+
+namespace «5.14»
+  open Structures (dec)
+
+  variables {A : Type u} {B : A → Type v} (H : Π x, dec (B x))
+
+  hott example : (W x, B x) → (Σ x, ¬(B x)) :=
+  W.propDecodeDec H
+end «5.14»
+
+namespace «5.17»
+  variables {A : Type u} {B : A → Type v}
+
+  hott example : ¬(W x, B x) ≃ ¬(Σ x, ¬(B x)) :=
+  W.negEquiv
+end «5.17»
