@@ -160,7 +160,7 @@ Lost.isZero
 -- Exercise 5.12
 
 namespace «5.12»
-  open Structures (prop)
+  open Types.Id (ap) open Types.Equiv open Structures open HITs.Interval (happly)
 
   variables {A : Type u} {B : A → Type v} (H : prop A)
 
@@ -169,6 +169,22 @@ namespace «5.12»
 
   hott example : (W x, B x) ≃ (Σ x, ¬(B x)) :=
   W.propEquivSig H
+
+  hott example : Wd A B :=
+  let ε : prop (Σ x, ¬(B x)) := sigProp H (λ _, notIsProp);
+  let Φ {x y : A} : B x → B y := transport B (H x y);
+
+  let sup (a : A) (f : B a → Σ (x : A), ¬B x) : Σ x, ¬(B x) :=
+  ⟨a, λ b, (f b).2 (Φ b)⟩;
+
+  ⟨Σ x, ¬(B x), sup,
+   λ E e, ⟨λ w, transport E (ε _ w) (e w.1 (λ _, w) (λ b, explode (w.2 b))),
+           λ a f, (happly (apd (e a) (@implProp (B a) _ ε (λ _, sup a f) f))⁻¹ _
+                 ⬝ happly (transportCharacterization _ _) _
+                 ⬝ transportComp _ _ _ _
+                 ⬝ bimap (@transport (Σ (x : A), ¬B x) E (sup a (λ _, sup a f)) (sup a f))
+                         (propIsSet ε _ _ _ _)
+                         (ap (e a _) (Theorems.funext (λ b, explode ((f b).2 (Φ b))))))⁻¹⟩⟩
 end «5.12»
 
 -- Exercise 5.13
