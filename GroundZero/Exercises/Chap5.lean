@@ -130,6 +130,27 @@ namespace «5.9»
   begin symmetry; apply elimβrule end
 end «5.9»
 
+-- Exercise 5.10
+
+namespace «5.10»
+  variable {L : Type} (lawvere : (L → 𝟏) → L)
+
+  hott definition indSig :=
+  Π (C : L → Type), (Π f, C (lawvere f)) → Π x, C x
+
+  variable (ind : indSig lawvere)
+
+  variable (C : L → Type) (h : Π f, C (lawvere f))
+
+  hott definition indβruleSig :=
+  Π f, ind C h (lawvere f) = h f
+
+  open Structures (contr unitIsProp) open Theorems (funext) open Types.Id (ap)
+
+  hott example : contr L :=
+  ⟨lawvere (λ _, ★), ind _ (λ _, ap lawvere (funext (λ _, unitIsProp _ _)))⟩
+end «5.10»
+
 -- Exercise 5.11
 
 hott example (A : Type u) : Lost A ≃ 𝟎 :=
