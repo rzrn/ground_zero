@@ -171,6 +171,8 @@ namespace «5.12»
   W.propEquivSig H
 end «5.12»
 
+-- Exercise 5.13
+
 namespace «5.13»
   variables {A : Type u} {B : A → Type v}
 
@@ -181,6 +183,8 @@ namespace «5.13»
   W.propDecodeNeg
 end «5.13»
 
+-- Exercise 5.14
+
 namespace «5.14»
   open Structures (dec)
 
@@ -189,6 +193,8 @@ namespace «5.14»
   hott example : (W x, B x) → (Σ x, ¬(B x)) :=
   W.propDecodeDec H
 end «5.14»
+
+-- Exercise 5.17
 
 namespace «5.17»
   variables {A : Type u} {B : A → Type v}
