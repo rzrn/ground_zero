@@ -92,3 +92,4 @@ import GroundZero.Types.Product
 import GroundZero.Types.Setquot
 import GroundZero.Types.Sigma
 import GroundZero.Types.Unit
+import GroundZero.Types.W
