@@ -89,4 +89,33 @@ namespace Types.W
   propEquivLemma (λ _, notIsProp _) (λ _, notIsProp _) negDecode negEncode
 end Types.W
 
+namespace Structures
+  hott definition WAlg (A : Type u) (B : A → Type v) :=
+  Σ (C : Type (max u v)), Π (a : A), (B a → C) → C
+
+  hott definition WHom {A : Type u} {B : A → Type v} : WAlg A B → WAlg A B → Type (max u v) :=
+  λ ⟨C, sC⟩ ⟨D, sD⟩, Σ (f : C → D), Π (a : A) (h : B a → C), f (sC a h) = sD a (f ∘ h)
+
+  hott definition isHinitW {A : Type u} {B : A → Type v} (I : WAlg A B) :=
+  Π (C : WAlg A B), contr (WHom I C)
+
+  hott definition Wh (A : Type u) (B : A → Type v) :=
+  Σ (I : WAlg A B), isHinitW I
+
+  hott definition Wd (A : Type u) (B : A → Type v) :=
+  Σ (C : Type (max u v)) (sup : Π a, (B a → C) → C),
+  Π (E : C → Type w) (e : Π a f, (Π b, E (f b)) → E (sup a f)),
+  Σ (ind : Π w, E w), Π a f, ind (sup a f) = e a f (λ b, ind (f b))
+
+  open Types.Id (ap) open Theorems (funext)
+
+  hott definition Ws (A : Type u) (B : A → Type v) :=
+  Σ (C : Type (max u v)) (sup : Π a, (B a → C) → C),
+  Π (E : Type w) (e : Π a, (B a → E) → E),
+  Σ (rec : C → E) (β : Π a f, rec (sup a f) = e a (λ b, rec (f b))),
+  Π (g h : C → E) (βg : Π a f, g (sup a f) = e a (λ b, g (f b)))
+                  (βh : Π a f, h (sup a f) = e a (λ b, h (f b))),
+  Σ (α : Π w, g w = h w), Π a f, α (sup a f) ⬝ βh a f = βg a f ⬝ ap (e a) (funext (λ b, α (f b)))
+end Structures
+
 end GroundZero
