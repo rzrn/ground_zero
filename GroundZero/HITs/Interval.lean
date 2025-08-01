@@ -123,6 +123,9 @@ namespace Interval
   hott corollary transportconstWithSeg {A B : Type u} (p : A = B) (x : A) :
     @transport I (elim p) 0 1 seg x = transportconst p x :=
   by apply transportOverSeg id
+
+  hott lemma recNeg {A : Type u} {a b : A} (p : a = b) : rec b a p⁻¹ ~ rec a b p :=
+  begin induction p; reflexivity end
 end Interval
 
 end HITs

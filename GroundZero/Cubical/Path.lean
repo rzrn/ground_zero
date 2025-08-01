@@ -57,6 +57,9 @@ end
 hott corollary equivPath {A : Type u} (a b : A) : Path A a b ≃ (a = b) :=
 Equiv.intro encode decode decodeEncode encodeDecode
 
+hott corollary ofDecode {A : Type u} {a b : A} (p q : a = b) : decode p = decode q → p = q :=
+(equivPath a b).eqvLeftInj p q
+
 hott corollary ofEncode {A : Type u} {a b : A} (p q : Path A a b) : encode p = encode q → p = q :=
 (equivPath a b).eqvInj p q
 
@@ -184,6 +187,26 @@ by apply Equiv.constmap
 
 hott corollary decodeIdp {A : Type u} (a : A) : decode (idp a) = refl a :=
 ap decode (encodeRefl a)⁻¹ ⬝ decodeEncode (refl a)
+
+hott lemma encodeApf {A : Type u} {B : Type v} {a b : A} (f : A → B) (p : Path A a b) :
+  encode (apf f p) = ap f (encode p) :=
+Equiv.mapOverComp _ _ _ ⬝ ap (ap f) (Interval.recβrule _ _ _)
+
+hott lemma decodeAp {A : Type u} {B : Type v} {a b : A} (f : A → B) (p : a = b) :
+  apf f (decode p) = decode (ap f p) :=
+ofEncode _ _ (encodeApf _ _ ⬝ ap (ap f) (encodeDecode _) ⬝ (encodeDecode _)⁻¹)
+
+hott definition rev {A : Type u} {a b : A} (p : Path A a b) : Path A b a :=
+<i> p @ −i
+
+hott lemma apNegSeg : ap neg seg = seg⁻¹ :=
+Structures.propIsSet Interval.intervalProp _ _ _ _
+
+hott lemma encodeRev {A : Type u} {a b : A} (p : Path A a b) : encode (rev p) = (encode p)⁻¹ :=
+Equiv.mapOverComp _ _ _ ⬝ ap (ap _) apNegSeg ⬝ Interval.recβruleRev _ _ _
+
+hott lemma decodeRev {A : Type u} {a b : A} (p : a = b) : (<i> (decode p) @ −i) = decode p⁻¹ :=
+ofEncode _ _ (encodeRev _ ⬝ ap _ (encodeDecode _) ⬝ (encodeDecode _)⁻¹)
 
 hott lemma coerceβ {A : Type u} (B : A → Type v) {a : A} (u : B a) : coerce B (refl a) u = u :=
 begin

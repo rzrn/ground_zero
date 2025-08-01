@@ -66,6 +66,10 @@ namespace Interval
     symmetry; apply Equiv.apdOverConstantFamily; apply indβrule
   end
 
+  hott corollary recβruleRev {B : Type u} (b₀ b₁ : B)
+    (s : b₀ = b₁) : ap (rec b₀ b₁ s) seg⁻¹ = s⁻¹ :=
+  begin transitivity; apply Id.mapInv; apply ap; apply recβrule end
+
   hott definition homotopy {A : Type u} {B : A → Type v}
     {f g : Π x, B x} (p : f ~ g) (x : A) : I → B x :=
   Interval.rec (f x) (g x) (p x)
