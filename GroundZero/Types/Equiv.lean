@@ -25,6 +25,8 @@ namespace Equiv
   Π (x : A), f x = g x
   infix:80 " ~ " => Homotopy
 
+  notation:80 f:81 " ≁ " g:81 => ¬(f ~ g)
+
   hott definition Homotopy.id {A : Type u} {B : A → Type v} (f : Π x, B x) : f ~ f :=
   begin intro x; reflexivity end
 

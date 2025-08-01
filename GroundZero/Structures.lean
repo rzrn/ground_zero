@@ -225,6 +225,12 @@ begin existsi Prod.snd; apply Prod.mk <;> existsi Prod.mk ★ <;> { intro; refle
 hott lemma unitProdEquiv (A : Type u) : A × 𝟏 ≃ A :=
 begin existsi Prod.fst; apply Prod.mk <;> existsi (Prod.mk · ★) <;> { intro x; reflexivity } end
 
+hott lemma neqBoolToEqNot : Π (x y : 𝟐), ¬(x = y) → x = not y
+| false, false, np => explode (np (idp false))
+| false, true,  _  => idp false
+| true,  false, _  => idp true
+| true,  true,  np => explode (np (idp true))
+
 hott definition boolToUniverse : 𝟐 → Type
 | true => 𝟏 | false => 𝟎
 

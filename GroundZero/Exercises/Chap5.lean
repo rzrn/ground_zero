@@ -160,7 +160,7 @@ Lost.isZero
 -- Exercise 5.12
 
 namespace «5.12»
-  open Types.Id (ap) open Types.Equiv open Structures open HITs.Interval (happly)
+  open Structures Types.Equiv open HITs.Interval (happly) open Types.Id (ap)
 
   variables {A : Type u} {B : A → Type v} (H : prop A)
 
