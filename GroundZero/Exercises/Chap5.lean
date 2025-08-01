@@ -92,6 +92,48 @@ end «5.3»
 hott example (E : 𝟐 → Type u) : (E false × E true) ≃ (Π b, E b) :=
 familyOnBool
 
+-- Exercise 5.5
+
+namespace «5.5»
+  open Types Equiv Structures open Nat (succ) open Types.Id (ap) open HITs.Interval (happly)
+
+  variable (E : ℕ → Type u)
+
+  hott example : (E 0 × Π n, E (n + 1)) ≃ (Π n, E n) :=
+  begin
+    fapply Equiv.intro;
+    { intro (e₀, eₛ); exact λ | 0 => e₀ | succ n => eₛ n };
+    { intro e; exact (e 0, λ n, e (n + 1)) };
+    { intro (e₀, eₛ); apply Product.prod;
+      reflexivity; reflexivity };
+    { intro e; apply Theorems.funext; apply Nat.rec;
+      reflexivity; intros; reflexivity }
+  end
+
+  hott definition indCod := E 0 × (Π n, E n → E (n + 1))
+  hott definition indDom := Π n, E n
+
+  hott definition indNat : indCod E → indDom E :=
+  λ (e₀, eₛ), Nat.rec e₀ eₛ
+
+  -- just like in 5.3
+  hott definition indVal₁ : indCod (λ _, 𝟐) := (false, λ _ _, false)
+  hott definition indVal₂ : indCod (λ _, 𝟐) := (false, λ _ b, b)
+
+  hott lemma valTriv₁ : indNat (λ _, 𝟐) indVal₁ ~ λ _, false
+  | 0 => idp false | succ _ => idp false
+
+  hott lemma valTriv₂ : indNat (λ _, 𝟐) indVal₂ ~ λ _, false
+  | 0 => idp false | succ n => valTriv₂ n
+
+  hott lemma valIneq : indVal₁ ≠ indVal₂ :=
+  λ np, ffNeqTt (happly (happly (ap Prod.pr₂ np) 1) true)
+
+  hott example : ¬(Π E, biinv (indNat E)) :=
+  λ H, valIneq (Equiv.eqvInj ⟨indNat (λ _, 𝟐), H (λ _, 𝟐)⟩ indVal₁ indVal₂
+                             (Theorems.funext (λ _, valTriv₁ _ ⬝ (valTriv₂ _)⁻¹)))
+end «5.5»
+
 -- Exercise 5.7
 
 namespace «5.7»
