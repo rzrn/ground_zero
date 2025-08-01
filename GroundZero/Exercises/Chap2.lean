@@ -228,3 +228,8 @@ begin induction p; reflexivity end
 hott definition transportSquare {A : Type u} {B : A → Type v} {f g : Π x, B x} (H : f ~ g) {x y : A} (p : x = y) :
   ap (transport B p) (H x) ⬝ apd g p = apd f p ⬝ H y :=
 begin induction p; transitivity; apply Id.rid; apply Equiv.idmap end
+
+-- exercise 2.19
+
+hott example : @Id (Σ A, A) ⟨𝟐, false⟩ ⟨𝟐, true⟩ :=
+Sigma.prod (ua negBoolEquiv) (uaβ _ _)
