@@ -40,14 +40,24 @@ namespace Category
   hott definition univalence {a b : A.obj} : (a = b) ≃ (iso A a b) :=
   ⟨idtoiso A, A.snd a b⟩
 
-  hott definition ua {a b : A.obj} : iso A a b → a = b :=
+  hott definition isotoid {a b : A.obj} : iso A a b → a = b :=
   (univalence A).left
 
-  hott definition uaβrule₁ {a b : A.obj} (φ : iso A a b) : idtoiso A (ua A φ) = φ :=
+  hott definition isotoidβrule₁ {a b : A.obj} (φ : iso A a b) : idtoiso A (isotoid A φ) = φ :=
   (univalence A).forwardLeft φ
 
-  hott definition uaβrule₂ {a b : A.obj} (φ : a = b) : ua A (idtoiso A φ) = φ :=
+  hott definition isotoidβrule₂ {a b : A.obj} (φ : a = b) : isotoid A (idtoiso A φ) = φ :=
   (univalence A).leftForward φ
+
+  hott lemma ofIsotoid {a b : A.obj} {f g : iso A a b} : isotoid A f = isotoid A g → f = g :=
+  (univalence A).eqvLeftInj _ _
+
+  hott lemma ofIdtoiso {a b : A.obj} {f g : a = b} : idtoiso A f = idtoiso A g → f = g :=
+  (univalence A).eqvInj _ _
+
+  hott lemma isotoidCom {A : Category} {a b c : A.obj} {f : iso A b c} {g : iso A a b} :
+    isotoid A (f.com g) = isotoid A g ⬝ isotoid A f :=
+  ofIdtoiso A (isotoidβrule₁ A _ ⬝ (A.1.idtoisoCom _ _ ⬝ bimap _ (isotoidβrule₁ A _) (isotoidβrule₁ A _))⁻¹)
 
   hott definition Mor (A : Category) := Σ (x y : A.obj), hom A x y
 

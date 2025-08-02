@@ -31,13 +31,23 @@ namespace Precategory
   hott abbreviation compose {A : Precategory} {a b c : A.obj} (g : hom A b c) (f : hom A a b) : hom A a c :=
   A.com g f
 
-  local infix:60 " ∘ " => compose
+  local infixr:60 " ∘ " => compose
 
-  hott definition hasInv(A : Precategory) {a b : A.obj} (f : hom A a b) :=
+  hott definition hasInv (A : Precategory) {a b : A.obj} (f : hom A a b) :=
   Σ (g : hom A b a), (f ∘ g = id A) × (g ∘ f = id A)
 
   hott definition iso (A : Precategory) (a b : A.obj) :=
   Σ (f : hom A a b), hasInv A f
+
+  hott definition iso.rev {A : Precategory} {a b : A.obj} :
+    iso A a b → iso A b a :=
+  λ ⟨f, ⟨g, (p, q)⟩⟩, ⟨g, ⟨f, (q, p)⟩⟩
+
+  hott definition iso.com {A : Precategory} {a b c : A.obj} :
+    iso A b c → iso A a b → iso A a c :=
+  λ ⟨f₁, ⟨g₁, (α₁, β₁)⟩⟩ ⟨f₂, ⟨g₂, (α₂, β₂)⟩⟩,
+    ⟨f₁ ∘ f₂, ⟨g₂ ∘ g₁, ((A.assoc _ _ _)⁻¹ ⬝ ap (f₁ ∘ ·) (A.assoc _ _ _ ⬝ ap (· ∘ g₁) α₂ ⬝ A.lu _) ⬝ α₁,
+                         (A.assoc _ _ _)⁻¹ ⬝ ap (g₂ ∘ ·) (A.assoc _ _ _ ⬝ ap (· ∘ f₂) β₁ ⬝ A.lu _) ⬝ β₂)⟩⟩
 
   hott definition idiso (A : Precategory) {a : A.obj} : iso A a a :=
   ⟨id A, ⟨id A, (lu A (id A), lu A (id A))⟩⟩
@@ -47,7 +57,7 @@ namespace Precategory
   hott definition idtoiso (A : Precategory) {a b : A.obj} (p : a = b) : iso A a b :=
   begin induction p; reflexivity end
 
-  hott definition invProp (A : Precategory) {a b : A.obj} (f : hom A a b) : prop (hasInv A f) :=
+  hott lemma invProp (A : Precategory) {a b : A.obj} (f : hom A a b) : prop (hasInv A f) :=
   begin
     intro ⟨g', (H₁, H₂)⟩ ⟨g, (G₁, G₂)⟩;
     fapply Sigma.prod; apply calc
@@ -58,6 +68,9 @@ namespace Precategory
        ... = g            : ru _ _;
     apply productProp <;> apply set
   end
+
+  hott lemma isoEq {A : Precategory} {a b : A.obj} {f g : iso A a b} : f.1 = g.1 → f = g :=
+  λ p, Sigma.prod p (invProp A _ _ _)
 
   hott definition op (A : Precategory) : Precategory :=
   ⟨A.obj, λ a b, hom A b a, λ a b, set A b a, id A,
@@ -135,6 +148,28 @@ namespace Precategory
 
   hott definition isCoproduct (A : Precategory) (a b c : A.obj) :=
   isProduct (op A) a b c
+
+  hott lemma transportHomCov {A : Precategory} {a b₁ b₂ : A.obj} (q : b₁ = b₂) (f : hom A a b₁) :
+    transport (hom A a ·) q f = (idtoiso A q).1 ∘ f :=
+  begin induction q; symmetry; apply lu end
+
+  hott lemma transportHomCon {A : Precategory} {a₁ a₂ b : A.obj} (p : a₁ = a₂) (f : hom A a₁ b) :
+    transport (hom A · b) p f = f ∘ (idtoiso A p).2.1 :=
+  begin induction p; symmetry; apply ru end
+
+  hott lemma transportBihom {A : Precategory} {a₁ a₂ b₁ b₂ : A.obj}
+    (p : a₁ = a₂) (q : b₁ = b₂) (f : hom A a₁ b₁) :
+      transport (λ (a, b), hom A a b) (Product.prod p q) f
+    = (idtoiso A q).1 ∘ f ∘ (idtoiso A p).2.1 :=
+  begin induction p; induction q; symmetry; transitivity; apply lu; apply ru end
+
+  hott lemma idtoisoRev {A : Precategory} {a b : A.obj} (p : a = b) :
+    idtoiso A p⁻¹ = (idtoiso A p).rev :=
+  begin induction p; reflexivity end
+
+  hott lemma idtoisoCom {A : Precategory} {a b c : A.obj} (p : a = b) (q : b = c) :
+    idtoiso A (p ⬝ q) = (idtoiso A q).com (idtoiso A p) :=
+  begin induction p; induction q; apply isoEq; symmetry; apply lu end
 end Precategory
 
 end GroundZero.Types
