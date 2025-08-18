@@ -204,12 +204,12 @@ namespace Nat'
 
   hott definition succMul : Π n m, mult (n + 1) m = add m (mult n m) :=
   λ n, ind (λ m, mult (n + 1) m = add m (mult n m)) (idp 0) (λ m p, calc
-    mult (n + 1) (m + 1) = add n (mult (n + 1) m) + 1   : succAdd n (mult (n + 1) m)
-                     ... = add n (add m (mult n m)) + 1 : ap (λ k, add n k + 1) p
-                     ... = add (add n m) (mult n m) + 1 : ap Nat.succ (addAssoc n m (mult n m))
-                     ... = add (add m n) (mult n m) + 1 : ap (λ k, add k (mult n m) + 1) (addComm n m)
-                     ... = add m (add n (mult n m)) + 1 : ap Nat.succ (addAssoc m n (mult n m))⁻¹
-                     ... = add (m + 1) (mult n (m + 1)) : (succAdd m (mult n (m + 1)))⁻¹)
+    mult (n + 1) (m + 1) = add n (mult (n + 1) m) + 1   : succAdd n (mult (n + 1) m),
+                         = add n (add m (mult n m)) + 1 : ap (λ k, add n k + 1) p,
+                         = add (add n m) (mult n m) + 1 : ap Nat.succ (addAssoc n m (mult n m)),
+                         = add (add m n) (mult n m) + 1 : ap (λ k, add k (mult n m) + 1) (addComm n m),
+                         = add m (add n (mult n m)) + 1 : ap Nat.succ (addAssoc m n (mult n m))⁻¹,
+                         = add (m + 1) (mult n (m + 1)) : (succAdd m (mult n (m + 1)))⁻¹)
 
   hott definition mulOne : Π n, mult n 1 = n :=
   ind (λ n, mult n 1 = n) (idp 0) (λ n p,
@@ -226,21 +226,21 @@ namespace Nat'
 
   hott definition mulDistrLeft : Π n m k, mult n (add m k) = add (mult n m) (mult n k) :=
   λ n m, ind (λ k, mult n (add m k) = add (mult n m) (mult n k)) (idp (mult n m)) (λ k p, calc
-      mult n (add m (k + 1)) = add n (add (mult n m) (mult n k)) : ap (add n) p
-                         ... = add (add (mult n m) (mult n k)) n : addComm _ _
-                         ... = add (mult n m) (add (mult n k) n) : (addAssoc _ _ _)⁻¹
-                         ... = add (mult n m) (mult n (k + 1))   : ap (add (mult n m)) (addComm _ _))
+      mult n (add m (k + 1)) = add n (add (mult n m) (mult n k)) : ap (add n) p,
+                             = add (add (mult n m) (mult n k)) n : addComm _ _,
+                             = add (mult n m) (add (mult n k) n) : (addAssoc _ _ _)⁻¹,
+                             = add (mult n m) (mult n (k + 1))   : ap (add (mult n m)) (addComm _ _))
 
   hott definition mulDistrRight : Π n m k, mult (add n m) k = add (mult n k) (mult m k) :=
-  λ n m k, calc mult (add n m) k = mult k (add n m)          : mulComm _ _
-                             ... = add (mult k n) (mult k m) : mulDistrLeft _ _ _
-                             ... = add (mult n k) (mult m k) : bimap add (mulComm _ _) (mulComm _ _)
+  λ n m k, calc mult (add n m) k = mult k (add n m)          : mulComm _ _,
+                                 = add (mult k n) (mult k m) : mulDistrLeft _ _ _,
+                                 = add (mult n k) (mult m k) : bimap add (mulComm _ _) (mulComm _ _)
 
   hott definition mulAssoc : Π n m k, mult n (mult m k) = mult (mult n m) k :=
   λ n m, ind (λ k, mult n (mult m k) = mult (mult n m) k) (idp 0) (λ k p, calc
-    mult n (mult m (k + 1)) = add (mult n m) (mult n (mult m k)) : mulDistrLeft _ _ _
-                        ... = add (mult n m) (mult (mult n m) k) : ap (add (mult n m)) p
-                        ... = mult (mult n m) (k + 1)            : idp _)
+    mult n (mult m (k + 1)) = add (mult n m) (mult n (mult m k)) : mulDistrLeft _ _ _,
+                            = add (mult n m) (mult (mult n m) k) : ap (add (mult n m)) p,
+                            = mult (mult n m) (k + 1)            : idp _)
 end Nat'
 
 -- exercise 1.9

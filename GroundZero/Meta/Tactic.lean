@@ -112,28 +112,29 @@ elab "existsi" e:term : tactic => do
 -- https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/How.20to.20use.20hand.20written.20parsers/near/245760023
 -- Author: Mario Carneiro
 
+abbrev ellipsisInfoKind : SyntaxNodeKind := `ellipsis
+
+def ellipsis := Syntax.node SourceInfo.none ellipsisInfoKind #[]
+
 -- https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Parser.2EtrailingLoop
-def calcLHS : Parser.Parser :=
-Parser.leadingNode `ellipsis Parser.maxPrec (Parser.symbol "...") >>
-Parser.withFn (λ _ c s => let category := (Parser.getCategory (Parser.parserExtension.getState c.env).categories `term).get!
-  Parser.trailingLoop category.tables c s) Parser.termParser
+def calcRHS : Parser.Parser :=
+Parser.withFn (λ _ c s =>
+  let category := (Parser.getCategory (Parser.parserExtension.getState c.env).categories `term).get!
+  Parser.trailingLoop category.tables c (s.pushSyntax ellipsis)) Parser.termParser
 
 open PrettyPrinter Elab.Term
 
-@[combinator_formatter GroundZero.Meta.Tactic.calcLHS] def calcLHS.formatter : Formatter := pure ()
-@[combinator_parenthesizer GroundZero.Meta.Tactic.calcLHS] def calcLHS.parenthesizer : Parenthesizer := pure ()
-
-def extRelation (e : Expr) : TermElabM (Expr × Expr) :=
+def expandBinaryRelation (e : Expr) : TermElabM (Expr × Expr) :=
   e.withApp λ e es => do
     unless (es.size > 1) do throwError "expected binary relation"
     return (es.back!, mkAppN e es.pop.pop)
 
-def getEqn (e : Syntax) : TermElabM (Syntax × Syntax) := do
+def expandRHS (e : Syntax) : TermElabM (Syntax × Syntax) := do
   unless (e.getArgs.size > 2) do throwError "expected binary relation"
   return (e.getArgs.get! 0, e.getArgs.get! 2)
 
-elab (priority := high) "calc " ε:term " : " τ:term σ:(calcLHS " : " term)* : term => do
-  let σ ← Array.mapM getEqn σ
+elab (priority := high) "calc " ε:term " : " τ:term ", " σ:(calcRHS " : " term),+ : term => do
+  let σ ← Array.mapM expandRHS σ
 
   let ε ← Elab.Term.elabTerm ε none
   let ε ← instantiateMVars ε
@@ -142,7 +143,7 @@ elab (priority := high) "calc " ε:term " : " τ:term σ:(calcLHS " : " term)* :
   let ty₁ ← Meta.inferType e₁
   let u₁  ← Meta.getLevel ty₁
 
-  let mut (e₂, ρ₁) ← extRelation ε
+  let mut (e₂, ρ₁) ← expandBinaryRelation ε
   let mut η ← Elab.Term.elabTermEnsuringType τ ε
 
   let mut ty₂ ← Meta.inferType e₂
@@ -151,13 +152,15 @@ elab (priority := high) "calc " ε:term " : " τ:term σ:(calcLHS " : " term)* :
   let mut v₁ ← Meta.getLevel ε
 
   for (e, τ) in σ do
+    guard <| (e.getArg 0).isOfKind ellipsisInfoKind
+
     let ε ← Elab.Term.elabTerm (e.setArg 0 (← PrettyPrinter.delab e₂)) none
     let ε ← instantiateMVars ε
 
     let τ ← Elab.Term.elabTermEnsuringType τ ε
     let mut v₂ ← Meta.getLevel ε
 
-    let (e₃, ρ₂) ← extRelation ε
+    let (e₃, ρ₂) ← expandBinaryRelation ε
 
     let ty₃ ← Meta.inferType e₃
     let u₃  ← Meta.getLevel ty₃

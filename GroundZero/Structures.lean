@@ -215,9 +215,9 @@ hott lemma terminalArrow {A : Type u} : A ≃ (𝟏 → A) :=
 ⟨λ x _, x, Types.Qinv.toBiinv _ ⟨λ φ, φ ★, (λ φ, funext (λ ★, idp _), idp)⟩⟩
 
 hott lemma contrTypeEquiv {A : Type u} {B : Type v}
-  (H : contr A) (G : contr B) : A ≃ B := calc
-      A ≃ 𝟏 : contrEquivUnit.{_, 0} H
-    ... ≃ B : (contrEquivUnit G).symm
+  (H : contr A) (G : contr B) : A ≃ B :=
+calc A ≃ 𝟏 : contrEquivUnit.{_, 0} H,
+       ≃ B : (contrEquivUnit G).symm
 
 hott lemma prodUnitEquiv (A : Type u) : 𝟏 × A ≃ A :=
 begin existsi Prod.snd; apply Prod.mk <;> existsi Prod.mk ★ <;> { intro; reflexivity } end
@@ -402,21 +402,21 @@ begin
     intro x; apply (H x).forwardRight }
 end
 
-hott lemma zeroEqvSet {A : Type u} : (is-0-type A) ≃ hset A := calc
-  (is-0-type A) ≃ (Π (x y : A), is-(−1)-type (x = y)) : by reflexivity
-            ... ≃ (Π (x y : A), prop (x = y)) :
-                  begin apply equivFunext; intro x;
-                        apply equivFunext; intro y;
-                        apply minusOneEqvProp end
-            ... ≃ hset A : by reflexivity
+hott lemma zeroEqvSet {A : Type u} : (is-0-type A) ≃ hset A :=
+calc (is-0-type A) ≃ (Π (x y : A), is-(−1)-type (x = y)) : by reflexivity,
+                   ≃ (Π (x y : A), prop (x = y)) :
+                     begin apply equivFunext; intro x;
+                           apply equivFunext; intro y;
+                           apply minusOneEqvProp end,
+                   ≃ hset A : by reflexivity
 
-hott lemma oneEqvGroupoid {A : Type u} : (is-1-type A) ≃ groupoid A := calc
-  (is-1-type A) ≃ (Π (x y : A), is-0-type (x = y)) : by reflexivity
-            ... ≃ (Π (x y : A), hset (x = y)) :
-                   begin apply equivFunext; intro x;
-                         apply equivFunext; intro y;
-                         apply zeroEqvSet end
-            ... ≃ groupoid A : by reflexivity
+hott lemma oneEqvGroupoid {A : Type u} : (is-1-type A) ≃ groupoid A :=
+calc (is-1-type A) ≃ (Π (x y : A), is-0-type (x = y)) : by reflexivity,
+                   ≃ (Π (x y : A), hset (x = y)) :
+                      begin apply equivFunext; intro x;
+                            apply equivFunext; intro y;
+                            apply zeroEqvSet end,
+                   ≃ groupoid A : by reflexivity
 
 hott lemma propIsNType {A : Type u} (H : prop A) : Π n, is-(hlevel.succ n)-type A
 | −2            => minusOneEqvProp.left H

@@ -101,18 +101,18 @@ namespace Group
     begin
       intro x; fapply HITs.Merely.rec; apply Ens.prop;
       intro ⟨(a, b), q⟩; change _ = _; apply calc
-        f.1 x = f.1 (G.φ (G.φ a b) (G.φ (G.ι a) (G.ι b)))             : ap f.1 (Id.inv q)
-          ... = H.φ (f.1 (G.φ a b)) (f.1 (G.φ (G.ι a) (G.ι b)))       : homoMul f _ _
-          ... = H.φ (f.1 (G.φ a b)) (H.φ (f.1 (G.ι a)) (f.1 (G.ι b))) : ap _ (homoMul f _ _)
-          ... = H.φ (f.1 (G.φ a b)) (H.φ (f.1 (G.ι b)) (f.1 (G.ι a))) : ap _ (ρ _ _)
-          ... = H.φ (f.1 (G.φ a b)) (f.1 (G.φ (G.ι b) (G.ι a)))       : ap _ (homoMul f _ _)⁻¹
-          ... = f.1 (G.φ (G.φ a b) (G.φ (G.ι b) (G.ι a)))             : Id.inv (homoMul f _ _)
-          ... = f.1 (G.φ (G.φ (G.φ a b) (G.ι b)) (G.ι a))             : ap f.1 (Id.inv (G.mulAssoc _ _ _))
-          ... = f.1 (G.φ (G.φ a (G.φ b (G.ι b))) (G.ι a))             : @ap G.carrier H.carrier _ _ (λ x, f.1 (G.φ x (G.ι a))) (G.mulAssoc a b (G.ι b))
-          ... = f.1 (G.φ (G.φ a G.e) (G.ι a))                         : @ap G.carrier H.carrier _ _ (λ x, f.1 (G.φ (G.φ a x) (G.ι a))) (mulRightInv b)
-          ... = f.1 (G.φ a (G.ι a))                                   : @ap G.carrier H.carrier _ _ (λ x, f.1 (G.φ x (G.ι a))) (G.mulOne a)
-          ... = f.1 G.e                                               : ap f.1 (mulRightInv a)
-          ... = H.e                                                   : homoUnit f
+        f.1 x = f.1 (G.φ (G.φ a b) (G.φ (G.ι a) (G.ι b)))             : ap f.1 (Id.inv q),
+              = H.φ (f.1 (G.φ a b)) (f.1 (G.φ (G.ι a) (G.ι b)))       : homoMul f _ _,
+              = H.φ (f.1 (G.φ a b)) (H.φ (f.1 (G.ι a)) (f.1 (G.ι b))) : ap _ (homoMul f _ _),
+              = H.φ (f.1 (G.φ a b)) (H.φ (f.1 (G.ι b)) (f.1 (G.ι a))) : ap _ (ρ _ _),
+              = H.φ (f.1 (G.φ a b)) (f.1 (G.φ (G.ι b) (G.ι a)))       : ap _ (homoMul f _ _)⁻¹,
+              = f.1 (G.φ (G.φ a b) (G.φ (G.ι b) (G.ι a)))             : Id.inv (homoMul f _ _),
+              = f.1 (G.φ (G.φ (G.φ a b) (G.ι b)) (G.ι a))             : ap f.1 (Id.inv (G.mulAssoc _ _ _)),
+              = f.1 (G.φ (G.φ a (G.φ b (G.ι b))) (G.ι a))             : @ap G.carrier H.carrier _ _ (λ x, f.1 (G.φ x (G.ι a))) (G.mulAssoc a b (G.ι b)),
+              = f.1 (G.φ (G.φ a G.e) (G.ι a))                         : @ap G.carrier H.carrier _ _ (λ x, f.1 (G.φ (G.φ a x) (G.ι a))) (mulRightInv b),
+              = f.1 (G.φ a (G.ι a))                                   : @ap G.carrier H.carrier _ _ (λ x, f.1 (G.φ x (G.ι a))) (G.mulOne a),
+              = f.1 G.e                                               : ap f.1 (mulRightInv a),
+              = H.e                                                   : homoUnit f
     end
   end
 

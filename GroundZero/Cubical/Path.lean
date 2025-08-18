@@ -147,12 +147,13 @@ trans (<i> A ≃ p @ i) (Equiv.ideqv A)
 section
   variable {A : Type u} {a b : A} (p : Path A a b)
 
-  hott definition testEta : Path (Path A a b) p p := rfl
+  hott definition testEta : Path (Path A a b) p p := Path.rfl
+
   hott definition face₀ : A := p @ 0
   hott definition face₁ : A := p @ 1
 
-  hott definition compTest₀ : Path A (p @ 0) a := rfl
-  hott definition compTest₁ : Path A (p @ 1) b := rfl
+  hott definition compTest₀ : Path A (p @ 0) a := Path.rfl
+  hott definition compTest₁ : Path A (p @ 1) b := Path.rfl
 
   -- fails, because this requires −(−i) ≡ i
   --hott definition symmTest : Path (Path A a b) (p⁻¹)⁻¹ p := rfl

@@ -61,11 +61,11 @@ namespace Precategory
   begin
     intro ⟨g', (H₁, H₂)⟩ ⟨g, (G₁, G₂)⟩;
     fapply Sigma.prod; apply calc
-        g' = id A ∘ g'    : (lu _ _)⁻¹
-       ... = (g ∘ f) ∘ g' : ap (compose · g') G₂⁻¹
-       ... = g ∘ (f ∘ g') : (assoc _ _ _ _)⁻¹
-       ... = g ∘ id A     : ap (compose g) H₁
-       ... = g            : ru _ _;
+        g' = id A ∘ g'    : (lu _ _)⁻¹,
+           = (g ∘ f) ∘ g' : ap (compose · g') G₂⁻¹,
+           = g ∘ (f ∘ g') : (assoc _ _ _ _)⁻¹,
+           = g ∘ id A     : ap (compose g) H₁,
+           = g            : ru _ _;
     apply productProp <;> apply set
   end
 

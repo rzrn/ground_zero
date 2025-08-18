@@ -152,17 +152,17 @@ namespace Circle
   hott definition recβrule₁ {B : Type u} (b : B) (ℓ : b = b) : rec b ℓ base = b :=
   idp b
 
-  hott definition recβrule₂ {B : Type u} (b : B) (ℓ : b = b) := calc
-          ap (rec b ℓ) loop
-        = ap (rec b ℓ) seg₂ ⬝ ap (rec b ℓ) seg₁⁻¹   : Equiv.mapFunctoriality _
-    ... = ap (rec b ℓ) seg₂ ⬝ (ap (rec b ℓ) seg₁)⁻¹ : ap (_ ⬝ ·) (Id.mapInv _ _)
-    ... = ℓ ⬝ (idp b)⁻¹                             : bimap (· ⬝ ·⁻¹) (Suspension.recβrule _ _ _ _) (Suspension.recβrule _ _ _ _)
-    ... = ℓ                                         : Id.rid _
+  hott definition recβrule₂ {B : Type u} (b : B) (ℓ : b = b) :=
+  calc ap (rec b ℓ) loop
+     = ap (rec b ℓ) seg₂ ⬝ ap (rec b ℓ) seg₁⁻¹   : Equiv.mapFunctoriality _,
+     = ap (rec b ℓ) seg₂ ⬝ (ap (rec b ℓ) seg₁)⁻¹ : ap (_ ⬝ ·) (Id.mapInv _ _),
+     = ℓ ⬝ (idp b)⁻¹                             : bimap (· ⬝ ·⁻¹) (Suspension.recβrule _ _ _ _) (Suspension.recβrule _ _ _ _),
+     = ℓ                                         : Id.rid _
 
-  hott definition recβrule₃ {B : Type u} (b : B) (ℓ : b = b) := calc
-            ap (rec b ℓ) loop⁻¹
-          = (ap (rec b ℓ) loop)⁻¹ : Id.mapInv _ _
-      ... = ℓ⁻¹                   : ap Id.inv (recβrule₂ _ _)
+  hott definition recβrule₃ {B : Type u} (b : B) (ℓ : b = b) :=
+  calc ap (rec b ℓ) loop⁻¹
+    = (ap (rec b ℓ) loop)⁻¹ : Id.mapInv _ _,
+    = ℓ⁻¹                   : ap Id.inv (recβrule₂ _ _)
 
   hott definition ind {B : S¹ → Type u} (b : B base) (ℓ : b =[loop] b) : Π (x : S¹), B x :=
   ind₂ b (transport B seg₁ b) (idp _) (depPathTransSymm ℓ)
@@ -265,18 +265,18 @@ namespace Circle
 
   hott definition winding : base = base → ℤ := encode base
 
-  hott theorem transportThere (x : ℤ) := calc
-          transport helix loop x
-        = transportconst (ap helix loop) x        : Equiv.transportComp id helix loop x
-    ... = transportconst (ua Integer.succEquiv) x : ap (transportconst · x) (recβrule₂ _ _)
-    ... = Integer.succ x                          : uaβ _ _
+  hott theorem transportThere (x : ℤ) :=
+  calc transport helix loop x
+     = transportconst (ap helix loop) x        : Equiv.transportComp id helix loop x,
+     = transportconst (ua Integer.succEquiv) x : ap (transportconst · x) (recβrule₂ _ _),
+     = Integer.succ x                          : uaβ _ _
 
-  hott theorem transportBack (x : ℤ) := calc
-           transport helix loop⁻¹ x
-         = transportconst (ap helix loop⁻¹) x        : Equiv.transportComp id helix loop⁻¹ x
-     ... = transportconst (ap helix loop)⁻¹ x        : ap (transportconst · x) (Id.mapInv _ _)
-     ... = transportconst (ua Integer.succEquiv)⁻¹ x : ap (transportconst ·⁻¹ x) (recβrule₂ _ _)
-     ... = Integer.pred x                            : uaβrev _ _
+  hott theorem transportBack (x : ℤ) :=
+  calc transport helix loop⁻¹ x
+     = transportconst (ap helix loop⁻¹) x        : Equiv.transportComp id helix loop⁻¹ x,
+     = transportconst (ap helix loop)⁻¹ x        : ap (transportconst · x) (Id.mapInv _ _),
+     = transportconst (ua Integer.succEquiv)⁻¹ x : ap (transportconst ·⁻¹ x) (recβrule₂ _ _),
+     = Integer.pred x                            : uaβrev _ _
 
   -- An example of two equal dependent pairs with unequal second components.
   -- Note that this example depends on the univalence.
@@ -353,25 +353,25 @@ namespace Circle
   begin
     induction x; reflexivity; apply calc
               transport (λ x, inv (inv x) = x) loop (idp base)
-            = invₚ loop⁻¹ ⬝ idp base ⬝ loop   : transportOverInvolution _ _ _
-        ... = invₚ loop⁻¹ ⬝ (idp base ⬝ loop) : (Id.assoc _ _ _)⁻¹
-        ... = ap inv (ap inv loop⁻¹) ⬝ loop   : ap (· ⬝ loop) (mapOverComp _ _ _)
-        ... = ap inv (ap inv loop)⁻¹ ⬝ loop   : ap (· ⬝ loop) (ap (ap inv) (Id.mapInv inv loop))
-        ... = ap inv loop⁻¹⁻¹ ⬝ loop          : @ap Ω¹(S¹) _ _ _ (ap inv ·⁻¹ ⬝ loop) (Circle.recβrule₂ base loop⁻¹)
-        ... = ap inv loop ⬝ loop              : @ap Ω¹(S¹) _ _ _ (ap inv · ⬝ loop) (Id.invInv _)
-        ... = loop⁻¹ ⬝ loop                   : ap (· ⬝ loop) (Circle.recβrule₂ _ _)
-        ... = idp base                        : Id.invComp _
+            = invₚ loop⁻¹ ⬝ idp base ⬝ loop   : transportOverInvolution _ _ _,
+            = invₚ loop⁻¹ ⬝ (idp base ⬝ loop) : (Id.assoc _ _ _)⁻¹,
+            = ap inv (ap inv loop⁻¹) ⬝ loop   : ap (· ⬝ loop) (mapOverComp _ _ _),
+            = ap inv (ap inv loop)⁻¹ ⬝ loop   : ap (· ⬝ loop) (ap (ap inv) (Id.mapInv inv loop)),
+            = ap inv loop⁻¹⁻¹ ⬝ loop          : @ap Ω¹(S¹) _ _ _ (ap inv ·⁻¹ ⬝ loop) (Circle.recβrule₂ base loop⁻¹),
+            = ap inv loop ⬝ loop              : @ap Ω¹(S¹) _ _ _ (ap inv · ⬝ loop) (Id.invInv _),
+            = loop⁻¹ ⬝ loop                   : ap (· ⬝ loop) (Circle.recβrule₂ _ _),
+            = idp base                        : Id.invComp _
   end
 
   hott lemma unitLeft (x : S¹) : μ base x = x := idp x
 
   hott lemma μRight : ap (μ base) loop = loop := Equiv.idmap _
 
-  hott lemma μLeft := calc
-        ap (μ · base) loop
-      = happly (ap μ loop) base             : Interval.mapHapply _ _
-  ... = (happly ∘ Theorems.funext) rot base : ap (λ f, happly f base) μLoop
-  ... = loop                                : happly (Theorems.happlyFunext _ _ rot) base
+  hott lemma μLeft :=
+  calc ap (μ · base) loop
+     = happly (ap μ loop) base             : Interval.mapHapply _ _,
+     = (happly ∘ Theorems.funext) rot base : ap (λ f, happly f base) μLoop,
+     = loop                                : happly (Theorems.happlyFunext _ _ rot) base
 
   hott lemma unitRight (x : S¹) : μ x base = x :=
   begin
@@ -707,27 +707,27 @@ namespace Circle
 
     hott definition loopOf {a : A} (p : a = a) : Σ (x : A), x = x := ⟨a, p⟩
 
-    hott lemma eqEquivSquare (f g : S¹ → A) := calc
-          f = g
-        ≃ @Id (Σ x, x = x) (loopOf (ap f loop)) (loopOf (ap g loop))
-        : apEquivOnEquiv mapLoopEqv
-    ... ≃ Σ (r : f base = g base), ap f loop =[λ x, x = x, r] ap g loop
-        : Sigma.sigmaPath
-    ... ≃ Σ (r : f base = g base), r⁻¹ ⬝ (ap f loop ⬝ r) = ap g loop
-        : Sigma.respectsEquiv (λ _, idtoeqv (ap (· = ap g loop) (transportInvCompComp _ _ ⬝ (Id.assoc _ _ _)⁻¹)))
-    ... ≃ Σ (r : f base = g base), ap f loop ⬝ r = r ⬝ ap g loop
-        : Sigma.respectsEquiv (λ _, rewriteCompEquiv.symm)
+    hott lemma eqEquivSquare (f g : S¹ → A) :=
+    calc f = g
+       ≃ @Id (Σ x, x = x) (loopOf (ap f loop)) (loopOf (ap g loop))
+       : apEquivOnEquiv mapLoopEqv,
+       ≃ Σ (r : f base = g base), ap f loop =[λ x, x = x, r] ap g loop
+       : Sigma.sigmaPath,
+       ≃ Σ (r : f base = g base), r⁻¹ ⬝ (ap f loop ⬝ r) = ap g loop
+       : Sigma.respectsEquiv (λ _, idtoeqv (ap (· = ap g loop) (transportInvCompComp _ _ ⬝ (Id.assoc _ _ _)⁻¹))),
+       ≃ Σ (r : f base = g base), ap f loop ⬝ r = r ⬝ ap g loop
+       : Sigma.respectsEquiv (λ _, rewriteCompEquiv.symm)
 
-    hott corollary recEqSquare {a b : A} (p : a = a) (q : b = b) := calc
-          rec a p = rec b q
-        ≃ Σ (r : a = b), ap (rec a p) loop ⬝ r = r ⬝ ap (rec b q) loop
-        : eqEquivSquare (rec a p) (rec b q)
-    ... ≃ Σ (r : a = b), p ⬝ r = r ⬝ q
-        : Sigma.respectsEquiv (λ r, idtoeqv (bimap (· ⬝ r = r ⬝ ·) (recβrule₂ a p) (recβrule₂ b q)))
+    hott corollary recEqSquare {a b : A} (p : a = a) (q : b = b) :=
+    calc rec a p = rec b q
+       ≃ Σ (r : a = b), ap (rec a p) loop ⬝ r = r ⬝ ap (rec b q) loop
+       : eqEquivSquare (rec a p) (rec b q),
+       ≃ Σ (r : a = b), p ⬝ r = r ⬝ q
+       : Sigma.respectsEquiv (λ r, idtoeqv (bimap (· ⬝ r = r ⬝ ·) (recβrule₂ a p) (recβrule₂ b q)))
 
-    hott corollary homEqSquare {A : Type u} {a b : A} (p : a = a) (q : b = b) := calc
-    rec a p ~ rec b q ≃ rec a p = rec b q              : Theorems.full.symm
-                  ... ≃ (Σ (r : a = b), p ⬝ r = r ⬝ q) : recEqSquare p q
+    hott corollary homEqSquare {A : Type u} {a b : A} (p : a = a) (q : b = b) :=
+    calc rec a p ~ rec b q ≃ rec a p = rec b q              : Theorems.full.symm,
+                           ≃ (Σ (r : a = b), p ⬝ r = r ⬝ q) : recEqSquare p q
   end
 
   hott definition roll (x : S¹) : Ω¹(S¹) → x = x :=
@@ -1181,11 +1181,11 @@ namespace Circle
   section
     open GroundZero.Types.Integer (auxsucc)
 
-    hott theorem autEquiv := calc
-      (S¹ ≃ S¹) ≃ Σ φ, abs (degree φ) = 1                           : Sigma.respectsEquiv degIffBiinv
-            ... ≃ Σ φ, (degree φ = 1) + (degree φ = auxsucc 1)      : Sigma.respectsEquiv (λ _, absEqEqv 1 succNeqZero)
-            ... ≃ (Σ φ, degree φ = 1) + (Σ φ, degree φ = auxsucc 1) : sigmaSumDistrib _ _
-            ... ≃ S¹ + S¹                                           : sumEquiv (circleEqvDeg _) (circleEqvDeg _)
+    hott theorem autEquiv :=
+    calc (S¹ ≃ S¹) ≃ Σ φ, abs (degree φ) = 1                           : Sigma.respectsEquiv degIffBiinv,
+                   ≃ Σ φ, (degree φ = 1) + (degree φ = auxsucc 1)      : Sigma.respectsEquiv (λ _, absEqEqv 1 succNeqZero),
+                   ≃ (Σ φ, degree φ = 1) + (Σ φ, degree φ = auxsucc 1) : sigmaSumDistrib _ _,
+                   ≃ S¹ + S¹                                           : sumEquiv (circleEqvDeg _) (circleEqvDeg _)
   end
 
   section
@@ -1393,19 +1393,19 @@ namespace Circle
 
     From “Homotopy Type Theory in Lean”, https://arxiv.org/abs/1704.06781.
   -/
-  hott lemma hubSpokesEquiv {A : Type u} {a : A} (p : a = a) := calc
-       (Σ (x₀ : A), Π (z : S¹), rec a p z = x₀)
+  hott lemma hubSpokesEquiv {A : Type u} {a : A} (p : a = a) :=
+  calc (Σ (x₀ : A), Π (z : S¹), rec a p z = x₀)
       ≃ Σ (x₀ : A), Π (z : S¹), rec a p z = rec x₀ (idp x₀) z
-      : Sigma.respectsEquiv (λ _, equivFunext (λ z, idtoeqv (ap (rec a p z = ·) (constRec _ _)⁻¹)))
-  ... ≃ Σ (x₀ : A) (ε : a = x₀), p ⬝ ε = ε ⬝ idp x₀
-      : Sigma.respectsEquiv (λ x₀, homEqSquare p (idp x₀))
-  ... ≃ Σ (x₀ : A) (ε : a = x₀), p ⬝ ε = ε
-      : Sigma.respectsEquiv (λ x₀, Sigma.respectsEquiv (λ ε, idtoeqv (ap (p ⬝ ε = ·) (Id.rid ε))))
-  ... ≃ Σ (w : Σ x₀, a = x₀), p ⬝ w.2 = w.2
-      : Sigma.assoc (λ w, p ⬝ w.2 = w.2)
-  ... ≃ (p ⬝ idp a = idp a)
-      : Equiv.contrFamily (singl.contr a)
-  ... = (p = idp a)
+      : Sigma.respectsEquiv (λ _, equivFunext (λ z, idtoeqv (ap (rec a p z = ·) (constRec _ _)⁻¹))),
+      ≃ Σ (x₀ : A) (ε : a = x₀), p ⬝ ε = ε ⬝ idp x₀
+      : Sigma.respectsEquiv (λ x₀, homEqSquare p (idp x₀)),
+      ≃ Σ (x₀ : A) (ε : a = x₀), p ⬝ ε = ε
+      : Sigma.respectsEquiv (λ x₀, Sigma.respectsEquiv (λ ε, idtoeqv (ap (p ⬝ ε = ·) (Id.rid ε)))),
+      ≃ Σ (w : Σ x₀, a = x₀), p ⬝ w.2 = w.2
+      : Sigma.assoc (λ w, p ⬝ w.2 = w.2),
+      ≃ (p ⬝ idp a = idp a)
+      : Equiv.contrFamily (singl.contr a),
+      = (p = idp a)
       : ap (· = idp a) (Id.rid p)
 
   /--
@@ -1417,18 +1417,18 @@ namespace Circle
 
     HoTT book, remark 6.7.1.
   -/
-  hott remark hubSpokesNonEquiv {A : Type u} {a : A} (p : a = a) := calc
-        (Π (z : S¹), rec a p z = a)
-      ≃ (Π (z : S¹), rec a p z = rec a (idp a) z)
-      : equivFunext (λ z, idtoeqv (ap (rec a p z = ·) (constRec _ _)⁻¹))
-  ... ≃ Σ (ε : a = a), p ⬝ ε = ε ⬝ idp a
-      : homEqSquare p (idp a)
-  ... ≃ Σ (ε : a = a), p ⬝ ε = idp a ⬝ ε
-      : Sigma.respectsEquiv (λ ε, idtoeqv (ap (p ⬝ ε = ·) (Id.rid ε)))
-  ... ≃ Σ (ε : a = a), p = idp a
-      : Sigma.respectsEquiv (λ _, cancelRightEquiv)
-  ... ≃ (a = a) × (p = idp a)
-      : Sigma.const (a = a) (p = idp a)
+  hott remark hubSpokesNonEquiv {A : Type u} {a : A} (p : a = a) :=
+  calc (Π (z : S¹), rec a p z = a)
+     ≃ (Π (z : S¹), rec a p z = rec a (idp a) z)
+     : equivFunext (λ z, idtoeqv (ap (rec a p z = ·) (constRec _ _)⁻¹)),
+     ≃ Σ (ε : a = a), p ⬝ ε = ε ⬝ idp a
+     : homEqSquare p (idp a),
+     ≃ Σ (ε : a = a), p ⬝ ε = idp a ⬝ ε
+     : Sigma.respectsEquiv (λ ε, idtoeqv (ap (p ⬝ ε = ·) (Id.rid ε))),
+     ≃ Σ (ε : a = a), p = idp a
+     : Sigma.respectsEquiv (λ _, cancelRightEquiv),
+     ≃ (a = a) × (p = idp a)
+     : Sigma.const (a = a) (p = idp a)
 end Circle
 
 hott definition Torus := S¹ × S¹

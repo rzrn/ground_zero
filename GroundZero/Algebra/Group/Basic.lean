@@ -82,25 +82,25 @@ namespace Group
   local postfix:max (priority := high) "⁻¹" => G.ι
   local notation "e" => G.e
 
-  hott lemma unitOfSqr {x : G.carrier} (H : x * x = x) := calc
-      x = e * x         : Id.inv (G.oneMul _)
-    ... = (x⁻¹ * x) * x : ap (G.φ · x) (Id.inv (G.mulLeftInv x))
-    ... = x⁻¹ * (x * x) : G.mulAssoc _ _ _
-    ... = x⁻¹ * x       : ap (G.φ x⁻¹) H
-    ... = e             : G.mulLeftInv _
+  hott lemma unitOfSqr {x : G.carrier} (H : x * x = x) :=
+  calc x = e * x         : Id.inv (G.oneMul _),
+         = (x⁻¹ * x) * x : ap (G.φ · x) (Id.inv (G.mulLeftInv x)),
+         = x⁻¹ * (x * x) : G.mulAssoc _ _ _,
+         = x⁻¹ * x       : ap (G.φ x⁻¹) H,
+         = e             : G.mulLeftInv _
 
   hott lemma mulRightInv (x : G.carrier) : x * x⁻¹ = e :=
   unitOfSqr (calc (x * x⁻¹) * (x * x⁻¹)
-                = x * (x⁻¹ * (x * x⁻¹)) : G.mulAssoc _ _ _
-            ... = x * (x⁻¹ * x * x⁻¹)   : ap (x * ·) (G.mulAssoc _ _ _).inv
-            ... = x * (e * x⁻¹)         : ap (x * ·) (ap (· * x⁻¹) (G.mulLeftInv _))
-            ... = x * x⁻¹               : ap (x * ·) (G.oneMul _))
+                = x * (x⁻¹ * (x * x⁻¹)) : G.mulAssoc _ _ _,
+                = x * (x⁻¹ * x * x⁻¹)   : ap (x * ·) (G.mulAssoc _ _ _).inv,
+                = x * (e * x⁻¹)         : ap (x * ·) (ap (· * x⁻¹) (G.mulLeftInv _)),
+                = x * x⁻¹               : ap (x * ·) (G.oneMul _))
 
   hott lemma mulOne (x : G.carrier) :=
-  calc x * e = x * (x⁻¹ * x) : ap (x * ·) (G.mulLeftInv _).inv
-         ... = (x * x⁻¹) * x : (G.mulAssoc _ _ _).inv
-         ... = e * x         : ap (· * x) (G.mulRightInv _)
-         ... = x             : G.oneMul _
+  calc x * e = x * (x⁻¹ * x) : ap (x * ·) (G.mulLeftInv _).inv,
+             = (x * x⁻¹) * x : (G.mulAssoc _ _ _).inv,
+             = e * x         : ap (· * x) (G.mulRightInv _),
+             = x             : G.oneMul _
 
   attribute [irreducible] unitOfSqr mulRightInv mulOne
 
@@ -110,12 +110,12 @@ namespace Group
   hott corollary rightUnitUniq (e' : G.carrier) (mulOne' : Π a, a * e' = a) : e' = e :=
   (G.oneMul e').inv ⬝ mulOne' e
 
-  hott lemma invEqOfMulEqOne {x y : G.carrier} (H : x * y = e) := calc
-     x⁻¹ = x⁻¹ * e       : (G.mulOne _).inv
-     ... = x⁻¹ * (x * y) : ap (G.φ x⁻¹) H.inv
-     ... = (x⁻¹ * x) * y : (G.mulAssoc _ _ _).inv
-     ... = e * y         : ap (G.φ · y) (G.mulLeftInv x)
-     ... = y             : G.oneMul y
+  hott lemma invEqOfMulEqOne {x y : G.carrier} (H : x * y = e) :=
+  calc x⁻¹ = x⁻¹ * e       : (G.mulOne _).inv,
+           = x⁻¹ * (x * y) : ap (G.φ x⁻¹) H.inv,
+           = (x⁻¹ * x) * y : (G.mulAssoc _ _ _).inv,
+           = e * y         : ap (G.φ · y) (G.mulLeftInv x),
+           = y             : G.oneMul y
 
   hott corollary invInv (x : G.carrier) : x⁻¹⁻¹ = x :=
   invEqOfMulEqOne (G.mulLeftInv x)
@@ -126,28 +126,28 @@ namespace Group
   hott corollary mulEqOneOfInvEq {x y : G.carrier} (H : x⁻¹ = y) : x * y = e :=
   (ap (G.φ x) H).inv ⬝ (mulRightInv x)
 
-  hott lemma invInj {x y : G.carrier} (h : x⁻¹ = y⁻¹) : x = y := calc
-      x = x⁻¹⁻¹ : (invInv x).inv
-    ... = y⁻¹⁻¹ : ap G.ι h
-    ... = y     : invInv y
+  hott lemma invInj {x y : G.carrier} (h : x⁻¹ = y⁻¹) : x = y :=
+  calc x = x⁻¹⁻¹ : (invInv x).inv,
+         = y⁻¹⁻¹ : ap G.ι h,
+         = y     : invInv y
 
-  hott theorem mulCancelLeft {a b c : G.carrier} (h : c * a = c * b) := calc
-      a = e * a         : Id.inv (G.oneMul a)
-    ... = (c⁻¹ * c) * a : ap (G.φ · a) (Id.inv (G.mulLeftInv c))
-    ... = c⁻¹ * (c * a) : G.mulAssoc _ _ _
-    ... = c⁻¹ * (c * b) : ap (G.φ c⁻¹) h
-    ... = (c⁻¹ * c) * b : Id.inv (G.mulAssoc _ _ _)
-    ... = e * b         : ap (G.φ · b) (G.mulLeftInv c)
-    ... = b             : G.oneMul b
+  hott theorem mulCancelLeft {a b c : G.carrier} (h : c * a = c * b) :=
+  calc a = e * a         : Id.inv (G.oneMul a),
+         = (c⁻¹ * c) * a : ap (G.φ · a) (Id.inv (G.mulLeftInv c)),
+         = c⁻¹ * (c * a) : G.mulAssoc _ _ _,
+         = c⁻¹ * (c * b) : ap (G.φ c⁻¹) h,
+         = (c⁻¹ * c) * b : Id.inv (G.mulAssoc _ _ _),
+         = e * b         : ap (G.φ · b) (G.mulLeftInv c),
+         = b             : G.oneMul b
 
-  hott theorem mulCancelRight {a b c : G.carrier} (h : a * c = b * c) := calc
-      a = a * e         : Id.inv (G.mulOne a)
-    ... = a * (c * c⁻¹) : ap (G.φ a) (Id.inv (mulRightInv c))
-    ... = (a * c) * c⁻¹ : Id.inv (G.mulAssoc _ _ _)
-    ... = (b * c) * c⁻¹ : ap (G.φ · c⁻¹) h
-    ... = b * (c * c⁻¹) : G.mulAssoc _ _ _
-    ... = b * e         : ap (G.φ b) (mulRightInv c)
-    ... = b             : G.mulOne b
+  hott theorem mulCancelRight {a b c : G.carrier} (h : a * c = b * c) :=
+  calc a = a * e         : Id.inv (G.mulOne a),
+         = a * (c * c⁻¹) : ap (G.φ a) (Id.inv (mulRightInv c)),
+         = (a * c) * c⁻¹ : Id.inv (G.mulAssoc _ _ _),
+         = (b * c) * c⁻¹ : ap (G.φ · c⁻¹) h,
+         = b * (c * c⁻¹) : G.mulAssoc _ _ _,
+         = b * e         : ap (G.φ b) (mulRightInv c),
+         = b             : G.mulOne b
 
   hott corollary unitInv : e = e⁻¹ :=
   Id.inv (mulRightInv e) ⬝ G.oneMul e⁻¹
@@ -164,25 +164,25 @@ namespace Group
   hott theorem invExplode (x y : G.carrier) : (x * y)⁻¹ = y⁻¹ * x⁻¹ :=
   invEqOfMulEqOne
     (calc (x * y) * (y⁻¹ * x⁻¹)
-        = ((x * y) * y⁻¹) * x⁻¹ : Id.inv (G.mulAssoc _ _ _)
-    ... = (x * (y * y⁻¹)) * x⁻¹ : ap (G.φ · x⁻¹) (G.mulAssoc _ _ _)
-    ... = (x * e) * x⁻¹         : ap (λ z, (x * z) * x⁻¹) (mulRightInv _)
-    ... = x * x⁻¹               : ap (G.φ · x⁻¹) (G.mulOne x)
-    ... = e                     : mulRightInv _)
+        = ((x * y) * y⁻¹) * x⁻¹ : Id.inv (G.mulAssoc _ _ _),
+        = (x * (y * y⁻¹)) * x⁻¹ : ap (G.φ · x⁻¹) (G.mulAssoc _ _ _),
+        = (x * e) * x⁻¹         : ap (λ z, (x * z) * x⁻¹) (mulRightInv _),
+        = x * x⁻¹               : ap (G.φ · x⁻¹) (G.mulOne x),
+        = e                     : mulRightInv _)
 
-  hott lemma sqrUnit {x : G.carrier} (p : x * x = e) := calc
-      x = x * e         : Id.inv (G.mulOne x)
-    ... = x * (x * x⁻¹) : ap (G.φ x) (Id.inv (mulRightInv x))
-    ... = (x * x) * x⁻¹ : Id.inv (G.mulAssoc x x x⁻¹)
-    ... = e * x⁻¹       : ap (G.φ · x⁻¹) p
-    ... = x⁻¹           : G.oneMul x⁻¹
+  hott lemma sqrUnit {x : G.carrier} (p : x * x = e) :=
+  calc x = x * e         : Id.inv (G.mulOne x),
+         = x * (x * x⁻¹) : ap (G.φ x) (Id.inv (mulRightInv x)),
+         = (x * x) * x⁻¹ : Id.inv (G.mulAssoc x x x⁻¹),
+         = e * x⁻¹       : ap (G.φ · x⁻¹) p,
+         = x⁻¹           : G.oneMul x⁻¹
 
   hott lemma sqrUnitImplsAbelian (H : Π x, x * x = e) : G.isCommutative :=
   begin
     intros x y; have F := λ x, sqrUnit (H x); apply calc
-      x * y = x⁻¹ * y⁻¹ : bimap G.φ (F x) (F y)
-        ... = (y * x)⁻¹ : Id.inv (invExplode y x)
-        ... = y * x     : Id.inv (F _)
+      x * y = x⁻¹ * y⁻¹ : bimap G.φ (F x) (F y),
+            = (y * x)⁻¹ : Id.inv (invExplode y x),
+            = y * x     : Id.inv (F _)
   end
 
   local infix:70 (priority := high) " ^ " => conjugate (G := G)
@@ -195,33 +195,33 @@ namespace Group
   hott lemma eqOfRdivEq {x y : G.carrier} (h : x / y = e) : x = y :=
   invInj (invEqOfMulEqOne h)
 
-  hott lemma cancelLeft (a b : G.carrier) := calc
-      a = a * e         : Id.inv (G.mulOne a)
-    ... = a * (b⁻¹ * b) : ap (G.φ a) (Id.inv (G.mulLeftInv b))
-    ... = (a * b⁻¹) * b : Id.inv (G.mulAssoc a b⁻¹ b)
+  hott lemma cancelLeft (a b : G.carrier) :=
+  calc a = a * e         : Id.inv (G.mulOne a),
+         = a * (b⁻¹ * b) : ap (G.φ a) (Id.inv (G.mulLeftInv b)),
+         = (a * b⁻¹) * b : Id.inv (G.mulAssoc a b⁻¹ b)
 
-  hott lemma cancelRight (a b : G.carrier) := calc
-      a = a * e         : Id.inv (G.mulOne a)
-    ... = a * (b * b⁻¹) : ap (G.φ a) (Id.inv (mulRightInv b))
-    ... = (a * b) * b⁻¹ : Id.inv (G.mulAssoc a b b⁻¹)
+  hott lemma cancelRight (a b : G.carrier) :=
+  calc a = a * e         : Id.inv (G.mulOne a),
+         = a * (b * b⁻¹) : ap (G.φ a) (Id.inv (mulRightInv b)),
+         = (a * b) * b⁻¹ : Id.inv (G.mulAssoc a b b⁻¹)
 
-  hott lemma revCancelLeft (a b : G.carrier) := calc
-      b = e * b         : Id.inv (G.oneMul b)
-    ... = (a⁻¹ * a) * b : ap (G.φ · b) (Id.inv (G.mulLeftInv a))
-    ... = a⁻¹ * (a * b) : G.mulAssoc a⁻¹ a b
+  hott lemma revCancelLeft (a b : G.carrier) :=
+  calc b = e * b         : Id.inv (G.oneMul b),
+         = (a⁻¹ * a) * b : ap (G.φ · b) (Id.inv (G.mulLeftInv a)),
+         = a⁻¹ * (a * b) : G.mulAssoc a⁻¹ a b
 
-  hott lemma revCancelRight (a b : G.carrier) := calc
-      b = e * b         : Id.inv (G.oneMul b)
-    ... = (a * a⁻¹) * b : ap (G.φ · b) (Id.inv (mulRightInv a))
-    ... = a * (a⁻¹ * b) : G.mulAssoc a a⁻¹ b
+  hott lemma revCancelRight (a b : G.carrier) :=
+  calc b = e * b         : Id.inv (G.oneMul b),
+         = (a * a⁻¹) * b : ap (G.φ · b) (Id.inv (mulRightInv a)),
+         = a * (a⁻¹ * b) : G.mulAssoc a a⁻¹ b
 
-  hott lemma commImplConj {x y : G.carrier} (p : x * y = y * x) : x = x ^ y := calc
-      x = e * x         : Id.inv (G.oneMul x)
-    ... = (y⁻¹ * y) * x : ap (G.φ · x) (Id.inv (G.mulLeftInv y))
-    ... = y⁻¹ * (y * x) : G.mulAssoc y⁻¹ y x
-    ... = y⁻¹ * (x * y) : ap (G.φ y⁻¹) (Id.inv p)
-    ... = (y⁻¹ * x) * y : Id.inv (G.mulAssoc y⁻¹ x y)
-    ... = x ^ y         : Id.refl
+  hott lemma commImplConj {x y : G.carrier} (p : x * y = y * x) : x = x ^ y :=
+  calc x = e * x         : Id.inv (G.oneMul x),
+         = (y⁻¹ * y) * x : ap (G.φ · x) (Id.inv (G.mulLeftInv y)),
+         = y⁻¹ * (y * x) : G.mulAssoc y⁻¹ y x,
+         = y⁻¹ * (x * y) : ap (G.φ y⁻¹) (Id.inv p),
+         = (y⁻¹ * x) * y : Id.inv (G.mulAssoc y⁻¹ x y),
+         = x ^ y         : Id.refl
 
   hott lemma invEqOfMulRevEqOne {x y : G.carrier} (h : y * x = e) : x⁻¹ = y :=
   begin
@@ -285,13 +285,13 @@ namespace Group
   hott definition ldiv (φ : G.subgroup) := λ x y, @leftDiv G x y ∈ φ.set
   hott definition rdiv (φ : G.subgroup) := λ x y, (x / y) ∈ φ.set
 
-  hott lemma invMulInv (x y : G.carrier) := calc
-    (x⁻¹ * y)⁻¹ = y⁻¹ * x⁻¹⁻¹ : invExplode _ _
-            ... = y⁻¹ * x     : ap (G.φ y⁻¹) (invInv x)
+  hott lemma invMulInv (x y : G.carrier) :=
+  calc (x⁻¹ * y)⁻¹ = y⁻¹ * x⁻¹⁻¹ : invExplode _ _,
+                   = y⁻¹ * x     : ap (G.φ y⁻¹) (invInv x)
 
-  hott lemma mulInvInv (x y : G.carrier) := calc
-    (x * y⁻¹)⁻¹ = y⁻¹⁻¹ * x⁻¹ : invExplode _ _
-            ... = y * x⁻¹     : ap (G.φ · x⁻¹) (invInv y)
+  hott lemma mulInvInv (x y : G.carrier) :=
+  calc (x * y⁻¹)⁻¹ = y⁻¹⁻¹ * x⁻¹ : invExplode _ _,
+                   = y * x⁻¹     : ap (G.φ · x⁻¹) (invInv y)
 
   hott lemma divByUnit (x : G.carrier) : x / e = x :=
   begin change _ * _ = _; transitivity; apply ap; symmetry; apply unitInv; apply G.mulOne end
@@ -299,24 +299,25 @@ namespace Group
   hott lemma ldivByUnit (x : G.carrier) : leftDiv x e = x⁻¹ :=
   by apply G.mulOne
 
-  hott lemma chainLdiv (x y z : G.carrier) := calc
-          (leftDiv x y) * (leftDiv y z)
-        = (x⁻¹ * y) * (y⁻¹ * z) : Id.refl
-    ... = x⁻¹ * (y * (y⁻¹ * z)) : G.mulAssoc x⁻¹ y (y⁻¹ * z)
-    ... = x⁻¹ * ((y * y⁻¹) * z) : ap (G.φ x⁻¹) (Id.inv (G.mulAssoc y y⁻¹ z))
-    ... = x⁻¹ * (e * z)         : ap (λ g, x⁻¹ * (g * z)) (mulRightInv _)
-    ... = leftDiv x z           : ap (G.φ x⁻¹) (G.oneMul z)
+  hott lemma chainLdiv (x y z : G.carrier) :=
+  calc (leftDiv x y) * (leftDiv y z)
+     = (x⁻¹ * y) * (y⁻¹ * z) : Id.refl,
+     = x⁻¹ * (y * (y⁻¹ * z)) : G.mulAssoc x⁻¹ y (y⁻¹ * z),
+     = x⁻¹ * ((y * y⁻¹) * z) : ap (G.φ x⁻¹) (Id.inv (G.mulAssoc y y⁻¹ z)),
+     = x⁻¹ * (e * z)         : ap (λ g, x⁻¹ * (g * z)) (mulRightInv _),
+     = leftDiv x z           : ap (G.φ x⁻¹) (G.oneMul z)
 
-  hott lemma chainRdiv (x y z : G.carrier) := calc
-    (x / y) * (y / z) = (x * y⁻¹) * (y * z⁻¹) : Id.refl
-                  ... = x * (y⁻¹ * (y * z⁻¹)) : G.mulAssoc x y⁻¹ (y * z⁻¹)
-                  ... = x * ((y⁻¹ * y) * z⁻¹) : ap (G.φ x) (Id.inv (G.mulAssoc y⁻¹ y z⁻¹))
-                  ... = x * (e * z⁻¹)         : ap (λ g, x * (g * z⁻¹)) (G.mulLeftInv _)
-                  ... = x / z                 : ap (G.φ x) (G.oneMul z⁻¹)
+  hott lemma chainRdiv (x y z : G.carrier) :=
+  calc (x / y) * (y / z)
+     = (x * y⁻¹) * (y * z⁻¹) : Id.refl,
+     = x * (y⁻¹ * (y * z⁻¹)) : G.mulAssoc x y⁻¹ (y * z⁻¹),
+     = x * ((y⁻¹ * y) * z⁻¹) : ap (G.φ x) (Id.inv (G.mulAssoc y⁻¹ y z⁻¹)),
+     = x * (e * z⁻¹)         : ap (λ g, x * (g * z⁻¹)) (G.mulLeftInv _),
+     = x / z                 : ap (G.φ x) (G.oneMul z⁻¹)
 
-  hott lemma conjugate.idem (x : G.carrier) := calc
-    conjugate x x = G.φ G.e x : ap (G.φ · x) (G.mulLeftInv x)
-              ... = x         : G.oneMul x
+  hott lemma conjugate.idem (x : G.carrier) :=
+  calc conjugate x x = G.φ G.e x : ap (G.φ · x) (G.mulLeftInv x),
+                     = x         : G.oneMul x
 
   hott lemma conjugate.eq {x y : G.carrier} (p : conjugate x y = y) : x = y :=
   begin
@@ -350,19 +351,19 @@ namespace Group
       (p : Π a b, φ (a * b) = φ a ∗ φ b) : φ G.e = H.e :=
     begin
       apply unitOfSqr; apply calc
-        H.φ (φ e) (φ e) = φ (G.e * G.e) : Id.inv (p G.e G.e)
-                    ... = φ G.e         : ap φ (Id.inv unitSqr)
+        H.φ (φ e) (φ e) = φ (G.e * G.e) : Id.inv (p G.e G.e),
+                        = φ G.e         : ap φ (Id.inv unitSqr)
     end
 
     hott lemma homoRespectsInv {φ : G.carrier → H.carrier}
-      (p : Π a b, φ (a * b) = φ a ∗ φ b) (x : G.carrier) : φ x⁻¹ = H.ι (φ x) := calc
-        φ x⁻¹ = φ x⁻¹ ∗ H.e               : Id.inv (H.mulOne (φ x⁻¹))
-          ... = φ x⁻¹ ∗ (φ x ∗ H.ι (φ x)) : ap (H.φ (φ x⁻¹)) (Id.inv (mulRightInv (φ x)))
-          ... = φ x⁻¹ ∗ φ x ∗ H.ι (φ x)   : Id.inv (H.mulAssoc _ _ _)
-          ... = φ (x⁻¹ * x) ∗ H.ι (φ x)   : ap (H.φ · (H.ι (φ x))) (Id.inv (p x⁻¹ x))
-          ... = φ G.e ∗ H.ι (φ x)         : ap (λ y, φ y ∗ H.ι (φ x)) (G.mulLeftInv x)
-          ... = H.e ∗ H.ι (φ x)           : ap (H.φ · (H.ι (φ x))) (homoRespectsUnit p)
-          ... = H.ι (φ x)                 : H.oneMul (H.ι (φ x))
+      (p : Π a b, φ (a * b) = φ a ∗ φ b) (x : G.carrier) : φ x⁻¹ = H.ι (φ x) :=
+    calc φ x⁻¹ = φ x⁻¹ ∗ H.e               : Id.inv (H.mulOne (φ x⁻¹)),
+               = φ x⁻¹ ∗ (φ x ∗ H.ι (φ x)) : ap (H.φ (φ x⁻¹)) (Id.inv (mulRightInv (φ x))),
+               = φ x⁻¹ ∗ φ x ∗ H.ι (φ x)   : Id.inv (H.mulAssoc _ _ _),
+               = φ (x⁻¹ * x) ∗ H.ι (φ x)   : ap (H.φ · (H.ι (φ x))) (Id.inv (p x⁻¹ x)),
+               = φ G.e ∗ H.ι (φ x)         : ap (λ y, φ y ∗ H.ι (φ x)) (G.mulLeftInv x),
+               = H.e ∗ H.ι (φ x)           : ap (H.φ · (H.ι (φ x))) (homoRespectsUnit p),
+               = H.ι (φ x)                 : H.oneMul (H.ι (φ x))
 
     attribute [irreducible] homoRespectsUnit homoRespectsInv
 
@@ -390,9 +391,9 @@ namespace Group
     homoMul φ.hom
 
     hott definition homoRespectsDiv (φ : Hom G H) (x y : G.carrier) :
-      φ.1 (x / y) = rightDiv (φ.1 x) (φ.1 y) := calc
-      φ.1 (x / y) = φ.1 x ∗ φ.1 y⁻¹     : homoMul φ x y⁻¹
-              ... = φ.1 x ∗ H.ι (φ.1 y) : ap (H.φ (φ.1 x)) (homoInv φ y)
+      φ.1 (x / y) = rightDiv (φ.1 x) (φ.1 y) :=
+    calc φ.1 (x / y) = φ.1 x ∗ φ.1 y⁻¹     : homoMul φ x y⁻¹,
+                     = φ.1 x ∗ H.ι (φ.1 y) : ap (H.φ (φ.1 x)) (homoInv φ y)
 
     attribute [irreducible] homoRespectsDiv
 

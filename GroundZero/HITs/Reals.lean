@@ -106,14 +106,14 @@ namespace Reals
       apply ap helix; apply φ.id
     end
 
-    hott lemma fibOfHomo (x : S¹) := calc
-      fib φ.ap x ≃ Σ (z : A.1), φ.ap z = x       : Equiv.ideqv (fib φ.ap x)
-             ... = Σ (z : A.1), φ.ap A.point = x : ap Sigma (funext (λ z, ap (φ.ap · = x) (H z A.point)))
-             ... = Σ (z : A.1), base = x         : ap Sigma (funext (λ _, ap (· = x) φ.id))
-             ... = Σ (z : A.1), helix x          : ap Sigma (funext (λ _, GroundZero.ua (Circle.family x)))
-             ... ≃ A.1 × (helix x)               : Sigma.const A.1 (helix x)
-             ... ≃ 𝟏 × (helix x)                 : productEquiv₃ (contrEquivUnit.{_, 0} ⟨A.point, H A.point⟩) (Equiv.ideqv (helix x))
-             ... ≃ helix x                       : prodUnitEquiv (helix x)
+    hott lemma fibOfHomo (x : S¹) :=
+    calc fib φ.ap x ≃ Σ (z : A.1), φ.ap z = x       : Equiv.ideqv (fib φ.ap x),
+                    = Σ (z : A.1), φ.ap A.point = x : ap Sigma (funext (λ z, ap (φ.ap · = x) (H z A.point))),
+                    = Σ (z : A.1), base = x         : ap Sigma (funext (λ _, ap (· = x) φ.id)),
+                    = Σ (z : A.1), helix x          : ap Sigma (funext (λ _, GroundZero.ua (Circle.family x))),
+                    ≃ A.1 × (helix x)               : Sigma.const A.1 (helix x),
+                    ≃ 𝟏 × (helix x)                 : productEquiv₃ (contrEquivUnit.{_, 0} ⟨A.point, H A.point⟩) (Equiv.ideqv (helix x)),
+                    ≃ helix x                       : prodUnitEquiv (helix x)
 
     hott corollary kerOfHomo : fib φ.ap base ≃ ℤ :=
     fibOfHomo H φ base
@@ -140,20 +140,20 @@ namespace Reals
     { case sz z =>
       change _ = _; let p := Integer.shift z; apply calc
             Equiv.transport (λ x, helix (cis x) = ℤ) (glue z) (Integer.shift z)⁻¹
-          = @ap R Type _ _ (helix ∘ cis) (glue z)⁻¹ ⬝ (Integer.shift z)⁻¹ :
-        Equiv.transportOverContrMap _ _ _
-      ... = (ap (helix ∘ cis) (glue z))⁻¹ ⬝ (Integer.shift z)⁻¹ :
-        ap (· ⬝ p⁻¹) (Id.mapInv _ _)
-      ... = (ap helix (ap cis (glue z)))⁻¹ ⬝ (Integer.shift z)⁻¹ :
-        ap (·⁻¹ ⬝ p⁻¹) (Equiv.mapOverComp _ _ _)
-      ... = (ap helix loop)⁻¹ ⬝ (Integer.shift z)⁻¹ :
-        begin apply ap (·⁻¹ ⬝ p⁻¹); apply ap; apply recβrule end
-      ... = Integer.succPath⁻¹ ⬝ (Integer.shift z)⁻¹ :
-        begin apply ap (·⁻¹ ⬝ p⁻¹); apply Circle.recβrule₂ end
-      ... = (Integer.shift z ⬝ Integer.succPath)⁻¹ :
-        (Id.explodeInv _ _)⁻¹
-      ... = (Integer.shift (Integer.succ z))⁻¹ :
-        ap _ (Integer.shiftComp _)
+          = @ap R Type _ _ (helix ∘ cis) (glue z)⁻¹ ⬝ (Integer.shift z)⁻¹
+          : Equiv.transportOverContrMap _ _ _,
+          = (ap (helix ∘ cis) (glue z))⁻¹ ⬝ (Integer.shift z)⁻¹
+          : ap (· ⬝ p⁻¹) (Id.mapInv _ _),
+          = (ap helix (ap cis (glue z)))⁻¹ ⬝ (Integer.shift z)⁻¹
+          : ap (·⁻¹ ⬝ p⁻¹) (Equiv.mapOverComp _ _ _),
+          = (ap helix loop)⁻¹ ⬝ (Integer.shift z)⁻¹
+          : begin apply ap (·⁻¹ ⬝ p⁻¹); apply ap; apply recβrule end,
+          = Integer.succPath⁻¹ ⬝ (Integer.shift z)⁻¹
+          : begin apply ap (·⁻¹ ⬝ p⁻¹); apply Circle.recβrule₂ end,
+          = (Integer.shift z ⬝ Integer.succPath)⁻¹
+          : (Id.explodeInv _ _)⁻¹,
+          = (Integer.shift (Integer.succ z))⁻¹
+          : ap _ (Integer.shiftComp _)
     }
   end
 

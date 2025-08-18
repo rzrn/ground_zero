@@ -64,10 +64,10 @@ namespace Group
   begin
     intro h; apply H;
     apply transport (· ∈ φ.set); apply calc
-      g * (g⁻¹ * n) = (g * g⁻¹) * n : Id.inv (G.mulAssoc g g⁻¹ n)
-                ... = e * n         : ap (G.φ · n) (mulRightInv g)
-                ... = (g⁻¹ * g) * n : ap (G.φ · n) (Id.inv (G.mulLeftInv g))
-                ... = g⁻¹ * (g * n) : G.mulAssoc g⁻¹ g n;
+      g * (g⁻¹ * n) = (g * g⁻¹) * n : Id.inv (G.mulAssoc g g⁻¹ n),
+                    = e * n         : ap (G.φ · n) (mulRightInv g),
+                    = (g⁻¹ * g) * n : ap (G.φ · n) (Id.inv (G.mulLeftInv g)),
+                    = g⁻¹ * (g * n) : G.mulAssoc g⁻¹ g n;
     apply H; assumption
   end
 
@@ -75,15 +75,15 @@ namespace Group
   begin
     apply Prod.mk <;> intro h;
     { change (x * y⁻¹) ∈ φ.set; apply transport (· ∈ φ.set);
-      apply calc x * (y⁻¹ * x) * x⁻¹ = x * (y⁻¹ * x * x⁻¹) : G.mulAssoc x (leftDiv y x) x⁻¹
-                                 ... = x * y⁻¹             : ap (G.φ x) (Id.inv (cancelRight y⁻¹ x));
+      apply calc x * (y⁻¹ * x) * x⁻¹ = x * (y⁻¹ * x * x⁻¹) : G.mulAssoc x (leftDiv y x) x⁻¹,
+                                     = x * y⁻¹             : ap (G.φ x) (Id.inv (cancelRight y⁻¹ x));
       apply conjugateEqv H;
       apply isNormalSubgroup.conj H;
       apply transport (· ∈ φ.set); apply invMulInv;
       apply φ.inv; assumption };
     { change (x⁻¹ * y) ∈ φ.set; apply transport (· ∈ φ.set);
-      apply calc x⁻¹ * (y * x⁻¹) * x = x⁻¹ * (y * x⁻¹ * x) : G.mulAssoc x⁻¹ (y / x) x
-                                 ... = x⁻¹ * y             : ap (G.φ x⁻¹) (Id.inv (cancelLeft y x));
+      apply calc x⁻¹ * (y * x⁻¹) * x = x⁻¹ * (y * x⁻¹ * x) : G.mulAssoc x⁻¹ (y / x) x,
+                                     = x⁻¹ * y             : ap (G.φ x⁻¹) (Id.inv (cancelLeft y x));
       apply isNormalSubgroup.conj H; apply transport (· ∈ φ.set);
       apply mulInvInv; apply φ.inv; assumption }
   end
@@ -169,15 +169,15 @@ namespace Group
       (begin
         intros x h; change _ = _;
         apply calc
-          φ.1 x⁻¹ = H.ι (φ.1 x) : homoInv φ x
-              ... = H.ι H.e     : ap H.ι h
-              ... = H.e         : Id.inv unitInv
+          φ.1 x⁻¹ = H.ι (φ.1 x) : homoInv φ x,
+                  = H.ι H.e     : ap H.ι h,
+                  = H.e         : Id.inv unitInv
       end),
     begin
       intro n g p; have r := Id.inv (homoMul φ n g) ⬝ p; apply calc
-        φ.1 (g * n) = φ.1 g ∗ φ.1 n       : homoMul φ g n
-                ... = φ.1 g ∗ H.ι (φ.1 g) : ap (H.φ (φ.1 g)) (eqInvOfMulEqOne r)
-                ... = H.e                 : Group.mulRightInv _
+        φ.1 (g * n) = φ.1 g ∗ φ.1 n       : homoMul φ g n,
+                    = φ.1 g ∗ H.ι (φ.1 g) : ap (H.φ (φ.1 g)) (eqInvOfMulEqOne r),
+                    = H.e                 : Group.mulRightInv _
     end⟩
 
     hott definition Ker := (ker φ).set.subtype
@@ -216,17 +216,17 @@ namespace Group
     end⟩;
     { intro; transitivity; apply G.oneMul; symmetry; apply G.mulOne };
     { intros a b g h c; symmetry; apply calc
-        G.φ c (G.φ a b) = G.φ (G.φ c a) b : Id.inv (G.mulAssoc _ _ _)
-                    ... = G.φ (G.φ a c) b : ap (G.φ · b) (Id.inv (g c))
-                    ... = G.φ a (G.φ c b) : G.mulAssoc _ _ _
-                    ... = G.φ a (G.φ b c) : ap (G.φ a) (Id.inv (h c))
-                    ... = G.φ (G.φ a b) c : Id.inv (G.mulAssoc _ _ _) };
+        G.φ c (G.φ a b) = G.φ (G.φ c a) b : Id.inv (G.mulAssoc _ _ _),
+                        = G.φ (G.φ a c) b : ap (G.φ · b) (Id.inv (g c)),
+                        = G.φ a (G.φ c b) : G.mulAssoc _ _ _,
+                        = G.φ a (G.φ b c) : ap (G.φ a) (Id.inv (h c)),
+                        = G.φ (G.φ a b) c : Id.inv (G.mulAssoc _ _ _) };
     { intros a g b; apply calc
-      G.φ (G.ι a) b = G.φ (G.ι a) (G.ι (G.ι b)) : ap (G.φ (G.ι a)) (Id.inv (invInv b))
-                ... = G.ι (G.φ (G.ι b) a)       : Id.inv (invExplode _ _)
-                ... = G.ι (G.φ a (G.ι b))       : ap G.ι (Id.inv (g (G.ι b)))
-                ... = G.φ (G.ι (G.ι b)) (G.ι a) : invExplode _ _
-                ... = G.φ b (G.ι a)             : ap (G.φ · (G.ι a)) (invInv b) }
+      G.φ (G.ι a) b = G.φ (G.ι a) (G.ι (G.ι b)) : ap (G.φ (G.ι a)) (Id.inv (invInv b)),
+                    = G.ι (G.φ (G.ι b) a)       : Id.inv (invExplode _ _),
+                    = G.ι (G.φ a (G.ι b))       : ap G.ι (Id.inv (g (G.ι b))),
+                    = G.φ (G.ι (G.ι b)) (G.ι a) : invExplode _ _,
+                    = G.φ b (G.ι a)             : ap (G.φ · (G.ι a)) (invInv b) }
   end,
   begin
     intros g h r z;

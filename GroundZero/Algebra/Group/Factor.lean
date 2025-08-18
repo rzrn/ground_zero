@@ -85,27 +85,27 @@ namespace Group
         change _ ∈ φ.set; apply transport (· ∈ φ.set);
         apply calc
              b⁻¹ * (a⁻¹ * c * (d * b⁻¹)) * b
-           = b⁻¹ * (a⁻¹ * c * d * b⁻¹) * b :
-             ap (b⁻¹ * · * b) (Id.inv (G.mulAssoc (a⁻¹ * c) d b⁻¹))
-       ... = b⁻¹ * (a⁻¹ * c * d * b⁻¹ * b) :
-             G.mulAssoc b⁻¹ (a⁻¹ * c * d * b⁻¹) b
-       ... = b⁻¹ * (a⁻¹ * c * d * (b⁻¹ * b)) :
-             ap (G.φ b⁻¹) (G.mulAssoc (a⁻¹ * c * d) b⁻¹ b)
-       ... = b⁻¹ * (a⁻¹ * c * d * e) :
-             @ap G.carrier G.carrier _ _ (λ x, b⁻¹ * (a⁻¹ * c * d * x)) (G.mulLeftInv b)
-       ... = b⁻¹ * (a⁻¹ * c * d) :
-             ap (b⁻¹ * ·) (G.mulOne (a⁻¹ * c * d))
-       ... = b⁻¹ * (a⁻¹ * (c * d)) :
-             ap (b⁻¹ * ·) (G.mulAssoc a⁻¹ c d)
-       ... = (b⁻¹ * a⁻¹) * (c * d) :
-             Id.inv (G.mulAssoc b⁻¹ a⁻¹ (c * d))
-       ... = leftDiv (a * b) (c * d) :
-             ap (G.φ · (c * d)) (Id.inv (invExplode a b));
+           = b⁻¹ * (a⁻¹ * c * d * b⁻¹) * b
+           : ap (b⁻¹ * · * b) (Id.inv (G.mulAssoc (a⁻¹ * c) d b⁻¹)),
+           = b⁻¹ * (a⁻¹ * c * d * b⁻¹ * b)
+           : G.mulAssoc b⁻¹ (a⁻¹ * c * d * b⁻¹) b,
+           = b⁻¹ * (a⁻¹ * c * d * (b⁻¹ * b))
+           : ap (G.φ b⁻¹) (G.mulAssoc (a⁻¹ * c * d) b⁻¹ b),
+           = b⁻¹ * (a⁻¹ * c * d * e)
+           : @ap G.carrier G.carrier _ _ (λ x, b⁻¹ * (a⁻¹ * c * d * x)) (G.mulLeftInv b),
+           = b⁻¹ * (a⁻¹ * c * d)
+           : ap (b⁻¹ * ·) (G.mulOne (a⁻¹ * c * d)),
+           = b⁻¹ * (a⁻¹ * (c * d))
+           : ap (b⁻¹ * ·) (G.mulAssoc a⁻¹ c d),
+           = (b⁻¹ * a⁻¹) * (c * d)
+           : Id.inv (G.mulAssoc b⁻¹ a⁻¹ (c * d)),
+           = leftDiv (a * b) (c * d)
+           : ap (G.φ · (c * d)) (Id.inv (invExplode a b));
         apply isNormalSubgroup.conj φ.2; apply φ.1.mul;
         { exact p };
         { apply transport (· ∈ φ.set); apply calc
-            (b * d⁻¹)⁻¹ = d⁻¹⁻¹ * b⁻¹ : invExplode b d⁻¹
-                    ... = d * b⁻¹     : ap (G.φ · b⁻¹) (invInv d);
+            (b * d⁻¹)⁻¹ = d⁻¹⁻¹ * b⁻¹ : invExplode b d⁻¹,
+                        = d * b⁻¹     : ap (G.φ · b⁻¹) (invInv d);
           apply φ.1.inv; apply (normalSubgroupCosets φ.2).left; exact q } }
     end
 

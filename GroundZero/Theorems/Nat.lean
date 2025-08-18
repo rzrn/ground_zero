@@ -87,15 +87,15 @@ namespace Nat
   hott definition isEven (n : ℕ) := Σ m, n = m * 2
   hott definition isOdd  (n : ℕ) := Σ m, n = m * 2 + 1
 
-  hott lemma plusOnePlus {i j : ℕ} : i + 1 + j = (i + j) + 1 := calc
-    i + 1 + j = i + (1 + j) : assoc _ _ _
-          ... = i + (j + 1) : ap (Nat.add i) (comm 1 j)
-          ... = (i + j) + 1 : idp _
+  hott lemma plusOnePlus {i j : ℕ} : i + 1 + j = (i + j) + 1 :=
+  calc i + 1 + j = i + (1 + j) : assoc _ _ _,
+                 = i + (j + 1) : ap (Nat.add i) (comm 1 j),
+                 = (i + j) + 1 : idp _
 
   hott lemma assocTetra {i j k l : ℕ} : i + (j + k) + l = (i + j) + (k + l) := calc
-    (i + (j + k)) + l = i + ((j + k) + l) : assoc _ _ _
-                  ... = i + (j + (k + l)) : ap _ (assoc _ _ _)
-                  ... = (i + j) + (k + l) : (assoc _ _ _)⁻¹
+    (i + (j + k)) + l = i + ((j + k) + l) : assoc _ _ _,
+                      = i + (j + (k + l)) : ap _ (assoc _ _ _),
+                      = (i + j) + (k + l) : (assoc _ _ _)⁻¹
 
   hott lemma plusDiag (n : ℕ) : n * 2 = n + n :=
   ap (λ m, m + n) (zeroPlus _)

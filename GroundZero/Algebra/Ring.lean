@@ -199,13 +199,13 @@ section
 
   attribute [irreducible] ring.mulZero ring.zeroMul ring.mulNeg ring.negMul
 
-  hott lemma ring.subDistribLeft (a b c : T.carrier) := calc
-    a * (b - c) = a * b + a * (-c) : T.distribLeft a b (T.neg c)
-            ... = a * b - a * c    : ap (T.φ (T.ψ a b)) (ring.mulNeg a c)
+  hott lemma ring.subDistribLeft (a b c : T.carrier) :=
+  calc a * (b - c) = a * b + a * (-c) : T.distribLeft a b (T.neg c),
+                   = a * b - a * c    : ap (T.φ (T.ψ a b)) (ring.mulNeg a c)
 
-  hott lemma ring.subDistribRight (a b c : T.carrier) := calc
-    (a - b) * c = a * c + (-b) * c : T.distribRight a (T.neg b) c
-            ... = a * c - b * c    : ap (T.φ (T.ψ a c)) (ring.negMul b c)
+  hott lemma ring.subDistribRight (a b c : T.carrier) :=
+  calc (a - b) * c = a * c + (-b) * c : T.distribRight a (T.neg b) c,
+                   = a * c - b * c    : ap (T.φ (T.ψ a c)) (ring.negMul b c)
 
   attribute [irreducible] ring.subDistribLeft ring.subDistribRight
 end

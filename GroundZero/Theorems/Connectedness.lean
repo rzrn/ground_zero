@@ -102,24 +102,24 @@ namespace Connectedness
   hott lemma fibCom {A : Type u} {B : Type v} {n : ℕ₋₂} (f : A → B) (P : B → (hlevel.succ n)-Type)
     {s : Π a, (P (f a)).1} (w₁ w₂ : fib (com f P) s) :=
   calc (w₁ = w₂) ≃ Σ (p : w₁.1 = w₂.1), transport (λ r, com f P r = s) p w₁.2 = w₂.2
-                 : Sigma.sigmaPath
-             ... ≃ Σ (p : w₁.1 = w₂.1), (ap (com f P) p)⁻¹ ⬝ w₁.2 = w₂.2
+                 : Sigma.sigmaPath,
+                 ≃ Σ (p : w₁.1 = w₂.1), (ap (com f P) p)⁻¹ ⬝ w₁.2 = w₂.2
                  : Sigma.respectsEquiv (λ _, idtoeqv (ap (· = _) (transportOverContrMap _ _ _ ⬝
-                                                                  ap (· ⬝ _) (Id.mapInv _ _))))
-             ... ≃ Σ (p : w₁.1 = w₂.1), ap (com f P) p ⬝ w₂.2 = w₁.2
-                 : Sigma.respectsEquiv (λ _, Equiv.trans rewriteCompEquiv.symm inveqv)
-             ... ≃ Σ (p : w₁.1 = w₂.1), ap (com f P) p = w₁.2 ⬝ w₂.2⁻¹
-                 : Sigma.respectsEquiv (λ _, compRewriteEquiv.symm)
-             ... ≃ Σ (H : w₁.1 ~ w₂.1), ap (com f P) (funext H) = w₁.2 ⬝ w₂.2⁻¹
-                 : Equiv.respectsEquivOverFst full _
-             ... ≃ Σ (H : w₁.1 ~ w₂.1), happly (ap (com f P) (funext H)) = happly (w₁.2 ⬝ w₂.2⁻¹)
-                 : Sigma.respectsEquiv (λ _, apEquivOnEquiv Theorems.full)
-             ... ≃ Σ (H : w₁.1 ~ w₂.1), (λ a, H (f a)) = (happly w₁.2).trans (happly w₂.2).symm
+                                                                  ap (· ⬝ _) (Id.mapInv _ _)))),
+                 ≃ Σ (p : w₁.1 = w₂.1), ap (com f P) p ⬝ w₂.2 = w₁.2
+                 : Sigma.respectsEquiv (λ _, Equiv.trans rewriteCompEquiv.symm inveqv),
+                 ≃ Σ (p : w₁.1 = w₂.1), ap (com f P) p = w₁.2 ⬝ w₂.2⁻¹
+                 : Sigma.respectsEquiv (λ _, compRewriteEquiv.symm),
+                 ≃ Σ (H : w₁.1 ~ w₂.1), ap (com f P) (funext H) = w₁.2 ⬝ w₂.2⁻¹
+                 : Equiv.respectsEquivOverFst full _,
+                 ≃ Σ (H : w₁.1 ~ w₂.1), happly (ap (com f P) (funext H)) = happly (w₁.2 ⬝ w₂.2⁻¹)
+                 : Sigma.respectsEquiv (λ _, apEquivOnEquiv Theorems.full),
+                 ≃ Σ (H : w₁.1 ~ w₂.1), (λ a, H (f a)) = (happly w₁.2).trans (happly w₂.2).symm
                  : Sigma.respectsEquiv
                     (λ H, idtoeqv (bimap _ (ap happly (apComHapply P (funext H)) ⬝ happlyFunext _ _ _ ⬝
                                             funext (λ a, happly (happlyFunext _ _ _) (f a)))
-                                           (Interval.happlyCom _ _ ⬝ ap _ (Interval.happlyRev _))))
-             ... ≃ fib (com f (λ b, ⟨w₁.1 b = w₂.1 b, (P b).2 _ _⟩))
+                                           (Interval.happlyCom _ _ ⬝ ap _ (Interval.happlyRev _)))),
+                 ≃ fib (com f (λ b, ⟨w₁.1 b = w₂.1 b, (P b).2 _ _⟩))
                        (λ a, happly w₁.2 a ⬝ (happly w₂.2 a)⁻¹)
                  : ideqv _
 

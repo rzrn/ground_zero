@@ -74,13 +74,13 @@ namespace Merely
   | Nat.succ n => Colimit.glue (exactNth a n) ⬝ nthGlue a n
 
   hott lemma inclUniq {A : Type u} {n : ℕ} (a b : Generalized.rep A n) :=
-  calc incl a = incl (Generalized.dep A n a) : glue⁻¹
-          ... = incl (Generalized.dep A n b) : ap incl (Generalized.glue a b)
-          ... = incl b                       : glue
+  calc incl a = incl (Generalized.dep A n a) : glue⁻¹,
+              = incl (Generalized.dep A n b) : ap incl (Generalized.glue a b),
+              = incl b                       : glue
 
   hott lemma inclZeroEqIncl {A : Type u} {n : ℕ} (x : A) (y : Generalized.rep A n) :=
-  calc @incl A 0 x = incl (exactNth x n) : (nthGlue x n)⁻¹
-               ... = incl y              : inclUniq (exactNth x n) y
+  calc @incl A 0 x = incl (exactNth x n) : (nthGlue x n)⁻¹,
+                   = incl y              : inclUniq (exactNth x n) y
 
   hott theorem weaklyConstantAp {A : Type u} {B : Type v} (f : A → B)
     {a b : A} (p q : a = b) (H : Π a b, f a = f b) : ap f p = ap f q :=

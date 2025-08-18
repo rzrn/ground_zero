@@ -79,29 +79,41 @@ namespace Interval
 
   hott lemma negNeg : Π x, neg (neg x) = x :=
   ind (idp i₀) (idp i₁) (calc
-    transport (λ x, neg (neg x) = x) seg (idp i₀) =
-    (@ap I I i₁ i₀ (neg ∘ neg) seg⁻¹) ⬝ idp i₀ ⬝ seg :
-      by apply transportOverInvolution
-    ... = ap neg (ap neg seg⁻¹) ⬝ idp i₀ ⬝ seg :
-      begin apply ap (λ p, p ⬝ idp i₀ ⬝ seg);
-            apply mapOverComp end
-    ... = ap neg (ap neg seg)⁻¹ ⬝ idp i₀ ⬝ seg :
-      begin apply ap (λ p, p ⬝ idp i₀ ⬝ seg);
-            apply ap; apply Id.mapInv end
-    ... = ap neg seg⁻¹⁻¹ ⬝ idp i₀ ⬝ seg :
-      begin apply ap (λ p, p ⬝ idp i₀ ⬝ seg);
-            apply ap; apply ap Types.Id.symm;
-            apply recβrule end
-    ... = ap neg seg ⬝ idp i₀ ⬝ seg :
-      begin apply ap (λ (p : i₀ = i₁), ap neg p ⬝ idp i₀ ⬝ seg);
-            apply Id.invInv end
-    ... = seg⁻¹ ⬝ idp i₀ ⬝ seg :
-      begin apply ap (· ⬝ idp i₀ ⬝ seg);
-            apply recβrule end
-    ... = seg⁻¹ ⬝ seg :
-      begin apply ap (· ⬝ seg);
-            apply Id.rid end
-    ... = idp i₁ : by apply Id.invComp)
+      transport (λ x, neg (neg x) = x) seg (idp i₀)
+    = (@ap I I i₁ i₀ (neg ∘ neg) seg⁻¹) ⬝ idp i₀ ⬝ seg :
+      by apply transportOverInvolution,
+    = ap neg (ap neg seg⁻¹) ⬝ idp i₀ ⬝ seg :
+      begin
+        apply ap (λ p, p ⬝ idp i₀ ⬝ seg);
+        apply mapOverComp
+      end,
+    = ap neg (ap neg seg)⁻¹ ⬝ idp i₀ ⬝ seg :
+      begin
+        apply ap (λ p, p ⬝ idp i₀ ⬝ seg);
+        apply ap; apply Id.mapInv
+      end,
+    = ap neg seg⁻¹⁻¹ ⬝ idp i₀ ⬝ seg :
+      begin
+        apply ap (λ p, p ⬝ idp i₀ ⬝ seg);
+        apply ap; apply ap Types.Id.symm;
+        apply recβrule
+      end,
+    = ap neg seg ⬝ idp i₀ ⬝ seg :
+      begin
+        apply ap (λ (p : i₀ = i₁), ap neg p ⬝ idp i₀ ⬝ seg);
+        apply Id.invInv
+      end,
+    = seg⁻¹ ⬝ idp i₀ ⬝ seg :
+      begin
+        apply ap (· ⬝ idp i₀ ⬝ seg);
+        apply recβrule
+      end,
+    = seg⁻¹ ⬝ seg :
+      begin
+        apply ap (· ⬝ seg);
+        apply Id.rid
+      end,
+    = idp i₁ : by apply Id.invComp)
 
   hott lemma negNeg' (x : I) : neg (neg x) = x :=
   (connAnd seg⁻¹ (neg x))⁻¹ ⬝ contrRight x
