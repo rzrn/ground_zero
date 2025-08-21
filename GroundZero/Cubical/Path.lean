@@ -92,14 +92,14 @@ coe.back (λ i, B i → B k) i (coe.back B k)
 notation "coe⁻¹" => coeInv
 
 hott definition refl {A : Type u} (a : A) : Path A a a := <_> a
-noncomputable instance (A : Type u) : Reflexive (Path A) := ⟨refl⟩
+hott instance (A : Type u) : Reflexive (Path A) := ⟨refl⟩
 
 hott definition rfl {A : Type u} {a : A} : Path A a a := <_> a
 
 hott definition symm {A : Type u} {a b : A} (p : Path A a b) : Path A b a :=
 coe 1 0 (λ i, Path A b (p @ i)) rfl
 
-noncomputable instance (A : Type u) : Symmetric (Path A) := ⟨@symm A⟩
+hott instance (A : Type u) : Symmetric (Path A) := ⟨@symm A⟩
 
 hott definition neg : I → I := Interval.elim seg⁻¹
 

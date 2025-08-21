@@ -93,7 +93,7 @@ namespace Reals
   hott definition lift (f : ℤ → ℤ) : R → R :=
   rec (elem ∘ f) (λ _, dist _ _)
 
-  noncomputable instance (n : ℕ) : OfNat R n := ⟨elem (Integer.pos n)⟩
+  hott instance (n : ℕ) : OfNat R n := ⟨elem (Integer.pos n)⟩
 
   section
     variable {A : Type⁎} (H : prop A.space)

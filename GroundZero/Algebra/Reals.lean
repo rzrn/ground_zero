@@ -16,8 +16,8 @@ namespace GroundZero.Algebra
 
   notation "ℝ" => Alg.carrier R
 
-  noncomputable instance R.orfield : orfield R := R.dedekind.{0}.toorfield
-  noncomputable instance R.hasInv : ring.hasInv R.τ := R.dedekind.{0}.tohasInv
+  hott instance R.orfield : orfield R := R.dedekind.{0}.toorfield
+  hott instance R.hasInv : ring.hasInv R.τ := R.dedekind.{0}.tohasInv
 
   hott def metric {α : Type u} (ρ : α → α → ℝ) :=
     (Π x y, ρ x y = 0 ↔ x = y)
@@ -454,8 +454,8 @@ namespace GroundZero.Algebra
   hott def I.one : I :=
   ⟨1, (zeroLeOne, @reflexive.refl R.κ _ _)⟩
 
-  noncomputable instance : OfNat I Nat.zero := ⟨I.zero⟩
-  noncomputable instance : OfNat I (Nat.succ Nat.zero) := ⟨I.one⟩
+  hott instance : OfNat I Nat.zero := ⟨I.zero⟩
+  hott instance : OfNat I (Nat.succ Nat.zero) := ⟨I.one⟩
 
   hott def I.neg : 𝕀 → 𝕀 :=
   λ ⟨i, p, q⟩, begin

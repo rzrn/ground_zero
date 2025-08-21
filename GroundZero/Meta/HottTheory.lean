@@ -143,6 +143,8 @@ def abbrevTok := leading_parser "abbrev " <|> "abbreviation "
 /-- Checks declaration without modifying environment. -/
 def exampleTok := leading_parser "example " <|> "counterexample "
 
+def instanceTok := leading_parser "instance "
+
 /-- Adds axiom with an additional `[GroundZero]` hypothesis
     or adds given declaration and marks it as `[hottAxiom]`. -/
 def axiomTok := leading_parser "axiom "
@@ -174,6 +176,8 @@ def implTok := leading_parser "implementation "
 def declDef      := leading_parser ppIndent optDeclSig >> declVal >> optDefDeriving
 def decl         := leading_parser (defTok <|> abbrevTok) >> declId >> declDef
 def declExample  := leading_parser exampleTok >> declDef
+def declInstance := leading_parser Term.attrKind >> instanceTok >> optNamedPrio >>
+                    optional (ppSpace >> declId) >> ppIndent declSig >> declVal
 def declCheck    := leading_parser checkTok >> Parser.many1 Parser.ident
 def declProhibit := leading_parser prohibitTok >> Parser.many1 Parser.ident
 def declAxiom    := leading_parser axiomTok >> declId >> ppIndent declSig >>
@@ -196,7 +200,7 @@ def hottDeclMods := leading_parser
   optional («partial» <|> «nonrec»)
 
 @[command_parser] def hott :=
-leading_parser hottDeclMods >> hottPrefix >> (decl <|> declExample <|> declCheck <|> declAxiom <|> declOpaque <|> declProhibit <|> declImpl)
+leading_parser hottDeclMods >> hottPrefix >> (decl <|> declExample <|> declInstance <|> declCheck <|> declAxiom <|> declOpaque <|> declProhibit <|> declImpl)
 
 def checkAndMark (tag : Syntax) (name : Name) : CommandElabM Unit := do {
   liftTermElabM (checkDecl tag name);
@@ -236,30 +240,51 @@ def abbrevAttrs : Array Attribute :=
 
 @[command_elab «hott»] def elabHoTT : CommandElab :=
 λ stx => do {
-  let #[hottMods, _, cmd] := stx.getArgs | throwError "incomplete declaration";
+  let #[hottMods, _, cmd] := stx.getArgs | throwUnsupportedSyntax;
 
-  let #[commentMod, attrs, visibilityMod, unsafeMod, recMod] := hottMods.getArgs | throwError "invalid syntax";
+  let #[commentMod, attrs, visibilityMod, unsafeMod, recMod] := hottMods.getArgs | throwUnsupportedSyntax;
   let mods := mkNode ``Command.declModifiers #[commentMod, attrs, visibilityMod, mkNode ``Command.«noncomputable» #[], unsafeMod, recMod];
 
   if cmd.isOfKind ``decl then do {
-    let #[tok, declId, declDef] := cmd.getArgs | throwError "invalid declaration";
+    let #[tok, declId, declDef] := cmd.getArgs | throwUnsupportedSyntax;
     let declName ← defAndCheck declId mods declId declDef;
     if tok.isOfKind ``abbrevTok then liftTermElabM (Term.applyAttributes declName abbrevAttrs)
   }
 
   if cmd.isOfKind ``declExample then withoutModifyingEnv do {
-    let #[tok, declDef] := cmd.getArgs | throwError "invalid example";
+    let #[tok, declDef] := cmd.getArgs | throwUnsupportedSyntax;
     let declId := mkNode ``declId #[mkIdentFrom tok `_example, mkNullNode];
     discard (defAndCheck tok mods declId declDef)
   }
 
+  if cmd.isOfKind ``declInstance then do {
+    let #[attrKindStx, tok, optPrioStx, optDeclId, declSig, declVal] := cmd.getArgs | throwUnsupportedSyntax;
+
+    let (binders, type) := expandDeclSig declSig;
+    let synthName ← mkInstanceName binders.getArgs type;
+
+    let declId := #[mkIdentFrom tok synthName (canonical := true), mkNullNode]
+                  |> mkNode ``Parser.Command.declId
+                  |> optDeclId.getOptional?.getD;
+
+    let #[bindersStx, typeSpecStx] := declSig.getArgs | throwUnsupportedSyntax;
+    let optDeclSig := mkNode ``Command.optDeclSig #[bindersStx, mkNullNode #[typeSpecStx]];
+    let declName ← defAndCheck tok mods declId (mkNode ``declDef #[optDeclSig, declVal, mkNullNode]);
+
+    let attrKind ← liftMacroM (toAttributeKind attrKindStx);
+    let prioVal  ← liftMacroM (expandOptNamedPrio optPrioStx);
+    let attrStx  ← `(attr| instance $(quote prioVal):num);
+
+    liftTermElabM (Term.applyAttributes declName #[{kind := attrKind, name := `instance, stx := attrStx}])
+  }
+
   if cmd.isOfKind ``declCheck then do {
-    let #[_, decls] := cmd.getArgs | throwError "invalid “check” statement";
+    let #[_, decls] := cmd.getArgs | throwUnsupportedSyntax;
     decls.getArgs.forM (λ stx => resolveGlobalConstNoOverload stx >>= checkAndMark stx)
   }
 
   if cmd.isOfKind ``declAxiom then do {
-    let #[_, declId, declSig, declDef] := cmd.getArgs | throwError "invalid “axiom” statement";
+    let #[_, declId, declSig, declDef] := cmd.getArgs | throwUnsupportedSyntax;
 
     if declDef.isNone then do {
       let modifiedSig := declSig.modifyArg 0 (·.modifyArgs (·.insertIdx! 0 axiomInstBinder));
@@ -276,7 +301,7 @@ def abbrevAttrs : Array Attribute :=
   }
 
   if cmd.isOfKind ``declOpaque then do {
-    let #[tok, axiom?, declId, declSig, declVal] := cmd.getArgs | throwError "invalid “opaque” statement";
+    let #[tok, axiom?, declId, declSig, declVal] := cmd.getArgs | throwUnsupportedSyntax;
 
     withHoTTScope <| cmd.setKind ``Command.«opaque»
     |>.setArgs #[mkAtom "opaque ", declId, declSig, declVal]
@@ -288,7 +313,7 @@ def abbrevAttrs : Array Attribute :=
   }
 
   if cmd.isOfKind ``declProhibit then do {
-    let #[_, decls] := cmd.getArgs | throwError "invalid “prohibit” statement";
+    let #[_, decls] := cmd.getArgs | throwUnsupportedSyntax;
 
     let env ← getEnv;
     decls.getArgs.forM λ stx => do {
@@ -302,7 +327,7 @@ def abbrevAttrs : Array Attribute :=
   }
 
   if cmd.isOfKind ``declImpl then do {
-    let #[_, implOfStx, _, implFnStx] := cmd.getArgs | throwError "invalid “implementation” statement";
+    let #[_, implOfStx, _, implFnStx] := cmd.getArgs | throwUnsupportedSyntax;
 
     let implOfName ← resolveGlobalConstNoOverload implOfStx;
     let implFnName ← resolveGlobalConstNoOverload implFnStx

@@ -393,7 +393,7 @@ namespace Category
     mulAssoc    := λ _ _ _, (@mulAssoc 𝒞 η _ _ _)⁻¹,
     mulDef      := λ a b α β, Iff.comp (@mulDef 𝒞 η b a β α) (Id.inv, Id.inv) }
 
-  noncomputable instance (𝒞 : Precategory) [η : category 𝒞] : category 𝒞ᵒᵖ := dual 𝒞 η
+  hott instance (𝒞 : Precategory) [η : category 𝒞] : category 𝒞ᵒᵖ := dual 𝒞 η
 
   /-
     https://ncatlab.org/nlab/show/natural+transformation

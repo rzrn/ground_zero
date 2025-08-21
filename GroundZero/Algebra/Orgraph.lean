@@ -50,7 +50,7 @@ namespace GroundZero.Algebra
   (leOverAdd : Π (x y z : T.carrier), x ≤ y → x + z ≤ y + z)
   (leOverMul : Π (x y : T.carrier), 0 ≤ x → 0 ≤ y → 0 ≤ (x * y))
 
-  noncomputable instance (T : Overring) [H : orfield T] : OfNat T.carrier (Nat.succ Nat.zero) := ⟨H.tohasOne.one⟩
+  hott instance (T : Overring) [H : orfield T] : OfNat T.carrier (Nat.succ Nat.zero) := ⟨H.tohasOne.one⟩
 
   hott def majorant {Γ : Orgraph} (φ : Γ.subset) (M : Γ.carrier) :=
   Π x, x ∈ φ → Γ.ρ x M

@@ -47,7 +47,7 @@ namespace Suspension
     (m : A → n = s) (x : A) : ap (rec n s m) (merid x) = m x :=
   by apply Pushout.recβrule
 
-  noncomputable instance (A : Type u) : isPointed (∑ A) := ⟨north⟩
+  hott instance (A : Type u) : isPointed (∑ A) := ⟨north⟩
 
   hott definition σ {A : Type u} [isPointed A] : A → Ω¹(∑ A) :=
   λ x, merid x ⬝ (merid (pointOf A))⁻¹

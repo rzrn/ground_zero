@@ -34,7 +34,7 @@ namespace Interval
   lift (λ x, lift (ofBool ∘ φ x) intervalProp b) intervalProp a
 
   hott definition neg : I → I := rec i₁ i₀ seg⁻¹
-  noncomputable instance : Neg I := ⟨neg⟩
+  hott instance : Neg I := ⟨neg⟩
 
   hott definition min (a b : I) : I :=
   lift (λ | false => i₀ | true => a) intervalProp b

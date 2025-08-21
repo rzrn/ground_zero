@@ -62,8 +62,8 @@ begin intro; apply id end
 hott lemma Ens.ssubset.trans {A : Type u} {a b c : Ens A} : a ⊆ b → b ⊆ c → a ⊆ c :=
 λ G H x p, H x (G x p)
 
-noncomputable instance {A : Type u} : @Reflexive  (Ens A) Ens.ssubset := ⟨Ens.ssubset.refl⟩
-noncomputable instance {A : Type u} : @Transitive (Ens A) Ens.ssubset := ⟨@Ens.ssubset.trans A⟩
+hott instance {A : Type u} : @Reflexive  (Ens A) Ens.ssubset := ⟨Ens.ssubset.refl⟩
+hott instance {A : Type u} : @Transitive (Ens A) Ens.ssubset := ⟨@Ens.ssubset.trans A⟩
 
 hott definition Ens.parallel {A : Type u} (a b : Ens A) := a ∩ b ⊆ ∅
 

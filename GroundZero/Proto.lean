@@ -27,9 +27,9 @@ hott definition Iff.comp {A : Type u} {B : Type v} {C : Type w} :
   (A ↔ B) → (B ↔ C) → (A ↔ C) :=
 λ p q, ⟨q.left ∘ p.left, p.right ∘ q.right⟩
 
-noncomputable instance : @Reflexive  (Type u) Iff := ⟨@Iff.refl⟩
-noncomputable instance : @Symmetric  (Type u) Iff := ⟨@Iff.symm⟩
-noncomputable instance : @Transitive (Type u) Iff := ⟨@Iff.comp⟩
+hott instance : @Reflexive  (Type u) Iff := ⟨@Iff.refl⟩
+hott instance : @Symmetric  (Type u) Iff := ⟨@Iff.symm⟩
+hott instance : @Transitive (Type u) Iff := ⟨@Iff.comp⟩
 
 notation "𝟎" => Empty
 notation "𝟐" => Bool

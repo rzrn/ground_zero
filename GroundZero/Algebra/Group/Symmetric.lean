@@ -29,8 +29,8 @@ namespace Group
     hott definition S.one                     := Equiv.ideqv ε.1
     hott definition S.inv (p : S.carrier ε)   := Equiv.symm p
 
-    noncomputable instance S.hasMul : Mul (S.carrier ε) := ⟨S.mul⟩
-    noncomputable instance S.hasOne : OfNat (S.carrier ε) (Nat.succ Nat.zero) := ⟨S.one⟩
+    hott instance S.hasMul : Mul (S.carrier ε) := ⟨S.mul⟩
+    hott instance S.hasOne : OfNat (S.carrier ε) (Nat.succ Nat.zero) := ⟨S.one⟩
 
     hott definition S (ε : nType.{u} 0) : Group.{u} :=
     @Group.intro (ε ≃₀ ε) (Equiv.zeroEquiv.hset ε ε) S.mul S.inv S.one

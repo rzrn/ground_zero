@@ -190,9 +190,9 @@ namespace GroundZero.Algebra
       { apply Equiv.biinvTrans; exact f.2.2; exact g.2.2 }
     end
 
-    noncomputable instance : @Reflexive  (Alg deg) Iso := ⟨Iso.refl⟩
-    noncomputable instance : @Symmetric  (Alg deg) Iso := ⟨@Iso.symm _ _ _⟩
-    noncomputable instance : @Transitive (Alg deg) Iso := ⟨@Iso.trans _ _ _⟩
+    hott instance : @Reflexive  (Alg deg) Iso := ⟨Iso.refl⟩
+    hott instance : @Symmetric  (Alg deg) Iso := ⟨@Iso.symm _ _ _⟩
+    hott instance : @Transitive (Alg deg) Iso := ⟨@Iso.trans _ _ _⟩
 
     hott lemma Algebra.ext {A B : Type w} (p : A = B) :
       Π (Γ : Algebra deg A) (Λ : Algebra deg B),

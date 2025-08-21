@@ -52,7 +52,7 @@ namespace K1
 
   attribute [irreducible] K1
 
-  noncomputable instance : isPointed (K1 G) := ⟨base⟩
+  hott instance : isPointed (K1 G) := ⟨base⟩
 
   hott definition KΩ.mul : Ω¹(K1 G) → Ω¹(K1 G) → Ω¹(K1 G) := λ p q, p ⬝ q
   hott definition KΩ.one : Ω¹(K1 G)                       := idp base

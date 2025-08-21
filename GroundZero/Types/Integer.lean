@@ -22,7 +22,7 @@ notation "ℤ" => Integer
 @[match_pattern] hott definition Integer.pos : ℕ → ℤ := Coproduct.inl
 @[match_pattern] hott definition Integer.neg : ℕ → ℤ := Coproduct.inr
 
-noncomputable instance (n : ℕ) : OfNat ℤ n := ⟨Integer.pos n⟩
+hott instance (n : ℕ) : OfNat ℤ n := ⟨Integer.pos n⟩
 
 namespace Integer
 
@@ -135,13 +135,13 @@ hott definition abs : ℤ → ℕ
 hott definition add : ℤ → ℤ → ℤ :=
 λ z, recsp z succ pred
 
-noncomputable instance : Add ℤ := ⟨add⟩
+hott instance : Add ℤ := ⟨add⟩
 
 hott definition negate : ℤ → ℤ
 | pos n => auxsucc n
 | neg n => pos (n + 1)
 
-noncomputable instance : Neg ℤ := ⟨negate⟩
+hott instance : Neg ℤ := ⟨negate⟩
 
 hott definition sgn : ℤ → ℤ
 | pos Nat.zero     =>  0
@@ -149,7 +149,7 @@ hott definition sgn : ℤ → ℤ
 | neg n            => -1
 
 hott definition sub (x y : ℤ) := x + (-y)
-noncomputable instance : Sub ℤ := ⟨sub⟩
+hott instance : Sub ℤ := ⟨sub⟩
 
 hott lemma plusSucc (i j : ℤ) : i + succ j = succ (i + j) :=
 begin apply recspβ₂; apply succPred end
@@ -255,7 +255,7 @@ by apply plusPred z 0
 hott definition mul : ℤ → ℤ → ℤ :=
 λ i, recsp 0 (λ j, j + i) (λ j, j - i)
 
-noncomputable instance : Mul ℤ := ⟨mul⟩
+hott instance : Mul ℤ := ⟨mul⟩
 
 hott lemma negateSucc : Π (i : ℤ), negate (succ i) = pred (negate i)
 | pos Nat.zero     => idp _

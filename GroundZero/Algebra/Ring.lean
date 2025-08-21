@@ -109,25 +109,25 @@ section
     apply propIsSet; apply notIsProp
   end
 
-  noncomputable instance : Add T.carrier := ⟨T.φ⟩
-  noncomputable instance : Sub T.carrier := ⟨T.sub⟩
-  noncomputable instance : Neg T.carrier := ⟨T.neg⟩
+  hott instance : Add T.carrier := ⟨T.φ⟩
+  hott instance : Sub T.carrier := ⟨T.sub⟩
+  hott instance : Neg T.carrier := ⟨T.neg⟩
 
-  noncomputable instance : Mul T.carrier := ⟨T.ψ⟩
+  hott instance : Mul T.carrier := ⟨T.ψ⟩
 
-  noncomputable instance : OfNat T.carrier Nat.zero := ⟨T.zero⟩
+  hott instance : OfNat T.carrier Nat.zero := ⟨T.zero⟩
 end
 
 section
   variable (T : Overring)
 
-  noncomputable instance : Add T.carrier := ⟨T.τ.φ⟩
-  noncomputable instance : Sub T.carrier := ⟨T.τ.sub⟩
-  noncomputable instance : Neg T.carrier := ⟨T.τ.neg⟩
+  hott instance : Add T.carrier := ⟨T.τ.φ⟩
+  hott instance : Sub T.carrier := ⟨T.τ.sub⟩
+  hott instance : Neg T.carrier := ⟨T.τ.neg⟩
 
-  noncomputable instance : Mul T.carrier := ⟨T.τ.ψ⟩
+  hott instance : Mul T.carrier := ⟨T.τ.ψ⟩
 
-  noncomputable instance : OfNat T.carrier Nat.zero := ⟨T.τ.zero⟩
+  hott instance : OfNat T.carrier Nat.zero := ⟨T.τ.zero⟩
 
   infix:60 " <= " => Overring.ρ _
   infix:60 " ≤ "  => Overring.ρ _

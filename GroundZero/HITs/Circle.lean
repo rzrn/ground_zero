@@ -101,7 +101,7 @@ hott definition S : ℕ → Type
 
 macro:max "S" noWs n:superscript : term => do `(GroundZero.HITs.S $(← Meta.Notation.parseSuperscript n))
 
-noncomputable instance (n : ℕ) : isPointed Sⁿ :=
+hott instance (n : ℕ) : isPointed Sⁿ :=
 ⟨match n with
  | Nat.zero   => false
  | Nat.succ _ => Suspension.north⟩

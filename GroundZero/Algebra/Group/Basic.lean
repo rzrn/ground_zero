@@ -400,15 +400,15 @@ namespace Group
     hott definition Homo.zero : Hom G H :=
     mkhomo (λ _, H.e) (λ _ _, Id.inv (H.oneMul H.e))
 
-    noncomputable instance : OfNat (Hom G H) Nat.zero := ⟨Homo.zero⟩
-    noncomputable instance : OfNat (Algebra.Hom G.1 H.1) Nat.zero := ⟨Homo.zero⟩
+    hott instance : OfNat (Hom G H) Nat.zero := ⟨Homo.zero⟩
+    hott instance : OfNat (Algebra.Hom G.1 H.1) Nat.zero := ⟨Homo.zero⟩
   end
 
   section
     variable (G H : Abelian)
 
-    noncomputable instance : OfNat (Abelian.Hom G H) Nat.zero := ⟨@Homo.zero G.group H.group⟩
-    noncomputable instance : OfNat (Algebra.Hom G.1 H.1) Nat.zero := ⟨@Homo.zero G.group H.group⟩
+    hott instance : OfNat (Abelian.Hom G H) Nat.zero := ⟨@Homo.zero G.group H.group⟩
+    hott instance : OfNat (Algebra.Hom G.1 H.1) Nat.zero := ⟨@Homo.zero G.group H.group⟩
   end
 
   hott lemma Homo.set {G H : Group} : Structures.hset (Hom G H) :=
@@ -473,7 +473,7 @@ namespace Group
   hott definition Z₁.mul : 𝟏 → 𝟏 → 𝟏 := λ _ _, ★
   hott definition Z₁.inv : 𝟏 → 𝟏     := λ _, ★
 
-  noncomputable instance Z₁.Mul : Mul 𝟏 := ⟨Z₁.mul⟩
+  hott instance Z₁.Mul : Mul 𝟏 := ⟨Z₁.mul⟩
 
   hott definition Z₁ : Group :=
   @Group.intro 𝟏 unitIsSet Z₁.mul Z₁.inv ★ (λ _ _ _, idp _) (λ _, idp _) (λ _, idp _)

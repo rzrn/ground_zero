@@ -50,8 +50,8 @@ namespace Group
   | S₂, R₀ => S₂ | S₂, R₁ => S₁ | S₂, R₂ => S₀
   | S₂, S₀ => R₂ | S₂, S₁ => R₁ | S₂, S₂ => R₀
 
-  noncomputable instance D₃.hasOne : OfNat D₃.carrier (Nat.succ Nat.zero) := ⟨R₀⟩
-  noncomputable instance D₃.hasMul : Mul D₃.carrier := ⟨D₃.mul⟩
+  hott instance D₃.hasOne : OfNat D₃.carrier (Nat.succ Nat.zero) := ⟨R₀⟩
+  hott instance D₃.hasMul : Mul D₃.carrier := ⟨D₃.mul⟩
 
   hott definition D₃.elim {β : Type u} (b₁ b₂ b₃ b₄ b₅ b₆ : β) (d : D₃.carrier) : β :=
   @D₃.carrier.casesOn (λ _, β) d b₁ b₂ b₃ b₄ b₅ b₆

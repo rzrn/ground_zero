@@ -136,13 +136,13 @@ namespace hlevel
   | n, −1            => idp (succ n)
   | n, succ (succ m) => addNatSuccSucc n (succSucc m)
 
-  noncomputable instance : HAdd ℕ₋₂ ℕ₋₂ ℕ₋₂ := ⟨add⟩
+  hott instance : HAdd ℕ₋₂ ℕ₋₂ ℕ₋₂ := ⟨add⟩
 
   hott definition ofNat (n : ℕ) : ℕ₋₂ :=
   succ (succ (predPred n))
 
-  noncomputable instance (n : ℕ) : OfNat ℕ₋₂ n := ⟨ofNat n⟩
-  noncomputable instance : Coe ℕ ℕ₋₂ := ⟨ofNat⟩
+  hott instance (n : ℕ) : OfNat ℕ₋₂ n := ⟨ofNat n⟩
+  hott instance : Coe ℕ ℕ₋₂ := ⟨ofNat⟩
 end hlevel
 
 hott definition isNType : hlevel → Type u → Type u

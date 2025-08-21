@@ -63,7 +63,7 @@ hott definition isHomogeneous (A : Type u) :=
 hott definition Homogeneous :=
 Σ (A : Type u), isHomogeneous A
 
-noncomputable instance : Coe Homogeneous (Type u) := ⟨Sigma.fst⟩
+hott instance : Coe Homogeneous (Type u) := ⟨Sigma.fst⟩
 
 hott definition Homogeneous.trivial : Homogeneous :=
 ⟨𝟏, ★, λ _, ideqv 𝟏, λ ★, idp ★⟩
@@ -72,6 +72,6 @@ hott definition Homogeneous.cart (A B : Homogeneous) : Homogeneous :=
 ⟨A.1 × B.1, ⟨(A.2.1, B.2.1), λ w, prodEquiv (A.2.2.1 w.1) (B.2.2.1 w.2),
              λ w, Product.prod (A.2.2.2 w.1) (B.2.2.2 w.2)⟩⟩
 
-noncomputable instance : HMul Homogeneous Homogeneous Homogeneous := ⟨Homogeneous.cart⟩
+hott instance : HMul Homogeneous Homogeneous Homogeneous := ⟨Homogeneous.cart⟩
 
 end GroundZero.HITs.Infinitesimal

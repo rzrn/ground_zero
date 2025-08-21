@@ -21,12 +21,12 @@ namespace Nat.Product
   hott definition add (x y : ℕ × ℕ) : ℕ × ℕ :=
   (x.1 + y.1, x.2 + y.2)
 
-  noncomputable instance : Add (ℕ × ℕ) := ⟨add⟩
+  hott instance : Add (ℕ × ℕ) := ⟨add⟩
 
   hott definition mul (x y : ℕ × ℕ) : ℕ × ℕ :=
   (x.1 * y.1 + x.2 * y.2, x.1 * y.2 + x.2 * y.1)
 
-  noncomputable instance : Mul (ℕ × ℕ) := ⟨mul⟩
+  hott instance : Mul (ℕ × ℕ) := ⟨mul⟩
 end Nat.Product
 
 namespace Int
@@ -36,7 +36,7 @@ namespace Int
   hott definition elem (a b : ℕ) : ℤ := Quotient.elem (a, b)
 
   hott definition pos (n : ℕ) := mk (n, 0)
-  noncomputable instance (n : ℕ) : OfNat ℤ n := ⟨pos n⟩
+  hott instance (n : ℕ) : OfNat ℤ n := ⟨pos n⟩
 
   hott definition neg (n : ℕ) := mk (0, n)
 
@@ -53,7 +53,7 @@ namespace Int
       mkπ (a, b) = mkπ (c, d)) : ℤ → C :=
   begin fapply Quotient.rec; exact mkπ; intros x y H; apply glueπ H end
 
-  noncomputable instance : Neg Int :=
+  hott instance : Neg Int :=
   ⟨rec (λ x, mk ⟨x.2, x.1⟩) (λ H, glue H⁻¹)⟩
 
   hott definition addRight (a b k : ℕ) : mk (a, b) = mk (a + k, b + k) :=
