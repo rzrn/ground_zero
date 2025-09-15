@@ -196,6 +196,7 @@ def hottDeclMods := leading_parser
   optional docComment >>
   optional Term.«attributes» >>
   optional visibility >>
+  optional «protected» >>
   optional «unsafe» >>
   optional («partial» <|> «nonrec»)
 
@@ -242,8 +243,8 @@ def abbrevAttrs : Array Attribute :=
 λ stx => do {
   let #[hottMods, _, cmd] := stx.getArgs | throwUnsupportedSyntax;
 
-  let #[commentMod, attrs, visibilityMod, unsafeMod, recMod] := hottMods.getArgs | throwUnsupportedSyntax;
-  let mods := mkNode ``Command.declModifiers #[commentMod, attrs, visibilityMod, mkNode ``Command.«noncomputable» #[], unsafeMod, recMod];
+  let #[commentMod, attrs, protectedMod, visibilityMod, unsafeMod, recMod] := hottMods.getArgs | throwUnsupportedSyntax;
+  let mods := mkNode ``Command.declModifiers #[commentMod, attrs, protectedMod, visibilityMod, mkNode ``Command.«noncomputable» #[], unsafeMod, recMod];
 
   if cmd.isOfKind ``decl then do {
     let #[tok, declId, declDef] := cmd.getArgs | throwUnsupportedSyntax;
