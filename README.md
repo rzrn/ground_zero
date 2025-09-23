@@ -33,6 +33,15 @@ There are also HITs that cannot be constructed this way. These HITs are defined 
 
 ![dependency map](pictures/dependency-map.svg "dependency map")
 
+## Related works
+
+* [sinhp/HoTTLean](https://github.com/sinhp/HoTTLean) is a Lean formalization of the groupoid model of homotopy type theory together with a proof mode for developing mathematics synthetically in those type theories.
+* [jthulhu/2ltt](https://github.com/jthulhu/2ltt) is a formalization of [2LTT](https://ncatlab.org/nlab/show/two-level+type+theory) in Lean 4.
+* [gebner/hott3](https://github.com/gebner/hott3) is a port of the Lean 2 HoTT library to Lean 3.
+* [leanprover/lean2/hott](https://github.com/leanprover/lean2/blob/master/hott/hott.md) is an old Lean 2 HoTT library.
+* [cmu-phil/Spectral](https://github.com/cmu-phil/Spectral) is a formalization of the Serre spectral sequence in Lean 2.
+* [annenkov/two-level](https://github.com/annenkov/two-level) is a Lean 2 formalization of 2LTT.
+* [bbentzen/hott-book-in-lean](https://github.com/bbentzen/hott-book-in-lean) is a formalization of the Part I of the HoTT book in Lean 2.
 
 ## License
 
