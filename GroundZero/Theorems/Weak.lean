@@ -92,7 +92,7 @@ section
       let fvdecl   := lctx.getFVar! fv
       let A        := fvdecl.type;
 
-      let some l₁ := (← Meta.inferType A).sortLevel!.dec | throwErrorAt (σs.get! 0) "expected to be a Type";
+      let some l₁ := (← Meta.inferType A).sortLevel!.dec | throwErrorAt σs[0]! "expected to be a Type";
       let some l₂ := (← Meta.inferType C).sortLevel!.dec | throwErrorAt σ "expected to be a Type";
 
       let ref     := mkApp (mkConst ``Con.ref  [l₁]) A;
@@ -119,12 +119,12 @@ section
         let U  := (lctx.getFVar! b₂).type;
 
         unless (U.isAppOfArity ``GroundZero.Types.Id 3)
-          do throwErrorAt (σs.get! (2 * k + 2))
+          do throwErrorAt σs[2 * k + 2]!
             "expected to be a path type";
 
         let #[_, u, y] := U.getAppArgs | unreachable!;
         unless (← Meta.isDefEq y b₁)
-          do throwErrorAt (σs.get! (2 * k + 2))
+          do throwErrorAt σs[2 * k + 2]!
             "expected to be in the form “... = {← Meta.ppExpr b₁}”";
 
         let ρ' := mkApp2 ref (natLit k) Δ;

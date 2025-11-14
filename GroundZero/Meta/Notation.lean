@@ -11,7 +11,7 @@ namespace GroundZero.Meta.Notation
 
 open Lean in def delabCustomSort (t₀ : Delab) (t : Syntax.Level → Delab) : Delab :=
 whenPPOption Lean.getPPNotation do {
-  let ε ← SubExpr.getExpr; let n := ε.constLevels!.get! 0;
+  let ε ← SubExpr.getExpr; let n := ε.constLevels![0]!;
   if n.isZero then t₀ else t (n.quote max_prec)
 }
 

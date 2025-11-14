@@ -409,7 +409,7 @@ namespace Nat
     | Or.inr G => Nat.lt_trans (right G) (by decide)
 
     hott definition charOfNatAux (n : ℕ) (h : n.isValidChar) : Char :=
-    { val := UInt32.ofNat' n (isValidChar_UInt32 h), valid := h }
+    { val := UInt32.ofNatLT n (isValidChar_UInt32 h), valid := h }
 
     hott implementation Char.ofNatAux ← charOfNatAux
 

@@ -84,7 +84,8 @@ def leftRightMeta (pickLeft : Bool) (mvar : MVarId) : MetaM (List MVarId) := do
     unless ctors.length == 2 do
       Meta.throwTacticEx `constructor mvar
         s!"{name} target applies for inductive types with exactly two constructors"
-    let ctor := ctors.get! (if pickLeft then 0 else 1)
+    -- Who thought it would be a good idea to remove `List.get!` and leave *only* `xs[n]!` syntax?
+    let ctor := ctors[if pickLeft then 0 else 1]!
     MVarId.apply mvar (mkConst ctor us)
 
 elab "left"  : tactic => Elab.Tactic.liftMetaTactic (leftRightMeta true)
@@ -102,7 +103,7 @@ def getExistsiCtor (mvar : MVarId) : MetaM Name := do
     unless ctors.length == 1 do
       Meta.throwTacticEx `constructor mvar
         "existsi target applies for inductive types with exactly one constructor"
-    return (ctors.get! 0)
+    return ctors[0]!
 
 elab "existsi" e:term : tactic => do
   let ctor ← Elab.Tactic.liftMetaMAtMain getExistsiCtor
@@ -131,7 +132,7 @@ def expandBinaryRelation (e : Expr) : TermElabM (Expr × Expr) :=
 
 def expandRHS (e : Syntax) : TermElabM (Syntax × Syntax) := do
   unless (e.getArgs.size > 2) do throwError "expected binary relation"
-  return (e.getArgs.get! 0, e.getArgs.get! 2)
+  return (e.getArgs[0]!, e.getArgs[2]!)
 
 elab (priority := high) "calc " ε:term " : " τ:term ", " σ:(calcRHS " : " term),+ : term => do
   let σ ← Array.mapM expandRHS σ
