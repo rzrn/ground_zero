@@ -342,9 +342,11 @@ namespace GroundZero.Algebra
   hott definition Magma : Type (u + 1) :=
   @Alg.{0, 0, u, 0} 𝟏 ⊥ (λ _, 2)
 
+  open GroundZero.Proto (explode)
+
   namespace Magma
     hott definition intro {A : Type u} (H : hset A) (φ : A → A → A) : Magma :=
-    ⟨zeroeqv H, (λ _ (a, b, _), φ a b, λ i, nomatch i)⟩
+    ⟨zeroeqv H, (λ _ (a, b, _), φ a b, explode)⟩
 
     hott definition φ (M : Magma) : M.carrier → M.carrier → M.carrier :=
     λ x y, M.op ★ (x, y, ★)
@@ -388,6 +390,7 @@ namespace GroundZero.Algebra
     hott definition signature : 𝟐 + ⊥ → ℕ
     | Sum.inl false => 0
     | Sum.inl true  => 2
+    | Sum.inr h     => explode h
   end Premonoid
 
   hott definition Premonoid : Type (u + 1) :=
@@ -404,7 +407,7 @@ namespace GroundZero.Algebra
     begin
       existsi M.1; apply Prod.mk;
       { intro; exact M.op true };
-      { intro x; apply nomatch x }
+      { apply explode }
     end
   end Premonoid
 
@@ -417,6 +420,7 @@ namespace GroundZero.Algebra
     | Sum.inl nullary => 0
     | Sum.inl unary   => 1
     | Sum.inl binary  => 2
+    | Sum.inr h       => explode h
   end Pregroup
 
   hott definition Pregroup : Type (u + 1) :=
@@ -428,7 +432,7 @@ namespace GroundZero.Algebra
     ⟨zeroeqv H, (λ | Arity.nullary => λ _, e
                    | Arity.unary   => λ (a, _), ι a
                    | Arity.binary  => λ (a, b, _), φ a b,
-                 λ i, nomatch i)⟩
+                 λ i, explode i)⟩
 
     hott definition e (G : Pregroup) : G.carrier :=
     G.op Arity.nullary ★
@@ -443,7 +447,7 @@ namespace GroundZero.Algebra
     begin
       existsi G.1; apply Prod.mk;
       { intro; exact G.op Arity.binary };
-      { intro x; apply nomatch x }
+      { apply explode }
     end
 
     hott definition premonoid (G : Pregroup) : Premonoid :=
@@ -451,7 +455,7 @@ namespace GroundZero.Algebra
       existsi G.1; apply Prod.mk;
       { exact λ | false => G.op Arity.nullary
                 | true  => G.op Arity.binary };
-      { intro x; apply nomatch x }
+      { intro x; apply explode x }
     end
 
     variable (G : Pregroup)

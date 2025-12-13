@@ -33,10 +33,10 @@ namespace Types.Coproduct
     | ⟨Sum.inr x, p⟩ => x
 
   hott def Empty.lift : Proto.Empty.{u} → Proto.Empty.{v} :=
-  λ z, nomatch z
+  λ z, explode z
 
   hott def Diff.inr : B → Diff (@Sum.inl A B) :=
-  λ x, ⟨Sum.inr x, λ y p, nomatch (@Types.Coproduct.inr.encode.{u, v} A B x (Sum.inl y) p)⟩
+  λ x, ⟨Sum.inr x, λ y p, explode (@Types.Coproduct.inr.encode.{u, v} A B x (Sum.inl y) p)⟩
 
   hott def ldiff : Diff (@Sum.inl A B) ≃ B :=
   begin
@@ -73,6 +73,7 @@ namespace Types.Coproduct
   ⟨left, (⟨right, rightLeft⟩, ⟨right, leftRight⟩)⟩
 
   hott def zero : 𝟎 + A → A
+  | Sum.inl h => explode h
   | Sum.inr x => x
 
   hott def empty : 𝟎 + A ≃ A :=

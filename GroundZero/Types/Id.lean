@@ -219,14 +219,16 @@ hott definition Not (A : Type u) : Type u := A → (𝟎 : Type)
 hott definition Neq {A : Type u} (a b : A) := Not (Id a b)
 
 namespace Not
+  open Proto (explode)
+
   prefix:90 (priority := high) "¬" => Not
   infix:50 (priority := high) " ≠ " => Neq
 
   hott definition absurd {A : Type u} {B : Type v} (h : A) (g : ¬A) : B :=
-  nomatch (g h)
+  explode (g h)
 
   hott definition univ : (𝟎 : Type u) → (𝟎 : Type v) :=
-  λ e, nomatch e
+  explode
 end Not
 
 namespace Whiskering

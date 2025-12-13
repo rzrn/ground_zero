@@ -17,11 +17,12 @@ namespace Precategory
   inductive Arity : Type
   | left | right | mul | bottom
 
-  def signature : Arity + ⊥ → ℕ
+  hott definition signature : Arity + ⊥ → ℕ
   | Sum.inl Arity.mul     => 2
   | Sum.inl Arity.left    => 1
   | Sum.inl Arity.right   => 1
   | Sum.inl Arity.bottom  => 0
+  | Sum.inr h             => explode h
 end Precategory
 
 hott def Precategory : Type (u + 1) :=

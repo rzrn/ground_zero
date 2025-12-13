@@ -369,7 +369,7 @@ namespace Group
 
     hott definition mkhomo (φ : G.carrier → H.carrier)
       (p : Π a b, φ (a * b) = φ a ∗ φ b) : Hom G H :=
-    ⟨φ, (λ _ (x, y, _), p x y, λ z, nomatch z)⟩
+    ⟨φ, (λ _ (x, y, _), p x y, λ z, explode z)⟩
 
     hott definition mkiso (φ : G.carrier → H.carrier)
       (p : Π a b, φ (a * b) = φ a ∗ φ b) (q : biinv φ) : G ≅ H :=

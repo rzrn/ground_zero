@@ -1,6 +1,7 @@
 import GroundZero.Algebra.Group.Factor
 open GroundZero.Algebra.Group (factorLeft)
 open GroundZero.Types.Equiv (transport)
+open GroundZero.Proto (explode)
 open GroundZero.Types.Id (ap)
 open GroundZero.Structures
 open GroundZero.Types
@@ -15,11 +16,12 @@ namespace Prering
   | nullary | unary | add | mul
   open Arity
 
-  def signature : Arity + ⊥ → ℕ
+  hott definition signature : Arity + ⊥ → ℕ
   | Sum.inl nullary => 0
   | Sum.inl unary   => 1
   | Sum.inl add     => 2
   | Sum.inl mul     => 2
+  | Sum.inr h       => explode h
 end Prering
 
 hott definition Prering : Type (u + 1) :=
@@ -42,7 +44,7 @@ namespace Prering
        | Arity.unary   => λ (a, _), ι a
        | Arity.add     => λ (a, b, _), φ a b
        | Arity.mul     => λ (a, b, _), ψ a b,
-     λ z, nomatch z)⟩
+     λ z, explode z)⟩
 
   hott abbreviation zero (T : Prering) : T.carrier :=
   T.op Arity.nullary ★
@@ -79,7 +81,7 @@ namespace Overring
   hott definition σ (T : Overring) (x y : T.carrier) := ¬(x = y) × T.ρ x y
 
   hott definition τ (T : Overring) : Prering :=
-  ⟨T.1, (T.2.1, λ z, nomatch z)⟩
+  ⟨T.1, (T.2.1, λ z, explode z)⟩
 end Overring
 
 class ring (T : Prering) :=

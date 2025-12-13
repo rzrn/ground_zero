@@ -35,8 +35,8 @@ notation "𝟎" => Empty
 notation "𝟐" => Bool
 notation "ℕ" => Nat
 
-hott definition explode {A : Sort u} (xs : 𝟎) : A :=
-nomatch xs
+hott definition explode {A : Sort u} : 𝟎 → A :=
+Empty.rec (λ _, A) -- “nomatch” uses large elimination
 
 hott definition Bool.elim {A : Sort u} : A → A → 𝟐 → A :=
 λ b₁ b₂ b, @Bool.casesOn (λ _, A) b b₁ b₂

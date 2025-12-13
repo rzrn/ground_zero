@@ -28,7 +28,7 @@ section
   hott lemma suspEmpty : ∑ 𝟎 ≃ 𝟐 :=
   Equiv.intro (rec false true explode)
               (λ | false => north | true => south)
-              (ind (idp north) (idp south) (λ ε, nomatch ε))
+              (ind (idp north) (idp south) (λ ε, explode ε))
               (λ | false => idp false | true => idp true)
 end
 
