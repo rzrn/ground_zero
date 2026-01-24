@@ -45,7 +45,7 @@ There are also HITs that cannot be constructed this way. These HITs are defined 
 
 ## License
 
-Copyright © 2018–2025 rzrn &lt;rzrngh@outlook.com&gt;
+Copyright © 2018–2026 rzrn &lt;rzrngh@outlook.com&gt;
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this project except in compliance with the License.
